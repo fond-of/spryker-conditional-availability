@@ -10,7 +10,7 @@
     {
       "name": "Daniel Rose",
       "email": "daniel-rose@gmx.de"
-    },
+    }
   ],
   "require": {
     "php": ">=7.1",
