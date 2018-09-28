@@ -1,6 +1,6 @@
 {
   "name": "fond-of-spryker/conditional-availability",
-  "description": "Extend cart module.",
+  "description": "Conditional product availablility",
   "license": "MIT",
   "authors": [
     {
