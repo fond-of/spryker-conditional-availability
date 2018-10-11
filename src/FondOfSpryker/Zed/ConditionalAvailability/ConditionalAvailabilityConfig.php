@@ -23,7 +23,7 @@ class ConditionalAvailabilityConfig extends \Spryker\Zed\Search\SearchConfig
     {
         $directories = [];
 
-        $fondOfSprykerSharedGlobPattern = APPLICATION_ROOT_DIR . '/vendor/fond-of-spryker/*/src/*/Shared/*/AvailabilityMap/';
+        $fondOfSprykerSharedGlobPattern = APPLICATION_ROOT_DIR . '/vendor/fond-of-spryker/*/src/*/Shared/*/ConditionalAvailabilityMap/';
         if (\glob($fondOfSprykerSharedGlobPattern)) {
             $directories[] = $fondOfSprykerSharedGlobPattern;
         }
