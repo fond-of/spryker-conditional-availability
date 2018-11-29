@@ -3,8 +3,9 @@
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use Elastica\ResultSet;
+use Spryker\Client\Search\SearchClientInterface;
 
-interface ConditionalAvailabilityClientInterface
+interface ConditionalAvailabilityClientInterface extends SearchClientInterface
 {
     /**
      * @param string $searchString
