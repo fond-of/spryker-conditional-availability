@@ -2,6 +2,9 @@
 
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
+use DateTime;
+use FondOfSpryker\Client\ConditionalAvailability\Dependency\Plugin\WarehouseStringSetterInterface;
+use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use Generated\Shared\ConditionalAvailability\Search\PageIndexMap;
 use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 use Spryker\Client\Search\Dependency\Plugin\SearchStringSetterInterface;
@@ -13,18 +16,34 @@ use Spryker\Client\Search\SearchFactory;
 class ConditionalAvailabilityFactory extends SearchFactory
 {
     /**
-     * @param string $searchString
+     * @param string $sku
+     * @param \DateTime $date
      *
      * @return \Spryker\Client\Search\Dependency\Plugin\QueryInterface
      */
-    public function createConditionalAvailabilitySearchQuery($searchString): QueryInterface
+    public function createConditionalAvailabilitySearchQuery(string $sku, DateTime $date): QueryInterface
     {
         $searchQuery = $this->getConditionalAvailabilitySearchQueryPlugin();
 
         if ($searchQuery instanceof SearchStringSetterInterface) {
-            $searchQuery->setSearchString($searchString);
+            $searchQuery->setSearchString($sku);
         }
 
+        return $searchQuery;
+    }
+
+    /**
+     * @param string $warehouse
+     *
+     * @return \Spryker\Client\Search\Dependency\Plugin\QueryInterface
+     */
+    public function createConditionalAvailabilitySearchQueryWarehouse(string $warehouse): QueryInterface
+    {
+        $searchQuery = $this->getConditionalAvailabilitySearchQueryPlugin();
+
+        if ($searchQuery instanceof WarehouseStringSetterInterface) {
+            $searchQuery->setWarehouseString($warehouse);
+        }
         return $searchQuery;
     }
 
@@ -36,6 +55,14 @@ class ConditionalAvailabilityFactory extends SearchFactory
     public function getConditionalAvailabilitySearchQueryPlugin(): QueryInterface
     {
         return $this->getProvidedDependency(ConditionalAvailabilityDependencyProvider::CONDITIONAL_AVAILABILITY_SEARCH_QUERY_PLUGIN);
+    }
+
+    /**
+     * @return \FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider
+     */
+    protected function createIndexClientProvider()
+    {
+        return new IndexClientProvider();
     }
 
     /**
