@@ -2,7 +2,7 @@
 
 namespace FondOfSpryker\Client\ConditionalAvailability\Provider;
 
-use FondOfSpryker\Shared\ConditionalAvailability\ConditionalAvailabilityConstants as SearchConstants;
+use Elastica\Index;
 use FondOfSpryker\Shared\ConditionalAvailability\Provider\AbstractIndexClientProvider;
 
 class IndexClientProvider extends AbstractIndexClientProvider
@@ -12,7 +12,7 @@ class IndexClientProvider extends AbstractIndexClientProvider
      *
      * @return \Elastica\Index
      */
-    public function getClient($index = null)
+    public function getClient($index = null): Index
     {
         return $this->createZedClient($index);
     }

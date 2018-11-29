@@ -2,11 +2,9 @@
 
 namespace FondOfSpryker\Zed\ConditionalAvailability;
 
-use Spryker\Zed\Kernel\AbstractBundleConfig;
+use Spryker\Zed\Search\SearchConfig;
 
-use FondOfSpryker\Shared\ConditionalAvailability\ConditionalAvailabilityConstants as SearchConstants;
-
-class ConditionalAvailabilityConfig extends \Spryker\Zed\Search\SearchConfig
+class ConditionalAvailabilityConfig extends SearchConfig
 {
     /**
      * @return string
