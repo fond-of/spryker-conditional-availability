@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
 use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\Elasticsearch\Generator\IndexMapGenerator;
+use Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGeneratorInterface;
 use Spryker\Zed\Search\Business\SearchBusinessFactory;
 
 /**
@@ -22,7 +25,7 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
     /**
      * @return \Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGeneratorInterface
      */
-    protected function createElasticsearchIndexMapGenerator()
+    protected function createElasticsearchIndexMapGenerator(): IndexMapGeneratorInterface
     {
         return new IndexMapGenerator(
             $this->getConfig()->getClassTargetDirectory(),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business\Model\Elasticsearch\Generator;
 
 use Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGenerator as SprykerIndexMapGenerator;

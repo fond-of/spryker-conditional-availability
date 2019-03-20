@@ -1,24 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FondOfSpryker\Zed\ConditionalAvailability\Communication\Console;
 
-use Spryker\Zed\Kernel\Communication\Console\Console;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use \Spryker\Zed\Search\Communication\Console\SearchCloseIndexConsole as SprykerSearchCloseIndexConsole;
 
 /**
- * @method \FondOfSpryker\Zed\ConditionalAvailability\Business\SearchFacadeInterface getFacade()
+ * @method \FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityFacadeInterface getFacade()
  */
-class SearchCloseIndexConsole extends \Spryker\Zed\Search\Communication\Console\SearchCloseIndexConsole
+class SearchCloseIndexConsole extends SprykerSearchCloseIndexConsole
 {
     /**
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
-        $this->setName('conditional_availability:'.self::COMMAND_NAME);
+        $this->setName('conditional_availability:' . self::COMMAND_NAME);
     }
 }

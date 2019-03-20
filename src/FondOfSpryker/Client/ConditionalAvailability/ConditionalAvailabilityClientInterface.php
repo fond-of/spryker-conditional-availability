@@ -1,27 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
-use DateTime;
+use DateTimeInterface;
 use Elastica\ResultSet;
 use Spryker\Client\Search\SearchClientInterface;
 
 interface ConditionalAvailabilityClientInterface extends SearchClientInterface
 {
     /**
-     * Conditional availability search
-     *
-     * @param string $sku
-     * @param \DateTime $date
+     * @param string|null $searchString
+     * @param string[] $requestParameters
      *
      * @return \Elastica\ResultSet
      */
-    public function conditionalAvailabilitySearch(string $sku, DateTime $date): ResultSet;
+    public function conditionalAvailabilitySkuSearch(?string $searchString, array $requestParameters = []): ResultSet;
 
     /**
-     * @param string $warehousegroup
+     * @param \DateTimeInterface $dateTimeFrom
+     * @param \DateTimeInterface $dateTimeUntil
+     * @param string[] $requestParameters
      *
      * @return \Elastica\ResultSet
      */
-    public function conditionalAvailabilitySearchWarehouse(string $warehousegroup): ResultSet;
+    public function ConditionalAvailabilityLastPingSearch(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil, array $requestParameters = []): ResultSet;
 }

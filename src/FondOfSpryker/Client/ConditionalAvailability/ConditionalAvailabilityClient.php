@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
-use DateTime;
+use DateTimeInterface;
 use Elastica\ResultSet;
 use Spryker\Client\Search\SearchClient;
 
@@ -12,31 +14,33 @@ use Spryker\Client\Search\SearchClient;
 class ConditionalAvailabilityClient extends SearchClient implements ConditionalAvailabilityClientInterface
 {
     /**
-     * @param string $sku
-     * @param \DateTime $date
+     * @param string|null $searchString
+     * @param string[] $requestParameters
      *
      * @return \Elastica\ResultSet
      */
-    public function conditionalAvailabilitySearch(string $sku, DateTime $date): ResultSet
+    public function conditionalAvailabilitySkuSearch(?string $searchString, array $requestParameters = []): ResultSet
     {
-        $searchQuery = $this->getFactory()->createConditionalAvailabilitySearchQuery($sku, $date);
-        return $this->search($searchQuery);
+        $searchQuery = $this->getFactory()->createConditionalAvailabilitySkuSearchQuery($searchString);
+        $searchQuery = $this->expandQuery($searchQuery, $this->getFactory()->getConditionalAvailabilitySkuSearchQueryExpanderPlugins(), $requestParameters);
+        $resultFormatters = $this->getFactory()->getConditionalAvailabilitySkuSearchQueryFormatterPlugins();
+
+        return $this->search($searchQuery, $resultFormatters, $requestParameters);
     }
 
     /**
-     * @param string $warehousegroup
+     * @param \DateTimeInterface $dateTimeFrom
+     * @param \DateTimeInterface $dateTimeUntil
+     * @param string[] $requestParameters
      *
      * @return \Elastica\ResultSet
      */
-    public function conditionalAvailabilitySearchWarehouse(string $warehousegroup): ResultSet
+    public function ConditionalAvailabilityLastPingSearch(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil, array $requestParameters = []): ResultSet
     {
-        $searchQuery = $this->getFactory()->createConditionalAvailabilitySearchQueryWarehouse($warehousegroup);
+        $searchQuery = $this->getFactory()->createConditionalAvailabilityPingSearchQuery($dateTimeFrom, $dateTimeUntil);
+        $searchQuery = $this->expandQuery($searchQuery, $this->getFactory()->getConditionalAvailabilityPingSearchQueryExpanderPlugins(), $requestParameters);
+        $resultFormatters = $this->getFactory()->getConditionalAvailabilityPingSearchQueryFormatterPlugins();
 
-        /*
-        $this->getSearchConfig()->getPaginationConfigBuilder()->setPagination(
-            (new PaginationConfigTransfer())->setDefaultItemsPerPage(100)
-        );*/
-
-        return $this->search($searchQuery);
+        return $this->search($searchQuery, $resultFormatters, $requestParameters);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FondOfSpryker\Shared\ConditionalAvailability;
 
-use Spryker\Shared\Search\SearchConfig;
-
-interface ConditionalAvailabilityConfig extends SearchConfig
+interface ConditionalAvailabilityConfig
 {
 }

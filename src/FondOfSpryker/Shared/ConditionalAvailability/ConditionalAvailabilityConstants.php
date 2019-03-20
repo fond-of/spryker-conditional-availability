@@ -1,39 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FondOfSpryker\Shared\ConditionalAvailability;
 
-/**
- * Declares global environment configuration keys. Do not use it for other class constants.
- */
 interface ConditionalAvailabilityConstants
 {
-    /**
-     * Elasticsearch connection index name. (Required)
-     *
-     * @api
-     */
-    const ELASTICA_PARAMETER__INDEX_NAME = 'CA_ELASTICA_PARAMETER__INDEX_NAME';
+    public const ELASTICA_PARAMETER__INDEX_NAME = 'CA_ELASTICA_PARAMETER__INDEX_NAME';
+    public const ELASTICA_PARAMETER__DOCUMENT_TYPE = 'CA_ELASTICA_PARAMETER__DOCUMENT_TYPE';
+    public const INDEX_NAME_SUFFIX = 'CA__INDEX_NAME_SUFFIX';
+    public const DIRECTORY_PERMISSION = 'CA:DIRECTORY_PERMISSION';
 
-    /**
-     * Elasticsearch connection document type. (Required)
-     *
-     * @api
-     */
-    const ELASTICA_PARAMETER__DOCUMENT_TYPE = 'CA_ELASTICA_PARAMETER__DOCUMENT_TYPE';
-
-    /**
-     * Specification:
-     * - Defines a suffix string for the index name to be installed. (Optional)
-     *
-     * @api
-     */
-    const INDEX_NAME_SUFFIX = 'CA__INDEX_NAME_SUFFIX';
-
-    /**
-     * Specification:
-     * - Sets the permission mode for generated directories.
-     *
-     * @api
-     */
-    const DIRECTORY_PERMISSION = 'CA:DIRECTORY_PERMISSION';
+    public const PARAMETER_WAREHOUSE = 'warehouse';
+    public const PARAMETER_SKU = 'sku';
+    public const PARAMETER_DATE = 'date';
 }

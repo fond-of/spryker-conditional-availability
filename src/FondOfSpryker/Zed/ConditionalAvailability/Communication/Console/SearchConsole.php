@@ -1,24 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FondOfSpryker\Zed\ConditionalAvailability\Communication\Console;
 
-use Spryker\Zed\Kernel\Communication\Console\Console;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use \Spryker\Zed\Search\Communication\Console\SearchConsole as SprykerSearchConsole;
 
 /**
- * @method \FondOfSpryker\Zed\ConditionalAvailability\Business\SearchFacadeInterface getFacade()
+ * @method \FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityFacadeInterface getFacade()
  */
-class SearchConsole extends \Spryker\Zed\Search\Communication\Console\SearchConsole
+class SearchConsole extends SprykerSearchConsole
 {
     /**
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
-        $this->setName('conditional_availability:'.self::COMMAND_NAME);
-        $this->setAliases(['conditional_availability:'.'setup:search']);
+        $this->setName('conditional_availability:' . self::COMMAND_NAME);
+        $this->setAliases(['conditional_availability:setup:search']);
     }
 }
