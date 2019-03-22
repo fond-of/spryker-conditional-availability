@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
-use Elastica\ResultSet;
+use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Zed\Search\Business\SearchFacade;
 
 /**
@@ -14,26 +15,28 @@ use Spryker\Zed\Search\Business\SearchFacade;
 class ConditionalAvailabilityFacade extends SearchFacade implements ConditionalAvailabilityFacadeInterface
 {
     /**
-     * @param string|null $searchString
-     * @param string[] $requestParameters
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponseTransfer
      *
-     * @return \Elastica\ResultSet
+     * @return bool
      */
-    public function conditionalAvailabilitySkuSearch(?string $searchString, array $requestParameters = []): ResultSet
+    public function checkoutConditionalAvailabilityPreCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponseTransfer): bool
     {
-         return $this->getClient()->conditionalAvailabilitySkuSearch($searchString, $requestParameters);
+        return $this->getFactory()
+            ->createConditionalAvailabilityPreCondition()
+            ->checkCondition($quoteTransfer, $checkoutResponseTransfer);
     }
 
     /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponseTransfer
+     *
      * @return bool
      */
-    public function hasConditionalAvailabilityPingsInLastHour(): bool
+    public function checkoutConditionalAvailabilityPingPreCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponseTransfer): bool
     {
-        $dateTimeFrom = new \DateTimeImmutable();
-        $dateTimeUntil = $dateTimeFrom->modify('-1 hour');
-
-        $result = $this->getClient()->ConditionalAvailabilityLastPingSearch($dateTimeFrom, $dateTimeUntil);
-
-        return $result->getTotalHits() > 0;
+        return $this->getFactory()
+            ->createConditionalAvailabilityPingPreCondition()
+            ->checkCondition($quoteTransfer, $checkoutResponseTransfer);
     }
 }

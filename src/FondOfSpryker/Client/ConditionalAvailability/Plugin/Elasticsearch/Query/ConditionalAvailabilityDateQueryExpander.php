@@ -45,7 +45,6 @@ class ConditionalAvailabilityDateQueryExpander extends AbstractPlugin implements
      */
     protected function getDateFrom(array $requestParameters): DateTimeInterface
     {
-        //return new \DateTime('2018-03-2019');
         return $requestParameters[ConditionalAvailabilityConstants::PARAMETER_DATE];
     }
 

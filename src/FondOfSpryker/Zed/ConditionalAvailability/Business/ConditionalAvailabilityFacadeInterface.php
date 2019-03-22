@@ -4,21 +4,25 @@ declare(strict_types=1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
-use Elastica\ResultSet;
+use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 use \Spryker\Zed\Search\Business\SearchFacadeInterface as SprykerSearchFacadeInterface;
 
 interface ConditionalAvailabilityFacadeInterface extends SprykerSearchFacadeInterface
 {
     /**
-     * @param string|null $searchString
-     * @param string[] $requestParameters
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponseTransfer
      *
-     * @return \Elastica\ResultSet
+     * @return void
      */
-    public function conditionalAvailabilitySkuSearch(?string $searchString, array $requestParameters = []): ResultSet;
+    public function checkoutConditionalAvailabilityPreCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponseTransfer): bool;
 
     /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponseTransfer
+     *
      * @return bool
      */
-    public function hasConditionalAvailabilityPingsInLastHour(): bool;
+    public function checkoutConditionalAvailabilityPingPreCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponseTransfer): bool;
 }
