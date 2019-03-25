@@ -9,6 +9,7 @@ use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig;
 use Generated\Shared\Transfer\CheckoutErrorTransfer;
 use Generated\Shared\Transfer\CheckoutResponseTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
+use Spryker\Shared\Config\Environment;
 
 class ConditionalAvailabilityPingCheckoutPreCondition implements ConditionalAvailabilityPingCheckoutPreConditionInterface
 {
@@ -42,8 +43,12 @@ class ConditionalAvailabilityPingCheckoutPreCondition implements ConditionalAvai
      */
     public function checkCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponse): bool
     {
-        $dateTimeFrom = new \DateTimeImmutable();
-        $dateTimeUntil = $dateTimeFrom->modify('-1 hour');
+        $dateTimeUntil = new \DateTimeImmutable();
+        if (Environment::getInstance()->isDevelopment()) {
+            $dateTimeUntil = new \DateTimeImmutable('2019-02-27 11:23:36');
+        }
+
+        $dateTimeFrom = $dateTimeUntil->modify('-1 hour');
 
         $result = $this->conditionalAvailabilityClient->ConditionalAvailabilityLastPingSearch($dateTimeFrom, $dateTimeUntil);
 

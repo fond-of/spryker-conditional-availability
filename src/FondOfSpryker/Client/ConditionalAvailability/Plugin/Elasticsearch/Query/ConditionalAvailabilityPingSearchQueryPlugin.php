@@ -86,7 +86,7 @@ class ConditionalAvailabilityPingSearchQueryPlugin extends AbstractPlugin implem
         if ($this->getSearchDateTimeFrom() !== null && $this->getSearchDateTimeUntil() !== null) {
             $matchQuery = $queryBuilder->createRangeQuery(
                 PageIndexMap::LASTUPDATEAT,
-                $this->getSearchDateTimeUntil()->format(static::FORMAT),
+                $this->getSearchDateTimeFrom()->format(static::FORMAT),
                 $this->getSearchDateTimeUntil()->format(static::FORMAT)
             );
         } else {

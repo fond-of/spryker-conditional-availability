@@ -92,9 +92,9 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
 
         foreach ($result->getResults() as $resultSet) {
             $data = $resultSet->getData();
-            $dataQuantity = $data['quantity'] > 0;
+            $dataQuantityInt = (int) $data['qty'];
 
-            if ($dataQuantity >= $quantity) {
+            if ($dataQuantityInt >= $quantity) {
                 return true;
             }
         }

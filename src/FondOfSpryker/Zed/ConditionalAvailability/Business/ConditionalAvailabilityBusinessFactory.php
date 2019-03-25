@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
+use FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface;
 use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreCondition;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreConditionInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPingCheckoutPreCondition;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPingCheckoutPreConditionInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\Elasticsearch\Generator\IndexMapGenerator;
+use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityDependencyProvider;
 use Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGeneratorInterface;
 use Spryker\Zed\Search\Business\SearchBusinessFactory;
 
 /**
  * @method \FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityFacadeInterface getFacade()
  * @method \FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig getConfig()
- * @method \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface getClient()
  */
 class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
 {
@@ -46,7 +47,7 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
     {
         return new ConditionalAvailabilityCheckoutPreCondition(
             $this->getConfig(),
-            $this->getClient()
+            $this->getConditionalAvailabilityClient()
         );
     }
 
@@ -57,7 +58,15 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
     {
         return new ConditionalAvailabilityPingCheckoutPreCondition(
             $this->getConfig(),
-            $this->getClient()
+            $this->getConditionalAvailabilityClient()
         );
+    }
+
+    /**
+     * @return \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface
+     */
+    protected function getConditionalAvailabilityClient(): ConditionalAvailabilityClientInterface
+    {
+        return $this->getProvidedDependency(ConditionalAvailabilityDependencyProvider::CONDITIONAL_AVAILABILITY_CLIENT);
     }
 }

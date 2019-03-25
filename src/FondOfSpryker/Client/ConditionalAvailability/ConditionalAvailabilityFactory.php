@@ -56,7 +56,7 @@ class ConditionalAvailabilityFactory extends SearchFactory
      */
     public function createConditionalAvailabilityPingSearchQuery(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil): QueryInterface
     {
-        $searchQuery = $this->getConditionalAvailabilitySkuSearchQueryPlugin();
+        $searchQuery = $this->getConditionalAvailabilityPingSearchQueryPlugin();
         if ($searchQuery instanceof SearchRangeSetterInterface) {
             $searchQuery->setSearchDateTimeRange($dateTimeFrom, $dateTimeUntil);
         }
