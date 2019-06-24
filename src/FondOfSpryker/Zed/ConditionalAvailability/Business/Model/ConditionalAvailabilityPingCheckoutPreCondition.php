@@ -50,7 +50,7 @@ class ConditionalAvailabilityPingCheckoutPreCondition implements ConditionalAvai
 
         $dateTimeFrom = $dateTimeUntil->modify('-1 hour');
 
-        $result = $this->conditionalAvailabilityClient->ConditionalAvailabilityLastPingSearch($dateTimeFrom, $dateTimeUntil);
+        $result = $this->conditionalAvailabilityClient->conditionalAvailabilityLastPingSearch($dateTimeFrom, $dateTimeUntil);
 
         $isPassed = $result->getTotalHits() > 0;
 

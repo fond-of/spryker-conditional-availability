@@ -35,7 +35,7 @@ class ConditionalAvailabilityClient extends SearchClient implements ConditionalA
      *
      * @return \Elastica\ResultSet
      */
-    public function ConditionalAvailabilityLastPingSearch(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil, array $requestParameters = []): ResultSet
+    public function conditionalAvailabilityLastPingSearch(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil, array $requestParameters = []): ResultSet
     {
         $searchQuery = $this->getFactory()->createConditionalAvailabilityPingSearchQuery($dateTimeFrom, $dateTimeUntil);
         $searchQuery = $this->expandQuery($searchQuery, $this->getFactory()->getConditionalAvailabilityPingSearchQueryExpanderPlugins(), $requestParameters);

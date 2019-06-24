@@ -25,5 +25,5 @@ interface ConditionalAvailabilityClientInterface extends SearchClientInterface
      *
      * @return \Elastica\ResultSet
      */
-    public function ConditionalAvailabilityLastPingSearch(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil, array $requestParameters = []): ResultSet;
+    public function conditionalAvailabilityLastPingSearch(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil, array $requestParameters = []): ResultSet;
 }
