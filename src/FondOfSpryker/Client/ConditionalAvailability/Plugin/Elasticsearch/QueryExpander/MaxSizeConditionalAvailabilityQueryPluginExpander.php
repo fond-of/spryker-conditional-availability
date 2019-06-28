@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query;
+namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander;
 
 use Elastica\Query;
 use Spryker\Client\Kernel\AbstractPlugin;
@@ -12,7 +12,7 @@ use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 /**
  * @method \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityFactory getFactory()
  */
-class ConditionalAvailabilityMaxSizeQueryExpander extends AbstractPlugin implements QueryExpanderPluginInterface
+class MaxSizeConditionalAvailabilityQueryPluginExpander extends AbstractPlugin implements QueryExpanderPluginInterface
 {
     /**
      * @param \Spryker\Client\Search\Dependency\Plugin\QueryInterface $searchQuery

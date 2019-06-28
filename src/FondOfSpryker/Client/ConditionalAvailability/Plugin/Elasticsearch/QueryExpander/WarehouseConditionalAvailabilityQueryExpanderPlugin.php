@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
-namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query;
+namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander;
 
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
@@ -16,7 +16,7 @@ use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 /**
  * @method \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityFactory getFactory()
  */
-class ConditionalAvailabilityWarehouseExpander extends AbstractPlugin implements QueryExpanderPluginInterface
+class WarehouseConditionalAvailabilityQueryExpanderPlugin extends AbstractPlugin implements QueryExpanderPluginInterface
 {
     /**
      * @param \Spryker\Client\Search\Dependency\Plugin\QueryInterface $searchQuery
@@ -50,7 +50,7 @@ class ConditionalAvailabilityWarehouseExpander extends AbstractPlugin implements
      */
     protected function hasWarehouseValue(array $requestParameters): bool
     {
-        return \array_key_exists(ConditionalAvailabilityConstants::PARAMETER_WAREHOUSE, $requestParameters);
+        return array_key_exists(ConditionalAvailabilityConstants::PARAMETER_WAREHOUSE, $requestParameters);
     }
 
     /**

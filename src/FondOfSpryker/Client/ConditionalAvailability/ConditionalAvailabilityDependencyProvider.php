@@ -1,14 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
-use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilityDateQueryExpander;
-use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilityMaxSizeQueryExpander;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilityPingSearchQueryPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilitySkuSearchQueryPlugin;
-use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilityWarehouseExpander;
+use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\StartAtConditionalAvailabilityQueryExpanderPlugin;
+use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\MaxSizeConditionalAvailabilityQueryPluginExpander;
+use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\SortedConditionalAvailabilityQueryExpanderPlugin;
+use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\WarehouseConditionalAvailabilityQueryExpanderPlugin;
 use Spryker\Client\Kernel\AbstractDependencyProvider;
 use Spryker\Client\Kernel\Container;
 
@@ -74,9 +75,10 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     protected function createConditionalAvailabilitySkuSearchQueryExpanderPlugins(): array
     {
         return [
-            new ConditionalAvailabilityWarehouseExpander(),
-            new ConditionalAvailabilityDateQueryExpander(),
-            new ConditionalAvailabilityMaxSizeQueryExpander(),
+            new WarehouseConditionalAvailabilityQueryExpanderPlugin(),
+            new StartAtConditionalAvailabilityQueryExpanderPlugin(),
+            new MaxSizeConditionalAvailabilityQueryPluginExpander(),
+            new SortedConditionalAvailabilityQueryExpanderPlugin(),
         ];
     }
 
@@ -136,7 +138,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     protected function createConditionalAvailabilityPingSearchQueryExpanderPlugins(): array
     {
         return [
-            new ConditionalAvailabilityMaxSizeQueryExpander(),
+            new MaxSizeConditionalAvailabilityQueryPluginExpander(),
         ];
     }
 

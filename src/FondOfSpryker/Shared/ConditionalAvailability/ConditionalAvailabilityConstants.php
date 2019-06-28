@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Shared\ConditionalAvailability;
 
@@ -13,5 +13,7 @@ interface ConditionalAvailabilityConstants
 
     public const PARAMETER_WAREHOUSE = 'warehouse';
     public const PARAMETER_SKU = 'sku';
-    public const PARAMETER_DATE = 'date';
+    public const PARAMETER_START_AT = 'start_at';
+    public const PARAMETER_END_AT = 'end_at';
+    public const PARAMETER_SORT = 'sort';
 }

@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
-namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query;
+namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander;
 
 use DateTimeInterface;
 use Elastica\Query;
@@ -17,11 +17,10 @@ use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 /**
  * @method \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityFactory getFactory()
  */
-class ConditionalAvailabilityDateQueryExpander extends AbstractPlugin implements QueryExpanderPluginInterface
+class StartAtConditionalAvailabilityQueryExpanderPlugin extends AbstractPlugin implements QueryExpanderPluginInterface
 {
     protected const DATE_FORMAT_PARAMETER = 'format';
     protected const DATE_FORMAT_VALUE = 'yyyy-MM-dd HH:mm:ss';
-    protected const REQUEST_PARAMETER_DATE = 'date';
 
     /**
      * @param \Spryker\Client\Search\Dependency\Plugin\QueryInterface $searchQuery
@@ -45,7 +44,7 @@ class ConditionalAvailabilityDateQueryExpander extends AbstractPlugin implements
      */
     protected function getDateFrom(array $requestParameters): DateTimeInterface
     {
-        return $requestParameters[ConditionalAvailabilityConstants::PARAMETER_DATE];
+        return $requestParameters[ConditionalAvailabilityConstants::PARAMETER_START_AT];
     }
 
     /**
@@ -55,7 +54,7 @@ class ConditionalAvailabilityDateQueryExpander extends AbstractPlugin implements
      */
     protected function hasDate(array $requestParameters): bool
     {
-        return \array_key_exists(ConditionalAvailabilityConstants::PARAMETER_DATE, $requestParameters);
+        return array_key_exists(ConditionalAvailabilityConstants::PARAMETER_START_AT, $requestParameters);
     }
 
     /**
@@ -71,10 +70,8 @@ class ConditionalAvailabilityDateQueryExpander extends AbstractPlugin implements
         $formattedDate = $dateTime->format('Y-m-d H:i:s');
 
         $rangeStart = $this->getFactory()->createQueryBuilder()->createRangeQuery(PageIndexMap::STARTAT, null, $formattedDate);
-        $boolQuery->addFilter($rangeStart);
 
-        $rangeEnd = $this->getFactory()->createQueryBuilder()->createRangeQuery(PageIndexMap::ENDAT, $formattedDate, null);
-        $boolQuery->addFilter($rangeEnd);
+        $boolQuery->addFilter($rangeStart);
     }
 
     /**

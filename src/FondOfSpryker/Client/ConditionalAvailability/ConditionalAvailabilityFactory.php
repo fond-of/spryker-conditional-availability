@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use DateTimeInterface;
-use FondOfSpryker\Client\ConditionalAvailability\Config\ConditionalAvailabilitySearchSortConfigBuilder;
-use FondOfSpryker\Client\ConditionalAvailability\Config\SortConfigBuilderInterface;
 use FondOfSpryker\Client\ConditionalAvailability\Dependency\Plugin\SearchRangeSetterInterface;
 use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use FondOfSpryker\Client\Search\SearchFactory;
@@ -33,14 +31,6 @@ class ConditionalAvailabilityFactory extends SearchFactory
     protected function createPageIndexMap(): PageIndexMap
     {
         return new PageIndexMap();
-    }
-
-    /**
-     * @return \FondOfSpryker\Client\ConditionalAvailability\Config\SortConfigBuilderInterface
-     */
-    public function createSortConfigBuilder(): SortConfigBuilderInterface
-    {
-        return new ConditionalAvailabilitySearchSortConfigBuilder();
     }
 
     /**
