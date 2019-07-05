@@ -113,7 +113,7 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
 
         foreach ($items as $itemTransfer) {
             $sku = $itemTransfer->getSku();
-            $deliveryDate = $itemTransfer->getDeliveryTime();
+            $deliveryDate = $itemTransfer->getDeliveryDate();
 
             if (!isset($result[$deliveryDate])) {
                 $result[$deliveryDate] = [];
