@@ -81,11 +81,16 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
      *
      * @return bool
      */
-    protected function isProductAvailable(string $deliveryDate, string $sku, int $quantity, string $warehouse): bool
-    {
+    protected function isProductAvailable(
+        string $deliveryDate,
+        string $sku,
+        int $quantity,
+        string $warehouse
+    ): bool {
         $requestParameters = [
             ConditionalAvailabilityConstants::PARAMETER_WAREHOUSE => $warehouse,
-            ConditionalAvailabilityConstants::PARAMETER_DATE => new DateTime($deliveryDate),
+            ConditionalAvailabilityConstants::PARAMETER_START_AT => new DateTime($deliveryDate),
+            ConditionalAvailabilityConstants::PARAMETER_END_AT => new DateTime($deliveryDate),
         ];
 
         $result = $this->conditionalAvailabilityClient->conditionalAvailabilitySkuSearch($sku, $requestParameters);
@@ -113,7 +118,7 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
 
         foreach ($items as $itemTransfer) {
             $sku = $itemTransfer->getSku();
-            $deliveryDate = $itemTransfer->getDeliveryDate();
+            $deliveryDate = $itemTransfer->getConcreteDeliveryDate();
 
             if (!isset($result[$deliveryDate])) {
                 $result[$deliveryDate] = [];

@@ -67,6 +67,6 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
      */
     protected function getConditionalAvailabilityClient(): ConditionalAvailabilityClientInterface
     {
-        return $this->getProvidedDependency(ConditionalAvailabilityDependencyProvider::CONDITIONAL_AVAILABILITY_CLIENT);
+        return $this->getProvidedDependency(ConditionalAvailabilityDependencyProvider::CLIENT);
     }
 }

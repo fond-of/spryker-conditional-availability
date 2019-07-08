@@ -9,7 +9,7 @@ use Spryker\Zed\Search\SearchDependencyProvider;
 
 class ConditionalAvailabilityDependencyProvider extends SearchDependencyProvider
 {
-    public const CONDITIONAL_AVAILABILITY_CLIENT = 'CONDITIONAL_AVAILABILITY_CLIENT';
+    public const CLIENT = 'CLIENT';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
@@ -32,7 +32,7 @@ class ConditionalAvailabilityDependencyProvider extends SearchDependencyProvider
      */
     protected function addConditionalAvailabilityClient(Container $container): Container
     {
-        $container[static::CONDITIONAL_AVAILABILITY_CLIENT] = function (Container $container) {
+        $container[static::CLIENT] = function (Container $container) {
             return $container->getLocator()->conditionalAvailability()->client();
         };
 
