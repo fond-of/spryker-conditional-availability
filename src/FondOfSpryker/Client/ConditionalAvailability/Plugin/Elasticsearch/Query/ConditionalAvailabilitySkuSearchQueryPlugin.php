@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query;
 
@@ -16,6 +16,9 @@ use Spryker\Client\Search\Dependency\Plugin\SearchStringSetterInterface;
  */
 class ConditionalAvailabilitySkuSearchQueryPlugin extends AbstractPlugin implements QueryInterface, SearchStringSetterInterface, SearchStringGetterInterface
 {
+    protected const TYPE_FIELD = '_type';
+    protected const TYPE_VALUE = 'period';
+
     /**
      * @var string|null
      */
@@ -72,14 +75,17 @@ class ConditionalAvailabilitySkuSearchQueryPlugin extends AbstractPlugin impleme
     protected function createSearchQuery(): Query
     {
         $queryBuilder = $this->getFactory()->createQueryBuilder();
+        $boolQuery = $queryBuilder->createBoolQuery();
+        $matchQuery = $queryBuilder->createMatchQuery()->setField(static::TYPE_FIELD, static::TYPE_VALUE);
 
-        if ($this->hasSearchString()) {
-            $matchQuery = $queryBuilder->createTermQuery(PageIndexMap::SKU, $this->searchString);
-        } else {
-            $matchQuery = $queryBuilder->createMatchAllQuery();
+        $boolQuery->addMust($matchQuery);
+
+        if (!$this->hasSearchString()) {
+            return new Query($boolQuery);
         }
 
-        $boolQuery = $queryBuilder->createBoolQuery();
+        $matchQuery = $queryBuilder->createTermQuery(PageIndexMap::SKU, $this->searchString);
+
         $boolQuery->addMust($matchQuery);
 
         return new Query($boolQuery);

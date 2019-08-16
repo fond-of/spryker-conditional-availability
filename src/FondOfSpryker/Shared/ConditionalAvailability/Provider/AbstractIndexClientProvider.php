@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Shared\ConditionalAvailability\Provider;
 
 use Elastica\Index;
-use Spryker\Shared\Config\Config;
 use FondOfSpryker\Shared\ConditionalAvailability\ConditionalAvailabilityConstants;
+use Spryker\Shared\Config\Config;
 use Spryker\Shared\Search\Provider\AbstractIndexClientProvider as SprykerAbstractIndexClientProvider;
 
 abstract class AbstractIndexClientProvider extends SprykerAbstractIndexClientProvider
@@ -14,7 +14,7 @@ abstract class AbstractIndexClientProvider extends SprykerAbstractIndexClientPro
     /**
      * @param string|null $index
      *
-     * @throws \Exception
+     * @throws
      *
      * @return \Elastica\Index
      */

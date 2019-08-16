@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use DateTimeInterface;
-use Elastica\ResultSet;
 use Spryker\Client\Search\SearchClient;
 
 /**
@@ -17,9 +16,9 @@ class ConditionalAvailabilityClient extends SearchClient implements ConditionalA
      * @param string|null $searchString
      * @param string[] $requestParameters
      *
-     * @return \Elastica\ResultSet
+     * @return array
      */
-    public function conditionalAvailabilitySkuSearch(?string $searchString, array $requestParameters = []): ResultSet
+    public function conditionalAvailabilitySkuSearch(?string $searchString, array $requestParameters = []): array
     {
         $searchQuery = $this->getFactory()->createConditionalAvailabilitySkuSearchQuery($searchString);
         $searchQuery = $this->expandQuery($searchQuery, $this->getFactory()->getConditionalAvailabilitySkuSearchQueryExpanderPlugins(), $requestParameters);
@@ -33,9 +32,9 @@ class ConditionalAvailabilityClient extends SearchClient implements ConditionalA
      * @param \DateTimeInterface $dateTimeUntil
      * @param string[] $requestParameters
      *
-     * @return \Elastica\ResultSet
+     * @return array
      */
-    public function conditionalAvailabilityLastPingSearch(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil, array $requestParameters = []): ResultSet
+    public function conditionalAvailabilityLastPingSearch(DateTimeInterface $dateTimeFrom, DateTimeInterface $dateTimeUntil, array $requestParameters = []): array
     {
         $searchQuery = $this->getFactory()->createConditionalAvailabilityPingSearchQuery($dateTimeFrom, $dateTimeUntil);
         $searchQuery = $this->expandQuery($searchQuery, $this->getFactory()->getConditionalAvailabilityPingSearchQueryExpanderPlugins(), $requestParameters);

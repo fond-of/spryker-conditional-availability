@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query;
 
@@ -18,6 +18,8 @@ use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 class ConditionalAvailabilityPingSearchQueryPlugin extends AbstractPlugin implements QueryInterface, SearchRangeGetterInterface, SearchRangeSetterInterface
 {
     protected const FORMAT = 'Y-m-d H:i:s';
+    protected const TYPE_FIELD = '_type';
+    protected const TYPE_VALUE = 'ping';
 
     /**
      * @var \DateTimeInterface|null
@@ -82,20 +84,22 @@ class ConditionalAvailabilityPingSearchQueryPlugin extends AbstractPlugin implem
     protected function createSearchQuery(): Query
     {
         $queryBuilder = $this->getFactory()->createQueryBuilder();
+        $boolQuery = $queryBuilder->createBoolQuery();
+        $matchQuery = $queryBuilder->createMatchQuery()->setField(static::TYPE_FIELD, static::TYPE_VALUE);
 
-        if ($this->getSearchDateTimeFrom() !== null && $this->getSearchDateTimeUntil() !== null) {
-            $matchQuery = $queryBuilder->createRangeQuery(
-                PageIndexMap::LASTUPDATEAT,
-                $this->getSearchDateTimeFrom()->format(static::FORMAT),
-                $this->getSearchDateTimeUntil()->format(static::FORMAT)
-            );
-        } else {
-            $matchQuery = $queryBuilder->createMatchAllQuery();
+        $boolQuery->addMust($matchQuery);
+
+        if ($this->getSearchDateTimeFrom() === null || $this->getSearchDateTimeUntil() === null) {
+            return new Query($boolQuery);
         }
 
-        $boolQuery = $queryBuilder->createBoolQuery();
-        $boolQuery->addFilter($matchQuery);
+        $rangeQuery = $queryBuilder->createRangeQuery(
+            PageIndexMap::LASTUPDATEAT,
+            $this->getSearchDateTimeFrom()->format(static::FORMAT),
+            $this->getSearchDateTimeUntil()->format(static::FORMAT)
+        );
 
+        $boolQuery->addMust($rangeQuery);
 
         return new Query($boolQuery);
     }

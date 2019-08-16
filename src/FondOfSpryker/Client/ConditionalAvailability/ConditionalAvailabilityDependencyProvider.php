@@ -6,12 +6,15 @@ namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilityPingSearchQueryPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilitySkuSearchQueryPlugin;
-use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\StartAtConditionalAvailabilityQueryExpanderPlugin;
-use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\MaxSizeConditionalAvailabilityQueryPluginExpander;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\SortedConditionalAvailabilityQueryExpanderPlugin;
+use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\StartAtConditionalAvailabilityQueryExpanderPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\WarehouseConditionalAvailabilityQueryExpanderPlugin;
+use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\ResultFormatter\RawConditionalAvailabilityPeriodResultFormatterPlugin;
+use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\ResultFormatter\RawConditionalAvailabilityPingResultFormatterPlugin;
 use Spryker\Client\Kernel\AbstractDependencyProvider;
 use Spryker\Client\Kernel\Container;
+use Spryker\Client\Search\Plugin\Elasticsearch\QueryExpander\PaginatedQueryExpanderPlugin;
+use Spryker\Client\Search\Plugin\Elasticsearch\ResultFormatter\PaginatedResultFormatterPlugin;
 
 class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvider
 {
@@ -77,8 +80,8 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
         return [
             new WarehouseConditionalAvailabilityQueryExpanderPlugin(),
             new StartAtConditionalAvailabilityQueryExpanderPlugin(),
-            new MaxSizeConditionalAvailabilityQueryPluginExpander(),
             new SortedConditionalAvailabilityQueryExpanderPlugin(),
+            new PaginatedQueryExpanderPlugin(),
         ];
     }
 
@@ -101,7 +104,10 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
      */
     protected function createConditionalAvailabilitySkuSearchQueryFormatterPlugins(): array
     {
-        return [];
+        return [
+            new PaginatedResultFormatterPlugin(),
+            new RawConditionalAvailabilityPeriodResultFormatterPlugin(),
+        ];
     }
 
     /**
@@ -138,7 +144,9 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     protected function createConditionalAvailabilityPingSearchQueryExpanderPlugins(): array
     {
         return [
-            new MaxSizeConditionalAvailabilityQueryPluginExpander(),
+            //new MaxSizeConditionalAvailabilityQueryPluginExpander(),
+            new PaginatedQueryExpanderPlugin(),
+            new RawConditionalAvailabilityPingResultFormatterPlugin(),
         ];
     }
 
@@ -161,6 +169,8 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
      */
     protected function createConditionalAvailabilityPingSearchQueryFormatterPlugins(): array
     {
-        return [];
+        return [
+            new PaginatedResultFormatterPlugin(),
+        ];
     }
 }
