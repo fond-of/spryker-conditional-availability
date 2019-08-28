@@ -14,7 +14,7 @@ use Spryker\Shared\Config\Environment;
 
 class ConditionalAvailabilityPingCheckoutPreCondition implements ConditionalAvailabilityPingCheckoutPreConditionInterface
 {
-    protected const SEARCH_KEY = 'ping';
+    protected const SEARCH_KEY = 'pings';
 
     /**
      * @var \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface

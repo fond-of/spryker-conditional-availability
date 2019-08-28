@@ -17,7 +17,7 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
 {
     protected const CHECKOUT_PRODUCT_UNAVAILABLE_TRANSLATION_KEY = 'product.unavailable';
 
-    protected const SEARCH_KEY = 'period';
+    protected const SEARCH_KEY = 'periods';
 
     /**
      * @var \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface
