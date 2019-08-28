@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business\Model;
 
@@ -16,6 +16,8 @@ use Generated\Shared\Transfer\QuoteTransfer;
 class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabilityCheckoutPreConditionInterface
 {
     protected const CHECKOUT_PRODUCT_UNAVAILABLE_TRANSLATION_KEY = 'product.unavailable';
+
+    protected const SEARCH_KEY = 'period';
 
     /**
      * @var \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface
@@ -53,7 +55,6 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
 
         foreach ($groupedItems as $deliveryDate => $skus) {
             foreach ($skus as $sku => $quantity) {
-
                 $isAvailable = $this->isProductAvailable(
                     $deliveryDate,
                     $sku,
@@ -79,6 +80,8 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
      * @param int $quantity
      * @param string $warehouse
      *
+     * @throws
+     *
      * @return bool
      */
     protected function isProductAvailable(
@@ -95,11 +98,14 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
 
         $result = $this->conditionalAvailabilityClient->conditionalAvailabilitySkuSearch($sku, $requestParameters);
 
-        foreach ($result->getResults() as $resultSet) {
-            $data = $resultSet->getData();
-            $dataQuantityInt = (int) $data['qty'];
+        if (!array_key_exists(static::SEARCH_KEY, $result) || count($result[static::SEARCH_KEY]) === 0) {
+            return false;
+        }
 
-            if ($dataQuantityInt >= $quantity) {
+        foreach ($result[static::SEARCH_KEY] as $result) {
+            $availableQuantity = (int)$result['qty'];
+
+            if ($availableQuantity >= $quantity) {
                 return true;
             }
         }
@@ -108,7 +114,7 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
     }
 
     /**
-     * @param  \ArrayObject|\Generated\Shared\Transfer\ItemTransfer[] $items
+     * @param \ArrayObject|\Generated\Shared\Transfer\ItemTransfer[] $items
      *
      * @return array
      */
