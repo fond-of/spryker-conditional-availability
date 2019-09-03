@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business\Model;
 
+use DateTimeImmutable;
 use FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig;
 use Generated\Shared\Transfer\CheckoutErrorTransfer;
@@ -13,6 +14,8 @@ use Spryker\Shared\Config\Environment;
 
 class ConditionalAvailabilityPingCheckoutPreCondition implements ConditionalAvailabilityPingCheckoutPreConditionInterface
 {
+    protected const SEARCH_KEY = 'pings';
+
     /**
      * @var \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface
      */
@@ -39,22 +42,22 @@ class ConditionalAvailabilityPingCheckoutPreCondition implements ConditionalAvai
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponse
      *
+     * @throws
+     *
      * @return bool
      */
     public function checkCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponse): bool
     {
-        $dateTimeUntil = new \DateTimeImmutable();
         if (Environment::getInstance()->isDevelopment()) {
-            $dateTimeUntil = new \DateTimeImmutable('2019-02-27 11:23:36');
+            return true;
         }
 
+        $dateTimeUntil = new DateTimeImmutable();
         $dateTimeFrom = $dateTimeUntil->modify('-1 hour');
 
         $result = $this->conditionalAvailabilityClient->conditionalAvailabilityLastPingSearch($dateTimeFrom, $dateTimeUntil);
 
-        $isPassed = $result->getTotalHits() > 0;
-
-        if ($isPassed) {
+        if (array_key_exists(static::SEARCH_KEY, $result) && count($result[static::SEARCH_KEY]) > 0) {
             return true;
         }
 
