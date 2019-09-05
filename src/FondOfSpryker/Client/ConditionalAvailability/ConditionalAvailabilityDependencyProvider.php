@@ -15,8 +15,6 @@ use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\ResultForm
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\ResultFormatter\RawConditionalAvailabilityPingResultFormatterPlugin;
 use Spryker\Client\Kernel\AbstractDependencyProvider;
 use Spryker\Client\Kernel\Container;
-use Spryker\Client\Search\Plugin\Elasticsearch\QueryExpander\PaginatedQueryExpanderPlugin;
-use Spryker\Client\Search\Plugin\Elasticsearch\ResultFormatter\PaginatedResultFormatterPlugin;
 
 class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvider
 {
@@ -68,7 +66,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     protected function addConditionalAvailabilitySkuSearchQueryExpanderPlugins(Container $container): Container
     {
         $container[static::CONDITIONAL_AVAILABILITY_SKU_SEARCH_QUERY_EXPANDER_PLUGINS] = function () {
-            return $this->createConditionalAvailabilitySkuSearchQueryExpanderPlugins();
+            return $this->getConditionalAvailabilitySkuSearchQueryExpanderPlugins();
         };
 
         return $container;
@@ -77,13 +75,12 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     /**
      * @return \Spryker\Client\Search\Dependency\Plugin\QueryExpanderPluginInterface[]
      */
-    protected function createConditionalAvailabilitySkuSearchQueryExpanderPlugins(): array
+    protected function getConditionalAvailabilitySkuSearchQueryExpanderPlugins(): array
     {
         return [
             new WarehouseConditionalAvailabilityQueryExpanderPlugin(),
             new StartAtConditionalAvailabilityQueryExpanderPlugin(),
             new SortedConditionalAvailabilityQueryExpanderPlugin(),
-            new PaginatedQueryExpanderPlugin(),
             new QuantityGreaterZeroConditionalAvailabilityQueryExpanderPlugin(),
             new NoSamplesConditionalAvailabilityQueryExpanderPlugin(),
         ];
@@ -97,7 +94,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     protected function addConditionalAvailabilitySkuSearchQueryFormatterPlugins(Container $container): Container
     {
         $container[static::CONDITIONAL_AVAILABILITY_SKU_SEARCH_QUERY_FORMATTER_PLUGINS] = function () {
-            return $this->createConditionalAvailabilitySkuSearchQueryFormatterPlugins();
+            return $this->getConditionalAvailabilitySkuSearchQueryFormatterPlugins();
         };
 
         return $container;
@@ -106,10 +103,9 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     /**
      * @return \Spryker\Client\Search\Dependency\Plugin\QueryExpanderPluginInterface[]
      */
-    protected function createConditionalAvailabilitySkuSearchQueryFormatterPlugins(): array
+    protected function getConditionalAvailabilitySkuSearchQueryFormatterPlugins(): array
     {
         return [
-            new PaginatedResultFormatterPlugin(),
             new RawConditionalAvailabilityPeriodResultFormatterPlugin(),
         ];
     }
@@ -136,7 +132,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     protected function addConditionalAvailabilityPingSearchQueryExpanderPlugins(Container $container): Container
     {
         $container[static::CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_EXPANDER_PLUGINS] = function () {
-            return $this->createConditionalAvailabilityPingSearchQueryExpanderPlugins();
+            return $this->getConditionalAvailabilityPingSearchQueryExpanderPlugins();
         };
 
         return $container;
@@ -145,13 +141,9 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     /**
      * @return \Spryker\Client\Search\Dependency\Plugin\QueryExpanderPluginInterface[]
      */
-    protected function createConditionalAvailabilityPingSearchQueryExpanderPlugins(): array
+    protected function getConditionalAvailabilityPingSearchQueryExpanderPlugins(): array
     {
-        return [
-            //new MaxSizeConditionalAvailabilityQueryPluginExpander(),
-            new PaginatedQueryExpanderPlugin(),
-            new RawConditionalAvailabilityPingResultFormatterPlugin(),
-        ];
+        return [];
     }
 
     /**
@@ -162,7 +154,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     protected function addConditionalAvailabilityPingSearchQueryFormatterPlugins(Container $container): Container
     {
         $container[static::CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_FORMATTER_PLUGINS] = function () {
-            return $this->createConditionalAvailabilityPingSearchQueryFormatterPlugins();
+            return $this->getConditionalAvailabilityPingSearchQueryFormatterPlugins();
         };
 
         return $container;
@@ -171,10 +163,10 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     /**
      * @return \Spryker\Client\Search\Dependency\Plugin\QueryExpanderPluginInterface[]
      */
-    protected function createConditionalAvailabilityPingSearchQueryFormatterPlugins(): array
+    protected function getConditionalAvailabilityPingSearchQueryFormatterPlugins(): array
     {
         return [
-            new PaginatedResultFormatterPlugin(),
+            new RawConditionalAvailabilityPingResultFormatterPlugin(),
         ];
     }
 }

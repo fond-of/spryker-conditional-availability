@@ -5,8 +5,6 @@ declare(strict_types = 1);
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use DateTimeInterface;
-use FondOfSpryker\Client\ConditionalAvailability\Config\ConditionalAvailabilityPaginationConfigBuilder;
-use FondOfSpryker\Client\ConditionalAvailability\Config\PaginationConfigBuilderInterface;
 use FondOfSpryker\Client\ConditionalAvailability\Dependency\Plugin\SearchRangeSetterInterface;
 use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use FondOfSpryker\Client\Search\SearchFactory;
@@ -64,19 +62,6 @@ class ConditionalAvailabilityFactory extends SearchFactory
         }
 
         return $searchQuery;
-    }
-
-    /**
-     * @return \FondOfSpryker\Client\ConditionalAvailability\Config\PaginationConfigBuilderInterface
-     */
-    public function createPaginationConfigBuilder(): PaginationConfigBuilderInterface
-    {
-        $paginationConfigBuilder = new ConditionalAvailabilityPaginationConfigBuilder();
-        $paginationConfigBuilder->setPaginationConfigTransfer(
-            $this->getConfig()->getConditionalAvailabilityPaginationConfigTransfer()
-        );
-
-        return $paginationConfigBuilder;
     }
 
     /**
