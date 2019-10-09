@@ -3,6 +3,8 @@
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use Codeception\Test\Unit;
+use DateTime;
+use Elastica\ResultSet;
 use Spryker\Client\Search\Dependency\Plugin\QueryExpanderPluginInterface;
 use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 use Spryker\Client\Search\Dependency\Plugin\ResultFormatterPluginInterface;
@@ -46,7 +48,7 @@ class ConditionalAvailabilityClientTest extends Unit
     protected $queryFormatterPlugins;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Spryker\Client\Search\Dependency\Plugin\ResultFormatterPluginInterface
      */
     private $queryFormatterPluginMock;
 
@@ -54,6 +56,16 @@ class ConditionalAvailabilityClientTest extends Unit
      * @var array
      */
     private $requestParameters;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Elastica\ResultSet
+     */
+    protected $resultSetMock;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\DateTime
+     */
+    private $dateTimeInterfaceMock;
 
     /**
      * @return void
@@ -78,6 +90,18 @@ class ConditionalAvailabilityClientTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->resultSetMock = $this->getMockBuilder(ResultSet::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->queryFormatterPluginMock = $this->getMockBuilder(ResultFormatterPluginInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->dateTimeInterfaceMock = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->queryExpanderPlugins = [
             $this->queryExpanderPluginInterfaceMock,
         ];
@@ -85,10 +109,6 @@ class ConditionalAvailabilityClientTest extends Unit
         $this->requestParameters = [
             "sort" => "asc",
         ];
-
-        $this->queryFormatterPluginMock = $this->getMockBuilder(ResultFormatterPluginInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->queryFormatterPlugins = [
             $this->queryFormatterPluginMock,
@@ -99,10 +119,8 @@ class ConditionalAvailabilityClientTest extends Unit
     }
 
     /**
-     * TODO: fix
      * @return void
      */
-    /*
     public function testConditionalAvailabilitySkuSearch(): void
     {
         $this->conditionalAvailabilityFactoryMock->expects($this->atLeastOnce())
@@ -121,7 +139,46 @@ class ConditionalAvailabilityClientTest extends Unit
             ->method('createElasticsearchSearchHandler')
             ->willReturn($this->searchHandlerInterfaceMock);
 
+        $this->queryExpanderPluginInterfaceMock->expects($this->atLeastOnce())
+            ->method('expandQuery')
+            ->willReturn($this->queryInterfaceMock);
+
+        $this->searchHandlerInterfaceMock->expects($this->atLeastOnce())
+            ->method('search')
+            ->willReturn([$this->resultSetMock]);
+
         $this->assertIsArray($this->conditionalAvailabilityClient->conditionalAvailabilitySkuSearch("search"));
     }
-    */
+
+    /**
+     * @return void
+     */
+    public function testConditionalAvailabilityLastPingSearch(): void
+    {
+        $this->conditionalAvailabilityFactoryMock->expects($this->atLeastOnce())
+            ->method('createConditionalAvailabilityPingSearchQuery')
+            ->willReturn($this->queryInterfaceMock);
+
+        $this->conditionalAvailabilityFactoryMock->expects($this->atLeastOnce())
+            ->method('getConditionalAvailabilityPingSearchQueryExpanderPlugins')
+            ->willReturn($this->queryExpanderPlugins);
+
+        $this->queryExpanderPluginInterfaceMock->expects($this->atLeastOnce())
+            ->method('expandQuery')
+            ->willReturn($this->queryInterfaceMock);
+
+        $this->conditionalAvailabilityFactoryMock->expects($this->atLeastOnce())
+            ->method('getConditionalAvailabilityPingSearchQueryFormatterPlugins')
+            ->willReturn($this->queryFormatterPlugins);
+
+        $this->conditionalAvailabilityFactoryMock->expects($this->atLeastOnce())
+            ->method('createElasticsearchSearchHandler')
+            ->willReturn($this->searchHandlerInterfaceMock);
+
+        $this->searchHandlerInterfaceMock->expects($this->atLeastOnce())
+            ->method('search')
+            ->willReturn([$this->resultSetMock]);
+
+        $this->assertIsArray($this->conditionalAvailabilityClient->conditionalAvailabilityLastPingSearch($this->dateTimeInterfaceMock, $this->dateTimeInterfaceMock));
+    }
 }

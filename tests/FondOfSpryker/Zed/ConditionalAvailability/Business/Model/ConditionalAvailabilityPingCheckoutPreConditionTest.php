@@ -34,7 +34,7 @@ class ConditionalAvailabilityPingCheckoutPreConditionTest extends Unit
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\Generated\Shared\Transfer\CheckoutResponseTransfer
      */
-    protected $checkoutResponseMock;
+    protected $checkoutResponseTransferMock;
 
     /**
      * @return void
@@ -55,7 +55,7 @@ class ConditionalAvailabilityPingCheckoutPreConditionTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->checkoutResponseMock = $this->getMockBuilder(CheckoutResponseTransfer::class)
+        $this->checkoutResponseTransferMock = $this->getMockBuilder(CheckoutResponseTransfer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -66,13 +66,39 @@ class ConditionalAvailabilityPingCheckoutPreConditionTest extends Unit
     }
 
     /**
-     * TODO: here
      * @return void
      */
-    /*
     public function testCheckCondition(): void
     {
-        $this->assertIsBool($this->conditionalAvailabilityPingCheckoutPreCondition->checkCondition($this->quoteTransferMock, $this->checkoutResponseMock));
+        $this->conditionalAvailabilityClientMock->expects($this->atLeastOnce())
+            ->method('conditionalAvailabilityLastPingSearch')
+            ->willReturn([
+                "pings" => [
+                    ["qty" => "3"],
+                ],
+            ]);
+
+        $this->assertIsBool($this->conditionalAvailabilityPingCheckoutPreCondition->checkCondition($this->quoteTransferMock, $this->checkoutResponseTransferMock));
     }
-    */
+
+    /**
+     * @return void
+     */
+    public function testCheckConditionFail(): void
+    {
+        $this->conditionalAvailabilityClientMock->expects($this->atLeastOnce())
+            ->method('conditionalAvailabilityLastPingSearch')
+            ->willReturn([]);
+
+        $this->checkoutResponseTransferMock->expects($this->atLeastOnce())
+            ->method('addError')
+            ->willReturn($this->checkoutResponseTransferMock);
+
+        $this->checkoutResponseTransferMock->expects($this->atLeastOnce())
+            ->method('setIsSuccess')
+            ->with(false)
+            ->willReturn($this->checkoutResponseTransferMock);
+
+        $this->assertIsBool($this->conditionalAvailabilityPingCheckoutPreCondition->checkCondition($this->quoteTransferMock, $this->checkoutResponseTransferMock));
+    }
 }

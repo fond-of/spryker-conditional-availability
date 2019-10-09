@@ -7,6 +7,7 @@ namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Quer
 use Codeception\Test\Unit;
 use DateTime;
 use Elastica\Query\BoolQuery;
+use Elastica\Query\Match;
 use Elastica\QueryBuilder;
 use FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityFactory;
 
@@ -38,6 +39,11 @@ class ConditionalAvailabilityPingSearchQueryPluginTest extends Unit
     protected $boolQueryMock;
 
     /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Elastica\Query\Match
+     */
+    protected $matchMock;
+
+    /**
      * @return void
      */
     protected function _before(): void
@@ -60,17 +66,15 @@ class ConditionalAvailabilityPingSearchQueryPluginTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->matchMock = $this->getMockBuilder(Match::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->conditionalAvailabilityFactoryMock->expects($this->atLeastOnce())
+            ->method('createQueryBuilder')
+            ->willReturn($this->queryBuilderMock);
+
         $this->conditionalAvailabilityPingSearchQueryPlugin = new ConditionalAvailabilityPingSearchQueryPlugin();
         $this->conditionalAvailabilityPingSearchQueryPlugin->setFactory($this->conditionalAvailabilityFactoryMock);
     }
-
-    /**
-     * @return void
-     */
-    /*
-    public function testSearchDateTimeFrom(): void
-    {
-        $this->conditionalAvailabilityPingSearchQueryPlugin->setSearchDateTimeRange($this->dateTimeMock, $this->dateTimeMock);
-    }
-    */
 }

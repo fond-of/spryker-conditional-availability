@@ -110,13 +110,111 @@ class ConditionalAvailabilityCheckoutPreConditionTest extends Unit
             ->method('getSku')
             ->willReturn("sku");
 
+        $this->itemTransferMock->expects($this->atLeastOnce())
+            ->method('getConcreteDeliveryDate')
+            ->willReturn("2019-08-27");
+
+        $this->itemTransferMock->expects($this->atLeastOnce())
+            ->method('getQuantity')
+            ->willReturn(1);
+
         $this->conditionalAvailabilityConfigMock->expects($this->atLeastOnce())
             ->method('getDefaultWarehouse')
-            ->willReturn("string");
+            ->willReturn("warehouse");
+
+        $this->conditionalAvailabilityClientMock->expects($this->atLeastOnce())
+            ->method('conditionalAvailabilitySkuSearch')
+            ->willReturn([
+                "periods" => [
+                    ["qty" => "3"],
+                ],
+            ]);
+
+        $this->assertIsBool($this->conditionalAvailabilityCheckoutPreCondition->checkCondition($this->quoteTransferMock, $this->checkoutResponseTransferMock));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCheckConditionLowerAvailableQuantity(): void
+    {
+        $this->quoteTransferMock->expects($this->atLeastOnce())
+            ->method('getItems')
+            ->willReturn($this->itemTransfers);
+
+        $this->itemTransferMock->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn("sku");
 
         $this->itemTransferMock->expects($this->atLeastOnce())
             ->method('getConcreteDeliveryDate')
             ->willReturn("2019-08-27");
+
+        $this->itemTransferMock->expects($this->atLeastOnce())
+            ->method('getQuantity')
+            ->willReturn(5);
+
+        $this->conditionalAvailabilityConfigMock->expects($this->atLeastOnce())
+            ->method('getDefaultWarehouse')
+            ->willReturn("warehouse");
+
+        $this->conditionalAvailabilityClientMock->expects($this->atLeastOnce())
+            ->method('conditionalAvailabilitySkuSearch')
+            ->willReturn([
+                "periods" => [
+                    ["qty" => "3"],
+                ],
+            ]);
+
+        $this->checkoutResponseTransferMock->expects($this->atLeastOnce())
+            ->method('addError')
+            ->willReturn($this->checkoutResponseTransferMock);
+
+        $this->checkoutResponseTransferMock->expects($this->atLeastOnce())
+            ->method('setIsSuccess')
+            ->with(false)
+            ->willReturn($this->checkoutResponseTransferMock);
+
+        $this->assertIsBool($this->conditionalAvailabilityCheckoutPreCondition->checkCondition($this->quoteTransferMock, $this->checkoutResponseTransferMock));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCheckConditionFail(): void
+    {
+        $this->quoteTransferMock->expects($this->atLeastOnce())
+            ->method('getItems')
+            ->willReturn($this->itemTransfers);
+
+        $this->itemTransferMock->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn("sku");
+
+        $this->itemTransferMock->expects($this->atLeastOnce())
+            ->method('getConcreteDeliveryDate')
+            ->willReturn("2019-08-27");
+
+        $this->itemTransferMock->expects($this->atLeastOnce())
+            ->method('getQuantity')
+            ->willReturn(1);
+
+        $this->conditionalAvailabilityConfigMock->expects($this->atLeastOnce())
+            ->method('getDefaultWarehouse')
+            ->willReturn("warehouse");
+
+        $this->conditionalAvailabilityClientMock->expects($this->atLeastOnce())
+            ->method('conditionalAvailabilitySkuSearch')
+            ->willReturn([]);
+
+        $this->checkoutResponseTransferMock->expects($this->atLeastOnce())
+            ->method('addError')
+            ->willReturn($this->checkoutResponseTransferMock);
+
+        $this->checkoutResponseTransferMock->expects($this->atLeastOnce())
+            ->method('setIsSuccess')
+            ->with(false)
+            ->willReturn($this->checkoutResponseTransferMock);
 
         $this->assertIsBool($this->conditionalAvailabilityCheckoutPreCondition->checkCondition($this->quoteTransferMock, $this->checkoutResponseTransferMock));
     }

@@ -15,9 +15,8 @@
   "require": {
     "php": ">=7.1",
     "spryker/search": "^8.0",
-    "fond-of-spryker/search": "dev-master",
-    "spryker/checkout-rest-api": "^1.0.0",
-    "fond-of-spryker/conditional-availability-cart-connector": "dev-master"
+    "spryker/checkout-extension": "^1.2",
+    "fond-of-spryker/search": "dev-master"
   },
   "require-dev": {
     "spryker/code-sniffer": "^0.12",
