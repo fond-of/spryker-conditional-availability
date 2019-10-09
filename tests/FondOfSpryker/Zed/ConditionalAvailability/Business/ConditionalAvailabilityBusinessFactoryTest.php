@@ -11,6 +11,7 @@ use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabi
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig;
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityDependencyProvider;
 use ReflectionClass;
+use ReflectionMethod;
 use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGeneratorInterface;
 
@@ -119,7 +120,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     /**
      * @return void
      */
-    public function testCreateIndexClientProvider()
+    public function testCreateIndexClientProvider(): void
     {
         $foo = self::getMethod('createIndexProvider');
         $obj = new ConditionalAvailabilityBusinessFactory();
@@ -127,11 +128,13 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     }
 
     /**
-     * @param $name
+     * @param string $name
+     *
+     * @throws
      *
      * @return \ReflectionMethod
      */
-    protected static function getMethod($name)
+    protected static function getMethod(string $name): ReflectionMethod
     {
         $class = new ReflectionClass(ConditionalAvailabilityBusinessFactory::class);
         $method = $class->getMethod($name);

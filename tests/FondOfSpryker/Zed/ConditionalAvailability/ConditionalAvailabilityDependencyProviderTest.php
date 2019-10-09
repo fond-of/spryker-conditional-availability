@@ -37,6 +37,7 @@ class ConditionalAvailabilityDependencyProviderTest extends Unit
      */
     public function testProvideBusinessLayerDependencies(): void
     {
+
         $this->assertInstanceOf(Container::class, $this->conditionalAvailabilityDependencyProvider->provideBusinessLayerDependencies($this->containerMock));
     }
 }
