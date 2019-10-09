@@ -37,6 +37,9 @@
         "warehouseGroup":{
           "type":"keyword"
         },
+        "isAccessible":{
+          "type":"boolean"
+        },
         "lastUpdateAt":{
           "type":"date",
           "format":"yyyy-MM-dd HH:mm:ss"

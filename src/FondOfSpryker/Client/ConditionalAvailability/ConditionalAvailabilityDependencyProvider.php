@@ -6,6 +6,7 @@ namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilityPingSearchQueryPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilitySkuSearchQueryPlugin;
+use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\IsAccessibleConditionalAvailabilityQueryExpanderPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\NoSamplesConditionalAvailabilityQueryExpanderPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\QuantityGreaterZeroConditionalAvailabilityQueryExpanderPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander\SortedConditionalAvailabilityQueryExpanderPlugin;
@@ -83,6 +84,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
             new SortedConditionalAvailabilityQueryExpanderPlugin(),
             new QuantityGreaterZeroConditionalAvailabilityQueryExpanderPlugin(),
             new NoSamplesConditionalAvailabilityQueryExpanderPlugin(),
+            new IsAccessibleConditionalAvailabilityQueryExpanderPlugin(),
         ];
     }
 
