@@ -16,6 +16,7 @@ interface ConditionalAvailabilityConstants
     public const PARAMETER_START_AT = 'start_at';
     public const PARAMETER_END_AT = 'end_at';
     public const PARAMETER_SORT = 'sort';
+    public const PARAMETER_IS_ACCESSIBLE = 'is_accessible';
 
     public const KEY_EARLIEST_DATE = 'earliest-date';
     public const DEFAULT_WAREHOUSE = 'EU';

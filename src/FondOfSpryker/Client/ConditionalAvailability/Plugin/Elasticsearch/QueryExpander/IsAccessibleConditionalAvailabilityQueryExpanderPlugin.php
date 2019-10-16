@@ -5,6 +5,7 @@ namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Quer
 
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
+use FondOfSpryker\Shared\ConditionalAvailability\ConditionalAvailabilityConstants;
 use Generated\Shared\ConditionalAvailability\Search\PageIndexMap;
 use InvalidArgumentException;
 use Spryker\Client\Kernel\AbstractPlugin;
@@ -17,10 +18,6 @@ use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 class IsAccessibleConditionalAvailabilityQueryExpanderPlugin extends AbstractPlugin implements QueryExpanderPluginInterface
 {
     /**
-     * {@inheritdoc}
-     *
-     * @api
-     *
      * @param \Spryker\Client\Search\Dependency\Plugin\QueryInterface $searchQuery
      * @param array $requestParameters
      *
@@ -28,9 +25,17 @@ class IsAccessibleConditionalAvailabilityQueryExpanderPlugin extends AbstractPlu
      */
     public function expandQuery(QueryInterface $searchQuery, array $requestParameters = []): QueryInterface
     {
-        $this->getBoolQuery($searchQuery->getSearchQuery())->addMust(
-            $this->getFactory()->createQueryBuilder()->createTermQuery(PageIndexMap::ISACCESSIBLE, true)
+        if (!array_key_exists(ConditionalAvailabilityConstants::PARAMETER_IS_ACCESSIBLE, $requestParameters)) {
+            return $searchQuery;
+        }
+
+        $termQuery = $this->getFactory()->createQueryBuilder()->createTermQuery(
+            PageIndexMap::ISACCESSIBLE,
+            $requestParameters[ConditionalAvailabilityConstants::PARAMETER_IS_ACCESSIBLE]
         );
+
+        $this->getBoolQuery($searchQuery->getSearchQuery())
+            ->addMust($termQuery);
 
         return $searchQuery;
     }
