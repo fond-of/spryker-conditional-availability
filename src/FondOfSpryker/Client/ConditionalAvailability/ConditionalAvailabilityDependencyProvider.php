@@ -25,6 +25,8 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     public const CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_EXPANDER_PLUGINS = 'CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_EXPANDER_PLUGINS';
     public const CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_FORMATTER_PLUGINS = 'CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_FORMATTER_PLUGINS';
 
+    public const CLIENT_COMPANY_USER_CLIENT = 'CLIENT_COMPANY_USER_CLIENT';
+
     /**
      * @param \Spryker\Client\Kernel\Container $container
      *
@@ -33,6 +35,8 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
     public function provideServiceLayerDependencies(Container $container): Container
     {
         $container = parent::provideServiceLayerDependencies($container);
+
+        $container = $this->addCompanyUserClient($container);
 
         $container = $this->addConditionalAvailabilitySkuSearchQueryPlugin($container);
         $container = $this->addConditionalAvailabilitySkuSearchQueryExpanderPlugins($container);
@@ -168,5 +172,19 @@ class ConditionalAvailabilityDependencyProvider extends AbstractDependencyProvid
         return [
             new RawConditionalAvailabilityPingResultFormatterPlugin(),
         ];
+    }
+
+    /**
+     * @param \Spryker\Client\Kernel\Container $container
+     *
+     * @return \Spryker\Client\Kernel\Container
+     */
+    protected function addCompanyUserClient(Container $container): Container
+    {
+        $container[static::CLIENT_COMPANY_USER_CLIENT] = function (Container $container) {
+            return $container->getLocator()->companyUser()->client();
+        };
+
+        return $container;
     }
 }
