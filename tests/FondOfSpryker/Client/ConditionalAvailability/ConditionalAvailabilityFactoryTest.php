@@ -4,12 +4,12 @@ namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use Codeception\Test\Unit;
 use DateTime;
-use FondOfSpryker\Client\ConditionalAvailability\Config\PaginationConfigBuilderInterface;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilityPingSearchQueryPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\Query\ConditionalAvailabilitySkuSearchQueryPlugin;
 use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use Generated\Shared\ConditionalAvailability\Search\PageIndexMap;
 use ReflectionClass;
+use ReflectionMethod;
 use Spryker\Client\Kernel\Container;
 use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 
@@ -128,14 +128,6 @@ class ConditionalAvailabilityFactoryTest extends Unit
     /**
      * @return void
      */
-    public function testPaginationConfigBuilder(): void
-    {
-        $this->assertInstanceOf(PaginationConfigBuilderInterface::class, $this->conditionalAvailabilityFactory->createPaginationConfigBuilder());
-    }
-
-    /**
-     * @return void
-     */
     public function testGetConditionalAvailabilitySkuSearchQueryExpanderPlugins(): void
     {
         $this->containerMock->expects($this->atLeastOnce())
@@ -208,7 +200,7 @@ class ConditionalAvailabilityFactoryTest extends Unit
     /**
      * @return void
      */
-    public function testCreatePageIndexMap()
+    public function testCreatePageIndexMap(): void
     {
         $foo = self::getMethod('createPageIndexMap');
         $obj = new ConditionalAvailabilityFactory();
@@ -218,7 +210,7 @@ class ConditionalAvailabilityFactoryTest extends Unit
     /**
      * @return void
      */
-    public function testCreateIndexClientProvider()
+    public function testCreateIndexClientProvider(): void
     {
         $foo = self::getMethod('createIndexClientProvider');
         $obj = new ConditionalAvailabilityFactory();
@@ -226,11 +218,13 @@ class ConditionalAvailabilityFactoryTest extends Unit
     }
 
     /**
-     * @param $name
+     * @param string $name
+     *
+     * @throws
      *
      * @return \ReflectionMethod
      */
-    protected static function getMethod($name)
+    protected static function getMethod(string $name): ReflectionMethod
     {
         $class = new ReflectionClass(ConditionalAvailabilityFactory::class);
         $method = $class->getMethod($name);
