@@ -14,6 +14,8 @@ interface ConditionalAvailabilityConstants
     public const PARAMETER_WAREHOUSE = 'warehouse';
     public const PARAMETER_SKU = 'sku';
     public const PARAMETER_START_AT = 'start_at';
+    public const PARAMETER_QUOTE_TRANSFER = 'quote_transfer';
+    public const PARAMETER_CUSTOMER_TRANSFER = 'customer_transfer';
     public const PARAMETER_END_AT = 'end_at';
     public const PARAMETER_SORT = 'sort';
 

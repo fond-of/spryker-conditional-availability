@@ -118,10 +118,6 @@ class ConditionalAvailabilityCheckoutPreConditionTest extends Unit
             ->method('getQuantity')
             ->willReturn(1);
 
-        $this->conditionalAvailabilityConfigMock->expects($this->atLeastOnce())
-            ->method('getDefaultWarehouse')
-            ->willReturn("warehouse");
-
         $this->conditionalAvailabilityClientMock->expects($this->atLeastOnce())
             ->method('conditionalAvailabilitySkuSearch')
             ->willReturn([
@@ -153,10 +149,6 @@ class ConditionalAvailabilityCheckoutPreConditionTest extends Unit
         $this->itemTransferMock->expects($this->atLeastOnce())
             ->method('getQuantity')
             ->willReturn(5);
-
-        $this->conditionalAvailabilityConfigMock->expects($this->atLeastOnce())
-            ->method('getDefaultWarehouse')
-            ->willReturn("warehouse");
 
         $this->conditionalAvailabilityClientMock->expects($this->atLeastOnce())
             ->method('conditionalAvailabilitySkuSearch')
@@ -198,10 +190,6 @@ class ConditionalAvailabilityCheckoutPreConditionTest extends Unit
         $this->itemTransferMock->expects($this->atLeastOnce())
             ->method('getQuantity')
             ->willReturn(1);
-
-        $this->conditionalAvailabilityConfigMock->expects($this->atLeastOnce())
-            ->method('getDefaultWarehouse')
-            ->willReturn("warehouse");
 
         $this->conditionalAvailabilityClientMock->expects($this->atLeastOnce())
             ->method('conditionalAvailabilitySkuSearch')

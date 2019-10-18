@@ -16,7 +16,8 @@
     "php": ">=7.1",
     "spryker/search": "^8.0",
     "spryker/checkout-extension": "^1.2",
-    "fond-of-spryker/search": "dev-master"
+    "fond-of-spryker/search": "dev-master",
+    "spryker/company-user": "^2.0.0"
   },
   "require-dev": {
     "spryker/code-sniffer": "^0.12",

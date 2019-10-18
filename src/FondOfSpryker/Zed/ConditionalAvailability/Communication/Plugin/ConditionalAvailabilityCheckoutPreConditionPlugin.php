@@ -19,8 +19,13 @@ class ConditionalAvailabilityCheckoutPreConditionPlugin extends AbstractPlugin i
      *
      * @return bool
      */
-    public function checkCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponseTransfer): bool
-    {
-        return $this->getFacade()->checkoutConditionalAvailabilityPreCondition($quoteTransfer, $checkoutResponseTransfer);
+    public function checkCondition(
+        QuoteTransfer $quoteTransfer,
+        CheckoutResponseTransfer $checkoutResponseTransfer
+    ): bool {
+        return $this->getFacade()->checkoutConditionalAvailabilityPreCondition(
+            $quoteTransfer,
+            $checkoutResponseTransfer
+        );
     }
 }

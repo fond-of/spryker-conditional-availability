@@ -30,6 +30,11 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
     protected $conditionalAvailabilityConfig;
 
     /**
+     * @var array
+     */
+    protected $defaultRequestParameters = [];
+
+    /**
      * @param \FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig $conditionalAvailabilityConfig
      * @param \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface $conditionalAvailabilityClient
      */
@@ -49,8 +54,9 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
      */
     public function checkCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponse): bool
     {
-        $isPassed = true;
+        $this->initDefaultRequestParameters($quoteTransfer);
 
+        $isPassed = true;
         $groupedItems = $this->groupItemsBySkuAndDeliveryDate($quoteTransfer->getItems());
 
         foreach ($groupedItems as $deliveryDate => $skus) {
@@ -58,8 +64,7 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
                 $isAvailable = $this->isProductAvailable(
                     $deliveryDate,
                     $sku,
-                    $quantity,
-                    $this->conditionalAvailabilityConfig->getDefaultWarehouse()
+                    $quantity
                 );
 
                 if ($isAvailable) {
@@ -78,7 +83,6 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
      * @param string $deliveryDate
      * @param string $sku
      * @param int $quantity
-     * @param string $warehouse
      *
      * @throws
      *
@@ -87,14 +91,12 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
     protected function isProductAvailable(
         string $deliveryDate,
         string $sku,
-        int $quantity,
-        string $warehouse
+        int $quantity
     ): bool {
-        $requestParameters = [
-            ConditionalAvailabilityConstants::PARAMETER_WAREHOUSE => $warehouse,
+        $requestParameters = array_merge($this->defaultRequestParameters, [
             ConditionalAvailabilityConstants::PARAMETER_START_AT => new DateTime($deliveryDate),
             ConditionalAvailabilityConstants::PARAMETER_END_AT => new DateTime($deliveryDate),
-        ];
+        ]);
 
         $result = $this->conditionalAvailabilityClient->conditionalAvailabilitySkuSearch($sku, $requestParameters);
 
@@ -171,5 +173,20 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
         $checkoutResponse
             ->addError($checkoutErrorTransfer)
             ->setIsSuccess(false);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
+     * @return $this
+     */
+    protected function initDefaultRequestParameters(QuoteTransfer $quoteTransfer): ConditionalAvailabilityCheckoutPreConditionInterface
+    {
+        $this->defaultRequestParameters = [
+            ConditionalAvailabilityConstants::PARAMETER_WAREHOUSE => ConditionalAvailabilityConstants::DEFAULT_WAREHOUSE,
+            ConditionalAvailabilityConstants::PARAMETER_QUOTE_TRANSFER => $quoteTransfer,
+        ];
+
+        return $this;
     }
 }

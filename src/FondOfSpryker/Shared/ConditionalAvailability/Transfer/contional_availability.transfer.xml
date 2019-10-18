@@ -17,11 +17,33 @@
     </transfer>
 
     <transfer name="Quote">
+        <property name="idQuote" type="int"/>
         <property name="items" type="Item[]" singular="item"/>
+        <property name="companyUser" type="CompanyUser"/>
     </transfer>
 
     <transfer name="CheckoutResponse">
         <property name="isSuccess" type="bool" />
         <property name="errors" type="CheckoutError[]" singular="error" />
+    </transfer>
+
+    <transfer name="Customer">
+        <property name="idCustomer" type="int" />
+    </transfer>
+
+    <transfer name="CompanyUserCollection">
+        <property name="companyUsers" type="CompanyUser[]" singular="companyUser"/>
+    </transfer>
+
+    <transfer name="CompanyUser">
+        <property name="companyBusinessUnit" type="CompanyBusinessUnit"/>
+    </transfer>
+
+    <transfer name="CompanyBusinessUnit">
+        <property name="company" type="Company"/>
+    </transfer>
+
+    <transfer name="Company">
+        <property name="debtorNumber" type="string"/>
     </transfer>
 </transfers>

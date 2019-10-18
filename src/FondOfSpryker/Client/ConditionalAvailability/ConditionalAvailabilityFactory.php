@@ -9,6 +9,7 @@ use FondOfSpryker\Client\ConditionalAvailability\Dependency\Plugin\SearchRangeSe
 use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use FondOfSpryker\Client\Search\SearchFactory;
 use Generated\Shared\ConditionalAvailability\Search\PageIndexMap;
+use Spryker\Client\CompanyUser\CompanyUserClientInterface;
 use Spryker\Client\Search\Dependency\Plugin\QueryInterface;
 use Spryker\Client\Search\Dependency\Plugin\SearchStringSetterInterface;
 
@@ -122,5 +123,15 @@ class ConditionalAvailabilityFactory extends SearchFactory
     public function getConditionalAvailabilityPingSearchQueryFormatterPlugins(): array
     {
         return $this->getProvidedDependency(ConditionalAvailabilityDependencyProvider::CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_FORMATTER_PLUGINS);
+    }
+
+    /**
+     * @throws
+     *
+     * @return \Spryker\Client\CompanyUser\CompanyUserClientInterface
+     */
+    public function getCompanyUserClient(): CompanyUserClientInterface
+    {
+        return $this->getProvidedDependency(ConditionalAvailabilityDependencyProvider::CLIENT_COMPANY_USER_CLIENT);
     }
 }
