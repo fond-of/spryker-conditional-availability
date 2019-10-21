@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability;
 
@@ -82,7 +82,7 @@ class ConditionalAvailabilityConfig extends SearchConfig
         $directories = [];
 
         $fondOfSprykerSharedGlobPattern = APPLICATION_ROOT_DIR . '/vendor/fond-of-spryker/*/src/*/Shared/*/ConditionalAvailabilityMap/';
-        if (\glob($fondOfSprykerSharedGlobPattern)) {
+        if (glob($fondOfSprykerSharedGlobPattern)) {
             $directories[] = $fondOfSprykerSharedGlobPattern;
         }
 

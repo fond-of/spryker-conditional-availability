@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace FondOfSpryker\Client\ConditionalAvailability;
 
 use FondOfSpryker\Shared\ConditionalAvailability\ConditionalAvailabilityConstants;
-use Generated\Shared\Transfer\PaginationConfigTransfer;
 use Spryker\Client\Search\SearchConfig;
 
 class ConditionalAvailabilityConfig extends SearchConfig

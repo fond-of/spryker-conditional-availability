@@ -1,6 +1,5 @@
 <?php
 
-
 namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander;
 
 use Elastica\Query;

@@ -178,7 +178,7 @@ class ConditionalAvailabilityCheckoutPreCondition implements ConditionalAvailabi
     /**
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      *
-     * @return $this
+     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreConditionInterface
      */
     protected function initDefaultRequestParameters(QuoteTransfer $quoteTransfer): ConditionalAvailabilityCheckoutPreConditionInterface
     {
