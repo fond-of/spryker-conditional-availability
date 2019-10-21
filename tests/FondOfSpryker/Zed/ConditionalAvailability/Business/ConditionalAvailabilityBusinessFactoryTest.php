@@ -139,7 +139,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
      *
      * @return \ReflectionMethod
      */
-    protected static function getReflectionMethodByName(string $name): ReflectionMethod
+    protected function getReflectionMethodByName(string $name): ReflectionMethod
     {
         $reflectionClass = new ReflectionClass(ConditionalAvailabilityBusinessFactory::class);
 
