@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
 use Generated\Shared\Transfer\CheckoutResponseTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
-use \Spryker\Zed\Search\Business\SearchFacadeInterface as SprykerSearchFacadeInterface;
+use Spryker\Zed\Search\Business\SearchFacadeInterface as SprykerSearchFacadeInterface;
 
 interface ConditionalAvailabilityFacadeInterface extends SprykerSearchFacadeInterface
 {

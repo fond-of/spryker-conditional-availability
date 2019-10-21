@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Communication\Console;
 
-use \Spryker\Zed\Search\Communication\Console\SearchDeleteSnapshotConsole as SprykerSearchDeleteSnapshotConsole;
+use Spryker\Zed\Search\Communication\Console\SearchDeleteSnapshotConsole as SprykerSearchDeleteSnapshotConsole;
 
 /**
  * @method \FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityFacadeInterface getFacade()

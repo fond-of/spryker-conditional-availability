@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
@@ -63,6 +63,8 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
     }
 
     /**
+     * @throws
+     *
      * @return \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface
      */
     protected function getConditionalAvailabilityClient(): ConditionalAvailabilityClientInterface

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace FondOfSpryker\Client\ConditionalAvailability\Plugin\Elasticsearch\QueryExpander;
 
 use Elastica\Query;
@@ -129,7 +128,9 @@ class IsAccessibleConditionalAvailabilityQueryExpanderPlugin extends AbstractPlu
     }
 
     /**
-     * @return void
+     * @param \Generated\Shared\Transfer\CompanyTransfer|null $companyTransfer
+     *
+     * @return bool
      */
     protected function canAddIsAccessibleTermToQueryForCompanyTransfer(?CompanyTransfer $companyTransfer): bool
     {
@@ -138,7 +139,9 @@ class IsAccessibleConditionalAvailabilityQueryExpanderPlugin extends AbstractPlu
     }
 
     /**
-     * @return void
+     * @param \Spryker\Client\Search\Dependency\Plugin\QueryInterface $searchQuery
+     *
+     * @return \Spryker\Client\Search\Dependency\Plugin\QueryInterface
      */
     protected function addIsAccessibleTermToQuery(QueryInterface $searchQuery): QueryInterface
     {
