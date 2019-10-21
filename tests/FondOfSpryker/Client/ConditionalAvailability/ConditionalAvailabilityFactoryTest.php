@@ -87,16 +87,16 @@ class ConditionalAvailabilityFactoryTest extends Unit
             ->withConsecutive(
                 [ConditionalAvailabilityDependencyProvider::CONDITIONAL_AVAILABILITY_SKU_SEARCH_QUERY_PLUGIN]
             )->willReturnOnConsecutiveCalls(
-                true
-            );
+            true
+        );
 
         $this->containerMock->expects($this->atLeastOnce())
             ->method('get')
             ->withConsecutive(
                 [ConditionalAvailabilityDependencyProvider::CONDITIONAL_AVAILABILITY_SKU_SEARCH_QUERY_PLUGIN]
             )->willReturnOnConsecutiveCalls(
-                $this->conditionalAvailabilitySkuSearchQueryPluginMock
-            );
+            $this->conditionalAvailabilitySkuSearchQueryPluginMock
+        );
 
         $this->assertInstanceOf(QueryInterface::class, $this->conditionalAvailabilityFactory->createConditionalAvailabilitySkuSearchQuery("search"));
     }
@@ -111,16 +111,16 @@ class ConditionalAvailabilityFactoryTest extends Unit
             ->withConsecutive(
                 [ConditionalAvailabilityDependencyProvider::CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_PLUGIN]
             )->willReturnOnConsecutiveCalls(
-                true
-            );
+            true
+        );
 
         $this->containerMock->expects($this->atLeastOnce())
             ->method('get')
             ->withConsecutive(
                 [ConditionalAvailabilityDependencyProvider::CONDITIONAL_AVAILABILITY_PING_SEARCH_QUERY_PLUGIN]
             )->willReturnOnConsecutiveCalls(
-                $this->conditionalAvailabilityPingSearchQueryPluginMock
-            );
+            $this->conditionalAvailabilityPingSearchQueryPluginMock
+        );
 
         $this->assertInstanceOf(QueryInterface::class, $this->conditionalAvailabilityFactory->createConditionalAvailabilityPingSearchQuery($this->dateTimeMock, $this->dateTimeMock));
     }
@@ -202,9 +202,12 @@ class ConditionalAvailabilityFactoryTest extends Unit
      */
     public function testCreatePageIndexMap(): void
     {
-        $foo = self::getMethod('createPageIndexMap');
-        $obj = new ConditionalAvailabilityFactory();
-        $this->assertInstanceOf(PageIndexMap::class, $foo->invokeArgs($obj, []));
+        $reflectionMethod = $this->getReflectionMethodByName('createPageIndexMap');
+
+        $this->assertInstanceOf(
+            PageIndexMap::class,
+            $reflectionMethod->invokeArgs($this->conditionalAvailabilityFactory, [])
+        );
     }
 
     /**
@@ -212,9 +215,12 @@ class ConditionalAvailabilityFactoryTest extends Unit
      */
     public function testCreateIndexClientProvider(): void
     {
-        $foo = self::getMethod('createIndexClientProvider');
-        $obj = new ConditionalAvailabilityFactory();
-        $this->assertInstanceOf(IndexClientProvider::class, $foo->invokeArgs($obj, []));
+        $reflectionMethod = $this->getReflectionMethodByName('createIndexClientProvider');
+
+        $this->assertInstanceOf(
+            IndexClientProvider::class,
+            $reflectionMethod->invokeArgs($this->conditionalAvailabilityFactory, [])
+        );
     }
 
     /**
@@ -224,11 +230,11 @@ class ConditionalAvailabilityFactoryTest extends Unit
      *
      * @return \ReflectionMethod
      */
-    protected static function getMethod(string $name): ReflectionMethod
+    protected function getReflectionMethodByName(string $name): ReflectionMethod
     {
-        $class = new ReflectionClass(ConditionalAvailabilityFactory::class);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
+        $reflectionClass = new ReflectionClass(ConditionalAvailabilityFactory::class);
+        $reflectionMethod = $reflectionClass->getMethod($name);
+        $reflectionMethod->setAccessible(true);
+        return $reflectionMethod;
     }
 }

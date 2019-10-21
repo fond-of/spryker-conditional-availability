@@ -111,10 +111,12 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
      */
     public function testCreateElasticsearchIndexMapGenerator(): void
     {
-        $foo = self::getMethod('createElasticsearchIndexMapGenerator');
-        $obj = new ConditionalAvailabilityBusinessFactory();
-        $obj->setConfig($this->conditionalAvailabilityConfigMock);
-        $this->assertInstanceOf(IndexMapGeneratorInterface::class, $foo->invokeArgs($obj, []));
+        $reflectionMethod = $this->getReflectionMethodByName('createElasticsearchIndexMapGenerator');
+
+        $this->assertInstanceOf(
+            IndexMapGeneratorInterface::class,
+            $reflectionMethod->invokeArgs($this->conditionalAvailabilityBusinessFactory, [])
+        );
     }
 
     /**
@@ -122,9 +124,12 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
      */
     public function testCreateIndexClientProvider(): void
     {
-        $foo = self::getMethod('createIndexProvider');
-        $obj = new ConditionalAvailabilityBusinessFactory();
-        $this->assertInstanceOf(IndexClientProvider::class, $foo->invokeArgs($obj, []));
+        $reflectionMethod = $this->getReflectionMethodByName('createIndexProvider');
+
+        $this->assertInstanceOf(
+            IndexClientProvider::class,
+            $reflectionMethod->invokeArgs($this->conditionalAvailabilityBusinessFactory, [])
+        );
     }
 
     /**
@@ -134,11 +139,13 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
      *
      * @return \ReflectionMethod
      */
-    protected static function getMethod(string $name): ReflectionMethod
+    protected static function getReflectionMethodByName(string $name): ReflectionMethod
     {
-        $class = new ReflectionClass(ConditionalAvailabilityBusinessFactory::class);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
+        $reflectionClass = new ReflectionClass(ConditionalAvailabilityBusinessFactory::class);
+
+        $reflectionMethod = $reflectionClass->getMethod($name);
+        $reflectionMethod->setAccessible(true);
+
+        return $reflectionMethod;
     }
 }
