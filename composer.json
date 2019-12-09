@@ -1,6 +1,6 @@
 {
   "name": "fond-of-spryker/conditional-availability",
-  "description": "Conditional product availablility",
+  "description": "Conditional availability module",
   "license": "MIT",
   "authors": [
     {
@@ -17,6 +17,7 @@
     "spryker/search": "^8.0",
     "spryker/checkout-extension": "^1.2",
     "fond-of-spryker/search": "dev-master",
+    "fond-of-spryker/conditional-availability-extension": "dev-master",
     "spryker/company-user": "^2.0.0"
   },
   "require-dev": {

@@ -46,4 +46,40 @@
     <transfer name="Company">
         <property name="debtorNumber" type="string"/>
     </transfer>
+
+    <transfer name="ConditionalAvailabilityResponse">
+        <property name="conditionalAvailabilityTransfer" type="ConditionalAvailability"/>
+        <property name="isSuccessful" type="bool"/>
+    </transfer>
+
+    <transfer name="ConditionalAvailability">
+        <property name="idConditionalAvailability" type="int"/>
+        <property name="fkProduct" type="int"/>
+        <property name="isAccessible" type="bool" />
+        <property name="warehouseGroup" type="string"/>
+        <property name="conditionalAvailabilityPeriodCollection" type="ConditionalAvailabilityPeriodCollection" />
+    </transfer>
+
+    <transfer name="ConditionalAvailabilityCollection">
+        <property name="conditionalAvailabilities" type="ConditionalAvailability[]" singular="conditionalAvailability" />
+    </transfer>
+
+    <transfer name="ConditionalAvailabilityPeriodResponse">
+        <property name="conditionalAvailabilityPeriodTransfer" type="ConditionalAvailabilityPeriod"/>
+        <property name="isSuccessful" type="bool"/>
+    </transfer>
+
+    <transfer name="ConditionalAvailabilityPeriod">
+        <property name="idConditionalAvailabilityPeriod" type="int"/>
+        <property name="fkConditionalAvailability" type="int"/>
+        <property name="conditionalAvailability" type="ConditionalAvailability" />
+        <property name="quantity" type="int" />
+        <property name="createdAt" type="string" />
+        <property name="startAt" type="string" />
+        <property name="endAt" type="string" />
+    </transfer>
+
+    <transfer name="ConditionalAvailabilityPeriodCollection">
+        <property name="conditionalAvailabilityPeriods" type="ConditionalAvailabilityPeriod[]" singular="conditionalAvailabilityPeriod" />
+    </transfer>
 </transfers>
