@@ -28,14 +28,18 @@
         </unique>
 
         <id-method-parameter value="fos_conditional_availability_pk_seq"/>
+
+        <behavior name="event">
+            <parameter name="fos_conditional_availability_all" column="*"/>
+        </behavior>
     </table>
 
     <table name="fos_conditional_availability_period" phpName="FosConditionalAvailabilityPeriod">
         <column name="fk_conditional_availability" type="INTEGER" required="true" primaryKey="true"/>
-        <column name="created_at" required="true" type="TIMESTAMP" primaryKey="true"/>
         <column name="start_at" required="true" type="TIMESTAMP" primaryKey="true"/>
         <column name="end_at" required="true" type="TIMESTAMP" primaryKey="true"/>
         <column name="quantity" type="INTEGER" required="true"/>
+        <column name="created_at" required="true" type="TIMESTAMP"/>
 
         <index name="index-fos_conditional_availability-fk_conditional_availability">
             <index-column name="fk_conditional_availability"/>
@@ -44,5 +48,9 @@
         <foreign-key name="fos_conditional_availability_period-fk_conditional_availability" foreignTable="fos_conditional_availability" phpName="FosConditionalAvailability" onDelete="CASCADE">
             <reference local="fk_conditional_availability" foreign="id_conditional_availability"/>
         </foreign-key>
+
+        <behavior name="event">
+            <parameter name="fos_conditional_availability_period_all" column="*"/>
+        </behavior>
     </table>
 </database>

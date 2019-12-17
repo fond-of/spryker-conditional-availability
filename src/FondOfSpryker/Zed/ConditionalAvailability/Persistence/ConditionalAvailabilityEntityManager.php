@@ -89,7 +89,12 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
     {
         $fosConditionalAvailabilityPeriodQuery = $this->getFactory()->createConditionalAvailabilityPeriodQuery();
 
-        $fosConditionalAvailabilityPeriodQuery->filterByFkConditionalAvailability($idConditionalAvailability)
-            ->deleteAll();
+        $fosConditionalAvailabilityPeriods = $fosConditionalAvailabilityPeriodQuery
+            ->filterByFkConditionalAvailability($idConditionalAvailability)
+            ->find();
+
+        foreach ($fosConditionalAvailabilityPeriods as $fosConditionalAvailabilityPeriod) {
+            $fosConditionalAvailabilityPeriod->delete();
+        }
     }
 }
