@@ -6,6 +6,8 @@ use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityPeriodTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
+use Orm\Zed\ConditionalAvailability\Persistence\Map\FosConditionalAvailabilityTableMap;
+use Orm\Zed\Product\Persistence\Map\SpyProductTableMap;
 use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 
 /**
@@ -13,6 +15,10 @@ use Spryker\Zed\Kernel\Persistence\AbstractRepository;
  */
 class ConditionalAvailabilityRepository extends AbstractRepository implements ConditionalAvailabilityRepositoryInterface
 {
+    public const VIRTUAL_COLUMN_SKU = 'sku';
+    public const VIRTUAL_COLUMN_WAREHOUSE_GROUP = 'warehouse_group';
+    public const VIRTUAL_COLUMN_IS_ACCESSIBLE = 'is_accessible';
+
     /**
      * @param int $idConditionalAvailability
      *
@@ -85,5 +91,39 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
         }
 
         return $conditionalAvailabilityPeriodCollectionTransfer;
+    }
+
+    /**
+     * @param string $warehouseGroup
+     * @param bool $isAccessible
+     *
+     * @throws
+     *
+     * @return array
+     */
+    public function findConditionalAvailabilityDataByWarehouseGroupAndIsAccessible(
+        string $warehouseGroup,
+        bool $isAccessible
+    ): array {
+        $fosConditionalAvailabilityQuery = $this->getFactory()
+            ->createConditionalAvailabilityQuery();
+
+        $fosConditionalAvailabilityQuery
+            ->innerJoinSpyProduct()
+            ->innerJoinFosConditionalAvailabilityPeriod()
+            ->filterByWarehouseGroup($warehouseGroup)
+            ->filterByIsAccessible($isAccessible)
+            ->withColumn(
+                SpyProductTableMap::COL_SKU,
+                static::VIRTUAL_COLUMN_SKU
+            )
+            ->withColumn(
+                FosConditionalAvailabilityTableMap::COL_WAREHOUSE_GROUP,
+                static::VIRTUAL_COLUMN_WAREHOUSE_GROUP
+            )
+            ->withColumn(
+                FosConditionalAvailabilityTableMap::COL_IS_ACCESSIBLE,
+                static::VIRTUAL_COLUMN_IS_ACCESSIBLE
+            );
     }
 }

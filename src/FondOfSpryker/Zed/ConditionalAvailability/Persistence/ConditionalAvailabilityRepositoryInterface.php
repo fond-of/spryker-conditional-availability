@@ -32,4 +32,15 @@ interface ConditionalAvailabilityRepositoryInterface
     public function findConditionalAvailabilityPeriodsByFkConditionalAvailability(
         int $fkConditionalAvailability
     ): ConditionalAvailabilityPeriodCollectionTransfer;
+
+    /**
+     * @param string $warehouseGroup
+     * @param bool $isAccessible
+     *
+     * @return array
+     */
+    public function findConditionalAvailabilityDataByWarehouseGroupAndIsAccessible(
+        string $warehouseGroup,
+        bool $isAccessible
+    ): array;
 }
