@@ -64,6 +64,13 @@
         <property name="conditionalAvailabilities" type="ConditionalAvailability[]" singular="conditionalAvailability" />
     </transfer>
 
+    <transfer name="ConditionalAvailabilityCriteriaFilter">
+        <property name="skus" type="string[]" />
+        <property name="minimumQuantity" type="string" />
+        <property name="warehouseGroup" type="string" />
+        <property name="isAccessible" type="bool" />
+    </transfer>
+
     <transfer name="ConditionalAvailabilityPeriodResponse">
         <property name="conditionalAvailabilityPeriodTransfer" type="ConditionalAvailabilityPeriod"/>
         <property name="isSuccessful" type="bool"/>

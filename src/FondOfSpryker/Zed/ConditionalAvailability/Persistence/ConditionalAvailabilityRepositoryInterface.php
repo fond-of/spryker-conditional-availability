@@ -2,7 +2,9 @@
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Persistence;
 
+use ArrayObject;
 use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
 
@@ -23,6 +25,24 @@ interface ConditionalAvailabilityRepositoryInterface
     public function findAllConditionalAvailabilities(): ConditionalAvailabilityCollectionTransfer;
 
     /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer
+     */
+    public function findConditionalAvailabilities(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ConditionalAvailabilityCollectionTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+     *
+     * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
+     */
+    public function findGroupedConditionalAvailabilities(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ArrayObject;
+
+    /**
      * @param int $fkConditionalAvailability
      *
      * @throws
@@ -32,15 +52,4 @@ interface ConditionalAvailabilityRepositoryInterface
     public function findConditionalAvailabilityPeriodsByFkConditionalAvailability(
         int $fkConditionalAvailability
     ): ConditionalAvailabilityPeriodCollectionTransfer;
-
-    /**
-     * @param string $warehouseGroup
-     * @param bool $isAccessible
-     *
-     * @return array
-     */
-    public function findConditionalAvailabilityDataByWarehouseGroupAndIsAccessible(
-        string $warehouseGroup,
-        bool $isAccessible
-    ): array;
 }

@@ -4,7 +4,10 @@ declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
+use ArrayObject;
 use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
@@ -105,16 +108,20 @@ interface ConditionalAvailabilityFacadeInterface extends SprykerSearchFacadeInte
     ): ConditionalAvailabilityTransfer;
 
     /**
-     * Specifications:
-     * - Populates conditional availability transfer with periods
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
      *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
-     *
-     * @return \Generated\Shared\Transfer\ConditionalAvailabilityTransfer
+     * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
      */
-    public function hydrateConditionalAvailabilityWithConditionalAvailabilityPeriods(
-        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
-    ): ConditionalAvailabilityTransfer;
+    public function findGroupedConditionalAvailabilities(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ArrayObject;
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer
+     */
+    public function findConditionalAvailabilities(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ConditionalAvailabilityCollectionTransfer;
 }

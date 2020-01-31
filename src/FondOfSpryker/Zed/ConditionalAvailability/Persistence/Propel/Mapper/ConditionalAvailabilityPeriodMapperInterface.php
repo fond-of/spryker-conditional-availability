@@ -2,8 +2,10 @@
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Persistence\Propel\Mapper;
 
+use Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityPeriodTransfer;
 use Orm\Zed\ConditionalAvailability\Persistence\FosConditionalAvailabilityPeriod;
+use Propel\Runtime\Collection\ObjectCollection;
 
 interface ConditionalAvailabilityPeriodMapperInterface
 {
@@ -28,4 +30,15 @@ interface ConditionalAvailabilityPeriodMapperInterface
         FosConditionalAvailabilityPeriod $fosConditionalAvailabilityPeriod,
         ConditionalAvailabilityPeriodTransfer $conditionalAvailabilityPeriodTransfer
     ): ConditionalAvailabilityPeriodTransfer;
+
+    /**
+     * @param \Propel\Runtime\Collection\ObjectCollection $fosConditionalAvailabilityPeriods
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer $conditionalAvailabilityPeriodCollectionTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer
+     */
+    public function mapEntityCollectionToTransferCollection(
+        ObjectCollection $fosConditionalAvailabilityPeriods,
+        ConditionalAvailabilityPeriodCollectionTransfer $conditionalAvailabilityPeriodCollectionTransfer
+    ): ConditionalAvailabilityPeriodCollectionTransfer;
 }

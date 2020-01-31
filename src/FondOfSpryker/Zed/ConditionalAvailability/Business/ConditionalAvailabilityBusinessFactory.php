@@ -8,8 +8,6 @@ use FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientIn
 use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreCondition;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreConditionInterface;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityHydrator;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityHydratorInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPeriodsPersister;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPeriodsPersisterInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPingCheckoutPreCondition;
@@ -21,6 +19,8 @@ use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabi
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriterInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\Elasticsearch\Generator\IndexMapGenerator;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReader;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReaderInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityDependencyProvider;
 use Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGeneratorInterface;
 use Spryker\Zed\Search\Business\SearchBusinessFactory;
@@ -90,8 +90,17 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
     public function createConditionalAvailabilityReader(): ConditionalAvailabilityReaderInterface
     {
         return new ConditionalAvailabilityReader(
-            $this->getRepository(),
-            $this->createConditionalAvailabilityPluginExecutor()
+            $this->getRepository()
+        );
+    }
+
+    /**
+     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReaderInterface
+     */
+    public function createGroupedConditionalAvailabilityReader(): GroupedConditionalAvailabilityReaderInterface
+    {
+        return new GroupedConditionalAvailabilityReader(
+            $this->getRepository()
         );
     }
 
@@ -104,14 +113,6 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
             $this->getEntityManager(),
             $this->createConditionalAvailabilityPluginExecutor()
         );
-    }
-
-    /**
-     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityHydratorInterface
-     */
-    public function createConditionalAvailabilityHydrator(): ConditionalAvailabilityHydratorInterface
-    {
-        return new ConditionalAvailabilityHydrator($this->getRepository());
     }
 
     /**
@@ -128,8 +129,7 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
     protected function createConditionalAvailabilityPluginExecutor(): ConditionalAvailabilityPluginExecutorInterface
     {
         return new ConditionalAvailabilityPluginExecutor(
-            $this->getConditionalAvailabilityPostSavePlugins(),
-            $this->getConditionalAvailabilityHydrationPlugins()
+            $this->getConditionalAvailabilityPostSavePlugins()
         );
     }
 
@@ -142,18 +142,6 @@ class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
     {
         return $this->getProvidedDependency(
             ConditionalAvailabilityDependencyProvider::PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE
-        );
-    }
-
-    /**
-     * @throws
-     *
-     * @return \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityHydrationPluginInterface[]
-     */
-    protected function getConditionalAvailabilityHydrationPlugins(): array
-    {
-        return $this->getProvidedDependency(
-            ConditionalAvailabilityDependencyProvider::PLUGINS_CONDITIONAL_AVAILABILITY_HYDRATION
         );
     }
 }

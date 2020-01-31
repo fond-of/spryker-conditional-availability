@@ -38,7 +38,7 @@ class ConditionalAvailabilityPersistenceFactory extends AbstractPersistenceFacto
      */
     public function createConditionalAvailabilityMapper(): ConditionalAvailabilityMapperInterface
     {
-        return new ConditionalAvailabilityMapper();
+        return new ConditionalAvailabilityMapper($this->createConditionalAvailabilityPeriodMapper());
     }
 
     /**

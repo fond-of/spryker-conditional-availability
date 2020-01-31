@@ -14,13 +14,4 @@ interface ConditionalAvailabilityPluginExecutorInterface
     public function executePostSavePlugins(
         ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
     ): ConditionalAvailabilityResponseTransfer;
-
-    /**
-     * @param \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
-     *
-     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
-     */
-    public function executeHydrationPlugins(
-        ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
-    ): ConditionalAvailabilityResponseTransfer;
 }

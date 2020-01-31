@@ -12,7 +12,6 @@ class ConditionalAvailabilityDependencyProvider extends SearchDependencyProvider
     public const CLIENT = 'CLIENT';
 
     public const PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE = 'PLUGIN_CONDITIONAL_AVAILABILITY_POST_SAVE';
-    public const PLUGINS_CONDITIONAL_AVAILABILITY_HYDRATION = 'PLUGINS_CONDITIONAL_AVAILABILITY_HYDRATION';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
@@ -25,7 +24,6 @@ class ConditionalAvailabilityDependencyProvider extends SearchDependencyProvider
 
         $container = $this->addConditionalAvailabilityClient($container);
         $container = $this->addConditionalAvailabilityPostSavePlugins($container);
-        $container = $this->addConditionalAvailabilityHydrationPlugins($container);
 
         return $container;
     }
@@ -62,28 +60,6 @@ class ConditionalAvailabilityDependencyProvider extends SearchDependencyProvider
      * @return \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface[]
      */
     protected function getConditionalAvailabilityPostSavePlugins(): array
-    {
-        return [];
-    }
-
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
-    protected function addConditionalAvailabilityHydrationPlugins(Container $container): Container
-    {
-        $container[static::PLUGINS_CONDITIONAL_AVAILABILITY_HYDRATION] = function () {
-            return $this->getConditionalAvailabilityHydrationPlugins();
-        };
-
-        return $container;
-    }
-
-    /**
-     * @return \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityHydrationPluginInterface[]
-     */
-    protected function getConditionalAvailabilityHydrationPlugins(): array
     {
         return [];
     }

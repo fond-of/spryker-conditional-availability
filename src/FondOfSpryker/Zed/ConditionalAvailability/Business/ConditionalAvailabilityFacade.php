@@ -4,7 +4,10 @@ declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
+use ArrayObject;
 use Generated\Shared\Transfer\CheckoutResponseTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
@@ -127,13 +130,30 @@ class ConditionalAvailabilityFacade extends SearchFacade implements ConditionalA
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
-     * @return \Generated\Shared\Transfer\ConditionalAvailabilityTransfer
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+     *
+     * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
      */
-    public function hydrateConditionalAvailabilityWithConditionalAvailabilityPeriods(
-        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
-    ): ConditionalAvailabilityTransfer {
-        return $this->getFactory()->createConditionalAvailabilityHydrator()
-            ->hydrateWithConditionalAvailabilityPeriods($conditionalAvailabilityTransfer);
+    public function findGroupedConditionalAvailabilities(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ArrayObject {
+        return $this->getFactory()->createGroupedConditionalAvailabilityReader()
+            ->find($conditionalAvailabilityCriteriaFilterTransfer);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer
+     */
+    public function findConditionalAvailabilities(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ConditionalAvailabilityCollectionTransfer {
+        return $this->getFactory()->createConditionalAvailabilityReader()
+            ->find($conditionalAvailabilityCriteriaFilterTransfer);
     }
 }

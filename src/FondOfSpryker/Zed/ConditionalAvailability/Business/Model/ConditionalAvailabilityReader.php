@@ -4,6 +4,7 @@ namespace FondOfSpryker\Zed\ConditionalAvailability\Business\Model;
 
 use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepositoryInterface;
 use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
 
@@ -15,20 +16,12 @@ class ConditionalAvailabilityReader implements ConditionalAvailabilityReaderInte
     protected $repository;
 
     /**
-     * @var \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface
-     */
-    protected $conditionalAvailabilityPluginExecutor;
-
-    /**
      * @param \FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepositoryInterface $repository
-     * @param \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor
      */
     public function __construct(
-        ConditionalAvailabilityRepositoryInterface $repository,
-        ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor
+        ConditionalAvailabilityRepositoryInterface $repository
     ) {
         $this->repository = $repository;
-        $this->conditionalAvailabilityPluginExecutor = $conditionalAvailabilityPluginExecutor;
     }
 
     /**
@@ -53,8 +46,7 @@ class ConditionalAvailabilityReader implements ConditionalAvailabilityReaderInte
             return $conditionalAvailabilityResponseTransfer->setIsSuccessful(false);
         }
 
-        return $this->conditionalAvailabilityPluginExecutor
-            ->executeHydrationPlugins($conditionalAvailabilityResponseTransfer);
+        return $conditionalAvailabilityResponseTransfer;
     }
 
     /**
@@ -63,5 +55,16 @@ class ConditionalAvailabilityReader implements ConditionalAvailabilityReaderInte
     public function findAll(): ConditionalAvailabilityCollectionTransfer
     {
         return $this->repository->findAllConditionalAvailabilities();
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer
+     */
+    public function find(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ConditionalAvailabilityCollectionTransfer {
+        return $this->repository->findConditionalAvailabilities($conditionalAvailabilityCriteriaFilterTransfer);
     }
 }
