@@ -54,7 +54,9 @@ class ConditionalAvailabilityReader implements ConditionalAvailabilityReaderInte
      */
     public function findAll(): ConditionalAvailabilityCollectionTransfer
     {
-        return $this->repository->findAllConditionalAvailabilities();
+        $conditionalAvailabilityCriteriaFilterTransfer = new ConditionalAvailabilityCriteriaFilterTransfer();
+
+        return $this->find($conditionalAvailabilityCriteriaFilterTransfer);
     }
 
     /**

@@ -20,11 +20,6 @@ interface ConditionalAvailabilityRepositoryInterface
     ): ?ConditionalAvailabilityTransfer;
 
     /**
-     * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer
-     */
-    public function findAllConditionalAvailabilities(): ConditionalAvailabilityCollectionTransfer;
-
-    /**
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
      *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer

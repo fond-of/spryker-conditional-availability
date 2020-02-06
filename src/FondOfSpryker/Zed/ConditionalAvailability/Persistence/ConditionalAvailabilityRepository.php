@@ -44,14 +44,6 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
     }
 
     /**
-     * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer
-     */
-    public function findAllConditionalAvailabilities(): ConditionalAvailabilityCollectionTransfer
-    {
-        return $this->findConditionalAvailabilities(new ConditionalAvailabilityCriteriaFilterTransfer());
-    }
-
-    /**
      * @param int $fkConditionalAvailability
      *
      * @throws

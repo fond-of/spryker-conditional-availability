@@ -3,24 +3,23 @@
 namespace FondOfSpryker\Client\Zed\ConditionalAvailability\Business;
 
 use Codeception\Test\Unit;
-use FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface;
-use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityBusinessFactory;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreConditionInterface;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPingCheckoutPreConditionInterface;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPeriodsPersister;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityReader;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReader;
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig;
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityDependencyProvider;
-use ReflectionClass;
-use ReflectionMethod;
+use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManager;
+use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepository;
 use Spryker\Zed\Kernel\Container;
-use Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGeneratorInterface;
 
 class ConditionalAvailabilityBusinessFactoryTest extends Unit
 {
     /**
      * @var \FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityBusinessFactory
      */
-    protected $conditionalAvailabilityBusinessFactory;
+    protected $businessFactory;
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\Spryker\Zed\Kernel\Container
@@ -28,19 +27,19 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     protected $containerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreConditionInterface
-     */
-    protected $conditionalAvailabilityClientInterfaceMock;
-
-    /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig
      */
-    protected $conditionalAvailabilityConfigMock;
+    protected $configMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPingCheckoutPreConditionInterface
+     * @var \PHPUnit\Framework\MockObject\MockBuilder|\FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepository
      */
-    protected $conditionalAvailabilityPingCheckoutPreConditionInterfaceMock;
+    protected $repositoryMock;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManager
+     */
+    protected $entityManagerMock;
 
     /**
      * @return void
@@ -49,15 +48,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     {
         parent::_before();
 
-        $this->conditionalAvailabilityConfigMock = $this->getMockBuilder(ConditionalAvailabilityConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->conditionalAvailabilityClientInterfaceMock = $this->getMockBuilder(ConditionalAvailabilityClientInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->conditionalAvailabilityPingCheckoutPreConditionInterfaceMock = $this->getMockBuilder(ConditionalAvailabilityPingCheckoutPreConditionInterface::class)
+        $this->configMock = $this->getMockBuilder(ConditionalAvailabilityConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -65,87 +56,72 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionalAvailabilityBusinessFactory = new ConditionalAvailabilityBusinessFactory();
-        $this->conditionalAvailabilityBusinessFactory->setContainer($this->containerMock);
-        $this->conditionalAvailabilityBusinessFactory->setConfig($this->conditionalAvailabilityConfigMock);
+        $this->repositoryMock = $this->getMockBuilder(ConditionalAvailabilityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->entityManagerMock = $this->getMockBuilder(ConditionalAvailabilityEntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->businessFactory = new ConditionalAvailabilityBusinessFactory();
+        $this->businessFactory->setContainer($this->containerMock);
+        $this->businessFactory->setConfig($this->configMock);
+        $this->businessFactory->setRepository($this->repositoryMock);
+        $this->businessFactory->setEntityManager($this->entityManagerMock);
     }
 
     /**
      * @return void
      */
-    public function testCreateConditionalAvailabilityPreCondition(): void
+    public function testCreateConditionalAvailabilityReader(): void
     {
-        $this->containerMock->expects($this->atLeastOnce())
-            ->method('has')
-            ->with(ConditionalAvailabilityDependencyProvider::CLIENT)
-            ->willReturn(true);
-
-        $this->containerMock->expects($this->atLeastOnce())
-            ->method('get')
-            ->with(ConditionalAvailabilityDependencyProvider::CLIENT)
-            ->willReturn($this->conditionalAvailabilityClientInterfaceMock);
-
-        $this->assertInstanceOf(ConditionalAvailabilityCheckoutPreConditionInterface::class, $this->conditionalAvailabilityBusinessFactory->createConditionalAvailabilityPreCondition());
-    }
-
-    /**
-     * @return void
-     */
-    public function testCreateConditionalAvailabilityPingPreCondition(): void
-    {
-        $this->containerMock->expects($this->atLeastOnce())
-            ->method('has')
-            ->with(ConditionalAvailabilityDependencyProvider::CLIENT)
-            ->willReturn(true);
-
-        $this->containerMock->expects($this->atLeastOnce())
-            ->method('get')
-            ->with(ConditionalAvailabilityDependencyProvider::CLIENT)
-            ->willReturn($this->conditionalAvailabilityClientInterfaceMock);
-
-        $this->assertInstanceOf(ConditionalAvailabilityPingCheckoutPreConditionInterface::class, $this->conditionalAvailabilityBusinessFactory->createConditionalAvailabilityPingPreCondition());
-    }
-
-    /**
-     * @return void
-     */
-    public function testCreateElasticsearchIndexMapGenerator(): void
-    {
-        $reflectionMethod = $this->getReflectionMethodByName('createElasticsearchIndexMapGenerator');
-
         $this->assertInstanceOf(
-            IndexMapGeneratorInterface::class,
-            $reflectionMethod->invokeArgs($this->conditionalAvailabilityBusinessFactory, [])
+            ConditionalAvailabilityReader::class,
+            $this->businessFactory->createConditionalAvailabilityReader()
         );
     }
 
     /**
      * @return void
      */
-    public function testCreateIndexClientProvider(): void
+    public function testCreateGroupedConditionalAvailabilityReader(): void
     {
-        $reflectionMethod = $this->getReflectionMethodByName('createIndexProvider');
-
         $this->assertInstanceOf(
-            IndexClientProvider::class,
-            $reflectionMethod->invokeArgs($this->conditionalAvailabilityBusinessFactory, [])
+            GroupedConditionalAvailabilityReader::class,
+            $this->businessFactory->createGroupedConditionalAvailabilityReader()
         );
     }
 
     /**
-     * @param string $name
-     *
-     * @throws
-     *
-     * @return \ReflectionMethod
+     * @return void
      */
-    protected function getReflectionMethodByName(string $name): ReflectionMethod
+    public function testCreateConditionalAvailabilityPeriodsPersister(): void
     {
-        $reflectionClass = new ReflectionClass(ConditionalAvailabilityBusinessFactory::class);
+        $this->assertInstanceOf(
+            ConditionalAvailabilityPeriodsPersister::class,
+            $this->businessFactory->createConditionalAvailabilityPeriodsPersister()
+        );
+    }
 
-        $reflectionMethod = $reflectionClass->getMethod($name);
-        $reflectionMethod->setAccessible(true);
+    /**
+     * @return void
+     */
+    public function testCreateConditionalAvailabilityWriter(): void
+    {
+        $this->containerMock->expects($this->atLeastOnce())
+            ->method('has')
+            ->with(ConditionalAvailabilityDependencyProvider::PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE)
+            ->willReturn(true);
 
-        return $reflectionMethod;
+        $this->containerMock->expects($this->atLeastOnce())
+            ->method('get')
+            ->with(ConditionalAvailabilityDependencyProvider::PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE)
+            ->willReturn([]);
+
+        $this->assertInstanceOf(
+            ConditionalAvailabilityWriter::class,
+            $this->businessFactory->createConditionalAvailabilityWriter()
+        );
     }
 }
