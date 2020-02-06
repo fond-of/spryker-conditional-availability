@@ -9,12 +9,14 @@ use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
-use Spryker\Zed\Search\Business\SearchFacade;
+use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
  * @method \FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityBusinessFactory getFactory()
+ * @method \FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManagerInterface getEntityManager()
+ * @method \FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepositoryInterface getRepository()
  */
-class ConditionalAvailabilityFacade extends SearchFacade implements ConditionalAvailabilityFacadeInterface
+class ConditionalAvailabilityFacade extends AbstractFacade implements ConditionalAvailabilityFacadeInterface
 {
     /**
      * {@inheritdoc}

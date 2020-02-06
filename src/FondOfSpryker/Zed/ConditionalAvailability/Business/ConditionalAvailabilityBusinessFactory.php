@@ -74,7 +74,9 @@ class ConditionalAvailabilityBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**@
+    /**
+     * @
+     *
      * @throws
      *
      * @return \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface[]

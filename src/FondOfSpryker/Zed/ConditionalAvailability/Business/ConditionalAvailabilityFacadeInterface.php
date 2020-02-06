@@ -9,9 +9,8 @@ use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
-use Spryker\Zed\Search\Business\SearchFacadeInterface as SprykerSearchFacadeInterface;
 
-interface ConditionalAvailabilityFacadeInterface extends SprykerSearchFacadeInterface
+interface ConditionalAvailabilityFacadeInterface
 {
     /**
      * Specifications:
