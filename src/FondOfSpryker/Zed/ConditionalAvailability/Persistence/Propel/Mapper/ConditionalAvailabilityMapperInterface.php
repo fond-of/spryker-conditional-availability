@@ -45,7 +45,7 @@ interface ConditionalAvailabilityMapperInterface
 
     /**
      * @param \Propel\Runtime\Collection\ObjectCollection $fosConditionalAvailabilities
-     * @param \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]> $groupedConditionalAvailabilityTransfers
+     * @param \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]> $groupedConditionalAvailabilities
      *
      * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
      */
