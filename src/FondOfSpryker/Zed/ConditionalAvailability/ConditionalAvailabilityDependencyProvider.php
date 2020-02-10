@@ -4,12 +4,12 @@ declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability;
 
+use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
-use Spryker\Zed\Search\SearchDependencyProvider;
 
-class ConditionalAvailabilityDependencyProvider extends SearchDependencyProvider
+class ConditionalAvailabilityDependencyProvider extends AbstractBundleDependencyProvider
 {
-    public const CLIENT = 'CLIENT';
+    public const PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE = 'PLUGIN_CONDITIONAL_AVAILABILITY_POST_SAVE';
 
     /**
      * @param \Spryker\Zed\Kernel\Container $container
@@ -20,7 +20,7 @@ class ConditionalAvailabilityDependencyProvider extends SearchDependencyProvider
     {
         $container = parent::provideBusinessLayerDependencies($container);
 
-        $container = $this->addConditionalAvailabilityClient($container);
+        $container = $this->addConditionalAvailabilityPostSavePlugins($container);
 
         return $container;
     }
@@ -30,12 +30,20 @@ class ConditionalAvailabilityDependencyProvider extends SearchDependencyProvider
      *
      * @return \Spryker\Zed\Kernel\Container
      */
-    protected function addConditionalAvailabilityClient(Container $container): Container
+    protected function addConditionalAvailabilityPostSavePlugins(Container $container): Container
     {
-        $container[static::CLIENT] = function (Container $container) {
-            return $container->getLocator()->conditionalAvailability()->client();
+        $container[static::PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE] = function () {
+            return $this->getConditionalAvailabilityPostSavePlugins();
         };
 
         return $container;
+    }
+
+    /**
+     * @return \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface[]
+     */
+    protected function getConditionalAvailabilityPostSavePlugins(): array
+    {
+        return [];
     }
 }

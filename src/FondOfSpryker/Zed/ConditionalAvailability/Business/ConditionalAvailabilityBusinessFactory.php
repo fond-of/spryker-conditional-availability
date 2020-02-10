@@ -4,71 +4,87 @@ declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
-use FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface;
-use FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreCondition;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreConditionInterface;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPingCheckoutPreCondition;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPingCheckoutPreConditionInterface;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\Elasticsearch\Generator\IndexMapGenerator;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPeriodsPersister;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPeriodsPersisterInterface;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutor;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityReader;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityReaderInterface;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriterInterface;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReader;
+use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReaderInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityDependencyProvider;
-use Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGeneratorInterface;
-use Spryker\Zed\Search\Business\SearchBusinessFactory;
+use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 
 /**
  * @method \FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityFacadeInterface getFacade()
  * @method \FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig getConfig()
+ * @method \FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepositoryInterface getRepository()
+ * @method \FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManagerInterface getEntityManager()
  */
-class ConditionalAvailabilityBusinessFactory extends SearchBusinessFactory
+class ConditionalAvailabilityBusinessFactory extends AbstractBusinessFactory
 {
     /**
-     * @return \FondOfSpryker\Client\ConditionalAvailability\Provider\IndexClientProvider|\Spryker\Client\Search\Provider\IndexClientProvider
+     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityReaderInterface
      */
-    protected function createIndexProvider()
+    public function createConditionalAvailabilityReader(): ConditionalAvailabilityReaderInterface
     {
-        return new IndexClientProvider();
-    }
-
-    /**
-     * @return \Spryker\Zed\Search\Business\Model\Elasticsearch\Generator\IndexMapGeneratorInterface
-     */
-    protected function createElasticsearchIndexMapGenerator(): IndexMapGeneratorInterface
-    {
-        return new IndexMapGenerator(
-            $this->getConfig()->getClassTargetDirectory(),
-            $this->getConfig()->getPermissionMode()
+        return new ConditionalAvailabilityReader(
+            $this->getRepository()
         );
     }
 
     /**
-     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityCheckoutPreConditionInterface
+     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReaderInterface
      */
-    public function createConditionalAvailabilityPreCondition(): ConditionalAvailabilityCheckoutPreConditionInterface
+    public function createGroupedConditionalAvailabilityReader(): GroupedConditionalAvailabilityReaderInterface
     {
-        return new ConditionalAvailabilityCheckoutPreCondition(
-            $this->getConfig(),
-            $this->getConditionalAvailabilityClient()
+        return new GroupedConditionalAvailabilityReader(
+            $this->getRepository()
         );
     }
 
     /**
-     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPingCheckoutPreConditionInterface
+     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriterInterface
      */
-    public function createConditionalAvailabilityPingPreCondition(): ConditionalAvailabilityPingCheckoutPreConditionInterface
+    public function createConditionalAvailabilityWriter(): ConditionalAvailabilityWriterInterface
     {
-        return new ConditionalAvailabilityPingCheckoutPreCondition(
-            $this->getConfig(),
-            $this->getConditionalAvailabilityClient()
+        return new ConditionalAvailabilityWriter(
+            $this->getEntityManager(),
+            $this->createConditionalAvailabilityPluginExecutor()
         );
     }
 
     /**
+     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPeriodsPersisterInterface
+     */
+    public function createConditionalAvailabilityPeriodsPersister(): ConditionalAvailabilityPeriodsPersisterInterface
+    {
+        return new ConditionalAvailabilityPeriodsPersister($this->getEntityManager());
+    }
+
+    /**
+     * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface
+     */
+    protected function createConditionalAvailabilityPluginExecutor(): ConditionalAvailabilityPluginExecutorInterface
+    {
+        return new ConditionalAvailabilityPluginExecutor(
+            $this->getConditionalAvailabilityPostSavePlugins()
+        );
+    }
+
+    /**
+     * @
+     *
      * @throws
      *
-     * @return \FondOfSpryker\Client\ConditionalAvailability\ConditionalAvailabilityClientInterface
+     * @return \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface[]
      */
-    protected function getConditionalAvailabilityClient(): ConditionalAvailabilityClientInterface
+    protected function getConditionalAvailabilityPostSavePlugins(): array
     {
-        return $this->getProvidedDependency(ConditionalAvailabilityDependencyProvider::CLIENT);
+        return $this->getProvidedDependency(
+            ConditionalAvailabilityDependencyProvider::PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE
+        );
     }
 }

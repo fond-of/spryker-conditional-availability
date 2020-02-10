@@ -18,8 +18,9 @@ paths:
 coverage:
   enabled: true
   include:
-    - src/FondOfSpryker/*.php
+    - src/*.php
 
 modules:
   enabled:
     - \FondOfCodeception\Module\Spryker
+

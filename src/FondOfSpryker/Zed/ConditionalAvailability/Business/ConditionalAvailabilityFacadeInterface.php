@@ -4,25 +4,105 @@ declare(strict_types = 1);
 
 namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
-use Generated\Shared\Transfer\CheckoutResponseTransfer;
-use Generated\Shared\Transfer\QuoteTransfer;
-use Spryker\Zed\Search\Business\SearchFacadeInterface as SprykerSearchFacadeInterface;
+use ArrayObject;
+use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
+use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
 
-interface ConditionalAvailabilityFacadeInterface extends SprykerSearchFacadeInterface
+interface ConditionalAvailabilityFacadeInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
-     * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponseTransfer
+     * Specifications:
+     * - Finds conditional availability by id
+     * - Requires ConditionalAvailabilityTransfer::idConditionalAvailability
      *
-     * @return void
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
      */
-    public function checkoutConditionalAvailabilityPreCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponseTransfer): bool;
+    public function findConditionalAvailabilityById(
+        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+    ): ConditionalAvailabilityResponseTransfer;
 
     /**
-     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
-     * @param \Generated\Shared\Transfer\CheckoutResponseTransfer $checkoutResponseTransfer
+     * Specifications:
+     * - Creates conditional availability
+     * - Creates conditional availability periods optionally.
      *
-     * @return bool
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
      */
-    public function checkoutConditionalAvailabilityPingPreCondition(QuoteTransfer $quoteTransfer, CheckoutResponseTransfer $checkoutResponseTransfer): bool;
+    public function createConditionalAvailability(
+        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+    ): ConditionalAvailabilityResponseTransfer;
+
+    /**
+     * Specifications:
+     * - Requires ConditionalAvailabilityTransfer::idConditionalAvailability.
+     * - Updates conditional availability.
+     * - Updates conditional availability periods optionally.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
+     */
+    public function updateConditionalAvailability(
+        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+    ): ConditionalAvailabilityResponseTransfer;
+
+    /**
+     * Specifications:
+     * - Requires ConditionalAvailabilityTransfer::idConditionalAvailability.
+     * - Deletes conditional availability.
+     * - Deletes conditional availability periods.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
+     */
+    public function deleteConditionalAvailability(
+        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+    ): ConditionalAvailabilityResponseTransfer;
+
+    /**
+     * Specifications:
+     * - Persist conditional availability periods
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityTransfer
+     */
+    public function persistConditionalAvailabilityPeriods(
+        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+    ): ConditionalAvailabilityTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+     *
+     * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
+     */
+    public function findGroupedConditionalAvailabilities(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ArrayObject;
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer
+     */
+    public function findConditionalAvailabilities(
+        ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
+    ): ConditionalAvailabilityCollectionTransfer;
 }
