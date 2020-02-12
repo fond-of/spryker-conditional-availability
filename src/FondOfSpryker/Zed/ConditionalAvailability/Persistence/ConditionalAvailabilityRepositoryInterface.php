@@ -47,4 +47,11 @@ interface ConditionalAvailabilityRepositoryInterface
     public function findConditionalAvailabilityPeriodsByFkConditionalAvailability(
         int $fkConditionalAvailability
     ): ConditionalAvailabilityPeriodCollectionTransfer;
+
+    /**
+     * @param int[] $productConcreteIds
+     *
+     * @return int[]
+     */
+    public function getConditionalAvailabilityIdsByProductConcreteIds(array $productConcreteIds): array;
 }

@@ -10,6 +10,7 @@ use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabi
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityReader;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReader;
+use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepository;
 use Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
@@ -73,6 +74,11 @@ class ConditionalAvailabilityFacadeTest extends Unit
     protected $conditionalAvailabilityCollectionTransferMock;
 
     /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepository
+     */
+    protected $conditionalAvailabilityRepositoryMock;
+
+    /**
      * @return void
      */
     protected function _before(): void
@@ -119,8 +125,13 @@ class ConditionalAvailabilityFacadeTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->conditionalAvailabilityRepositoryMock = $this->getMockBuilder(ConditionalAvailabilityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->conditionalAvailabilityFacade = new ConditionalAvailabilityFacade();
         $this->conditionalAvailabilityFacade->setFactory($this->conditionalAvailabilityBusinessFactoryMock);
+        $this->conditionalAvailabilityFacade->setRepository($this->conditionalAvailabilityRepositoryMock);
     }
 
     /**
@@ -274,6 +285,25 @@ class ConditionalAvailabilityFacadeTest extends Unit
             $this->conditionalAvailabilityFacade->findConditionalAvailabilities(
                 $this->conditionalAvailabilityCriteriaFilterTransferMock
             )
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetConditionalAvailabilityIdsByProductConcreteIds(): void
+    {
+        $conditionalAvailabilityIds = [1, 2, 3];
+        $productConcreteIds = [1];
+
+        $this->conditionalAvailabilityRepositoryMock->expects($this->atLeastOnce())
+            ->method('getConditionalAvailabilityIdsByProductConcreteIds')
+            ->with($productConcreteIds)
+            ->willReturn($conditionalAvailabilityIds);
+
+        $this->assertEquals(
+            $conditionalAvailabilityIds,
+            $this->conditionalAvailabilityFacade->getConditionalAvailabilityIdsByProductConcreteIds($productConcreteIds)
         );
     }
 }

@@ -9,6 +9,7 @@ use Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityPeriodTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
 use Orm\Zed\ConditionalAvailability\Persistence\FosConditionalAvailabilityQuery;
+use Orm\Zed\ConditionalAvailability\Persistence\Map\FosConditionalAvailabilityTableMap;
 use Orm\Zed\Product\Persistence\Map\SpyProductTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Spryker\Zed\Kernel\Persistence\AbstractRepository;
@@ -160,5 +161,24 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
         return $this->getFactory()
             ->createConditionalAvailabilityMapper()
             ->mapEntityCollectionToGroupedTransfers($fosConditionalAvailabilityQuery->find(), new ArrayObject());
+    }
+
+    /**
+     * @param int[] $productConcreteIds
+     *
+     * @return int[]
+     */
+    public function getConditionalAvailabilityIdsByProductConcreteIds(array $productConcreteIds): array
+    {
+        $fosConditionalAvailabilityQuery = $this->getFactory()
+            ->createConditionalAvailabilityQuery();
+
+        $columnsToSelect = [FosConditionalAvailabilityTableMap::COL_ID_CONDITIONAL_AVAILABILITY];
+
+        return $fosConditionalAvailabilityQuery->select($columnsToSelect)
+            ->filterByFkProduct_In($productConcreteIds)
+            ->distinct()
+            ->find()
+            ->toArray();
     }
 }

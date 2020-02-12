@@ -129,4 +129,18 @@ class ConditionalAvailabilityFacade extends AbstractFacade implements Conditiona
         return $this->getFactory()->createConditionalAvailabilityReader()
             ->find($conditionalAvailabilityCriteriaFilterTransfer);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
+     * @param int[] $productConcreteIds
+     *
+     * @return int[]
+     */
+    public function getConditionalAvailabilityIdsByProductConcreteIds(array $productConcreteIds): array
+    {
+        return $this->getRepository()->getConditionalAvailabilityIdsByProductConcreteIds($productConcreteIds);
+    }
 }

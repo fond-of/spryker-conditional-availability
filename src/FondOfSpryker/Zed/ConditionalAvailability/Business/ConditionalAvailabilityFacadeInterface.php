@@ -89,6 +89,12 @@ interface ConditionalAvailabilityFacadeInterface
     ): ConditionalAvailabilityTransfer;
 
     /**
+     * Specifications:
+     * - Retrieves conditional availabilities by given filter.
+     * - Groups conditional availabilities by sku (SKU => [ConditionalAvailabilityTransfer, ...], ...).
+     *
+     * @api
+     *
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
      *
      * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
@@ -98,6 +104,11 @@ interface ConditionalAvailabilityFacadeInterface
     ): ArrayObject;
 
     /**
+     * Specifications:
+     * - Retrieves conditional availabilities by given filter.
+     *
+     * @api
+     *
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
      *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityCollectionTransfer
@@ -105,4 +116,16 @@ interface ConditionalAvailabilityFacadeInterface
     public function findConditionalAvailabilities(
         ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
     ): ConditionalAvailabilityCollectionTransfer;
+
+    /**
+     * Specifications:
+     * - Retrieves conditional availability IDs by product concrete IDs.
+     *
+     * @api
+     *
+     * @param int[] $productConcreteIds
+     *
+     * @return int[]
+     */
+    public function getConditionalAvailabilityIdsByProductConcreteIds(array $productConcreteIds): array;
 }
