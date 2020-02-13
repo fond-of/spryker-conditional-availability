@@ -9,6 +9,7 @@ use Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityPeriodTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
 use Orm\Zed\ConditionalAvailability\Persistence\FosConditionalAvailabilityQuery;
+use Orm\Zed\ConditionalAvailability\Persistence\Map\FosConditionalAvailabilityPeriodTableMap;
 use Orm\Zed\ConditionalAvailability\Persistence\Map\FosConditionalAvailabilityTableMap;
 use Orm\Zed\Product\Persistence\Map\SpyProductTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -32,6 +33,9 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
     {
         $fosConditionalAvailability = $this->getFactory()
             ->createConditionalAvailabilityQuery()
+            ->useFosConditionalAvailabilityPeriodQuery()
+                ->addAscendingOrderByColumn(FosConditionalAvailabilityPeriodTableMap::COL_START_AT)
+            ->endUse()
             ->filterByIdConditionalAvailability($idConditionalAvailability)
             ->findOne();
 
@@ -57,6 +61,7 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
         $fosConditionalAvailabilities = $this->getFactory()
             ->createConditionalAvailabilityPeriodQuery()
             ->filterByFkConditionalAvailability($fkConditionalAvailability)
+            ->addAscendingOrderByColumn(FosConditionalAvailabilityPeriodTableMap::COL_START_AT)
             ->find();
 
         $conditionalAvailabilityPeriodCollectionTransfer = new ConditionalAvailabilityPeriodCollectionTransfer();
@@ -122,10 +127,12 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
                 ->filterByQuantity(
                     $conditionalAvailabilityCriteriaFilterTransfer->getMinimumQuantity(),
                     Criteria::GREATER_EQUAL
-                )
+                )->addAscendingOrderByColumn(FosConditionalAvailabilityPeriodTableMap::COL_START_AT)
                 ->endUse();
         } else {
-            $fosConditionalAvailabilityQuery->innerJoinWithFosConditionalAvailabilityPeriod();
+            $fosConditionalAvailabilityQuery->useFosConditionalAvailabilityPeriodQuery()
+                ->addAscendingOrderByColumn(FosConditionalAvailabilityPeriodTableMap::COL_START_AT)
+                ->endUse();
         }
 
         if ($conditionalAvailabilityCriteriaFilterTransfer->getIsAccessible() !== null) {
