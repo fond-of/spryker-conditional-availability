@@ -60,7 +60,7 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionalAvailabilityWriter = new class(
+        $this->conditionalAvailabilityWriter = new class (
             $this->conditionalAvailabilityEntityManagerMock,
             $this->conditionalAvailabilityPluginExecutorMock
         ) extends ConditionalAvailabilityWriter {
@@ -262,8 +262,7 @@ class ConditionalAvailabilityWriterTest extends Unit
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
             ->method('deleteConditionalAvailabilityById')
-            ->with($idConditionalAvailability)
-            ->willReturn($this->conditionalAvailabilityTransferMock);
+            ->with($idConditionalAvailability);
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->delete(
             $this->conditionalAvailabilityTransferMock
