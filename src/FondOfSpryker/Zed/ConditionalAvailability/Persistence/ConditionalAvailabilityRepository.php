@@ -25,8 +25,6 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
     /**
      * @param int $idConditionalAvailability
      *
-     * @throws
-     *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityTransfer|null
      */
     public function findConditionalAvailabilityById(int $idConditionalAvailability): ?ConditionalAvailabilityTransfer
@@ -50,8 +48,6 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
 
     /**
      * @param int $fkConditionalAvailability
-     *
-     * @throws
      *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer
      */
@@ -106,15 +102,15 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
      * @param \Orm\Zed\ConditionalAvailability\Persistence\FosConditionalAvailabilityQuery $fosConditionalAvailabilityQuery
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
      *
-     * @throws
-     *
      * @return \Orm\Zed\ConditionalAvailability\Persistence\FosConditionalAvailabilityQuery
      */
     protected function applyFilters(
         FosConditionalAvailabilityQuery $fosConditionalAvailabilityQuery,
         ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
     ): FosConditionalAvailabilityQuery {
-        if ($conditionalAvailabilityCriteriaFilterTransfer->getSkus() !== null) {
+        $skus = $conditionalAvailabilityCriteriaFilterTransfer->getSkus();
+
+        if (count($skus) === 0) {
             $fosConditionalAvailabilityQuery->useSpyProductQuery()
                 ->filterBySku_In($conditionalAvailabilityCriteriaFilterTransfer->getSkus())
                 ->endUse();

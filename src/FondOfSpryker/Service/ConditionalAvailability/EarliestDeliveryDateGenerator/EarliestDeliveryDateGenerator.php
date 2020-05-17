@@ -10,8 +10,6 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
     protected const DEFAULT_DELIVERY_DAYS = 2;
 
     /**
-     * @throws
-     *
      * @return \DateTime
      */
     public function generate(): DateTime

@@ -47,8 +47,6 @@ class ConditionalAvailabilityMapper implements ConditionalAvailabilityMapperInte
      * @param \Orm\Zed\ConditionalAvailability\Persistence\FosConditionalAvailability $fosConditionalAvailability
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
      *
-     * @throws
-     *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityTransfer
      */
     public function mapEntityToTransfer(

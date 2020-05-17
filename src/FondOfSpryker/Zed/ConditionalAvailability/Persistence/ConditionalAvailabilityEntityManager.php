@@ -15,8 +15,6 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
     /**
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
      *
-     * @throws
-     *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityTransfer
      */
     public function persistConditionalAvailability(
@@ -44,8 +42,6 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
     /**
      * @param int $idConditionalAvailability
      *
-     * @throws
-     *
      * @return void
      */
     public function deleteConditionalAvailabilityById(int $idConditionalAvailability): void
@@ -58,8 +54,6 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
 
     /**
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityPeriodTransfer $conditionalAvailabilityPeriodTransfer
-     *
-     * @throws
      *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityPeriodTransfer
      */
@@ -80,8 +74,6 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
 
     /**
      * @param int $idConditionalAvailability
-     *
-     * @throws
      *
      * @return void
      */

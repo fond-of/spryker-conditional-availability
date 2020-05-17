@@ -40,8 +40,6 @@ interface ConditionalAvailabilityRepositoryInterface
     /**
      * @param int $fkConditionalAvailability
      *
-     * @throws
-     *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityPeriodCollectionTransfer
      */
     public function findConditionalAvailabilityPeriodsByFkConditionalAvailability(
