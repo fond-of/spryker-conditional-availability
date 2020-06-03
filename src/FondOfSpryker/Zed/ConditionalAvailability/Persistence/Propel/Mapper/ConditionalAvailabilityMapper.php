@@ -73,9 +73,9 @@ class ConditionalAvailabilityMapper implements ConditionalAvailabilityMapperInte
 
     /**
      * @param \Propel\Runtime\Collection\ObjectCollection $fosConditionalAvailabilities
-     * @param \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]> $groupedConditionalAvailabilityTransfers
+     * @param \ArrayObject $groupedConditionalAvailabilityTransfers
      *
-     * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
+     * @return \ArrayObject
      */
     public function mapEntityCollectionToGroupedTransfers(
         ObjectCollection $fosConditionalAvailabilities,
