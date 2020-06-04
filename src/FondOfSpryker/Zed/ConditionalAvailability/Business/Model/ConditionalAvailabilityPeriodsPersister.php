@@ -28,7 +28,8 @@ class ConditionalAvailabilityPeriodsPersister implements ConditionalAvailability
     public function persist(
         ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
     ): ConditionalAvailabilityTransfer {
-        if ($conditionalAvailabilityTransfer->getIdConditionalAvailability() === null
+        if (
+            $conditionalAvailabilityTransfer->getIdConditionalAvailability() === null
             || $conditionalAvailabilityTransfer->getConditionalAvailabilityPeriodCollection() === null
         ) {
             return $conditionalAvailabilityTransfer;

@@ -13,7 +13,7 @@ use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 class ConditionalAvailabilityPeriodsPersisterPlugin extends AbstractPlugin implements ConditionalAvailabilityPostSavePluginInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -24,7 +24,8 @@ class ConditionalAvailabilityPeriodsPersisterPlugin extends AbstractPlugin imple
     public function postSave(
         ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
     ): ConditionalAvailabilityResponseTransfer {
-        if ($conditionalAvailabilityResponseTransfer->getIsSuccessful() === false
+        if (
+            $conditionalAvailabilityResponseTransfer->getIsSuccessful() === false
             || $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer() === null
         ) {
             return $conditionalAvailabilityResponseTransfer;

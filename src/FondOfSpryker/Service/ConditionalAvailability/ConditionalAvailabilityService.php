@@ -11,7 +11,7 @@ use Spryker\Service\Kernel\AbstractService;
 class ConditionalAvailabilityService extends AbstractService implements ConditionalAvailabilityServiceInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
