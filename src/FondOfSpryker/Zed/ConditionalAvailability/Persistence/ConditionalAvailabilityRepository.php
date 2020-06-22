@@ -110,7 +110,7 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
     ): FosConditionalAvailabilityQuery {
         $skus = $conditionalAvailabilityCriteriaFilterTransfer->getSkus();
 
-        if (count($skus) === 0) {
+        if (count($skus) !== 0) {
             $fosConditionalAvailabilityQuery->useSpyProductQuery()
                 ->filterBySku_In($conditionalAvailabilityCriteriaFilterTransfer->getSkus())
                 ->endUse();
