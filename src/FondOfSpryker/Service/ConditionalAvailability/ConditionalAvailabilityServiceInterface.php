@@ -2,7 +2,7 @@
 
 namespace FondOfSpryker\Service\ConditionalAvailability;
 
-use DateTime;
+use DateTimeInterface;
 
 interface ConditionalAvailabilityServiceInterface
 {
@@ -12,7 +12,7 @@ interface ConditionalAvailabilityServiceInterface
      *
      * @api
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
-    public function generateEarliestDeliveryDate(): DateTime;
+    public function generateEarliestDeliveryDate(): DateTimeInterface;
 }

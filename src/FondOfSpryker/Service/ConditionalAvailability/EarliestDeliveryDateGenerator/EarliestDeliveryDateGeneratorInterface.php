@@ -2,12 +2,12 @@
 
 namespace FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator;
 
-use DateTime;
+use DateTimeInterface;
 
 interface EarliestDeliveryDateGeneratorInterface
 {
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
-    public function generate(): DateTime;
+    public function generate(): DateTimeInterface;
 }

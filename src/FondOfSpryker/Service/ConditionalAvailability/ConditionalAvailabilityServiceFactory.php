@@ -6,6 +6,9 @@ use FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator\
 use FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator\EarliestDeliveryDateGeneratorInterface;
 use Spryker\Service\Kernel\AbstractServiceFactory;
 
+/**
+ * @method \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig getConfig()
+ */
 class ConditionalAvailabilityServiceFactory extends AbstractServiceFactory
 {
     /**
@@ -13,6 +16,8 @@ class ConditionalAvailabilityServiceFactory extends AbstractServiceFactory
      */
     public function createEarliestDeliveryDateGenerator(): EarliestDeliveryDateGeneratorInterface
     {
-        return new EarliestDeliveryDateGenerator();
+        return new EarliestDeliveryDateGenerator(
+            $this->getConfig()
+        );
     }
 }

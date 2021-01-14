@@ -4,15 +4,28 @@ namespace FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGene
 
 use DateInterval;
 use DateTime;
+use DateTimeInterface;
+use FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig;
 
 class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInterface
 {
-    protected const DEFAULT_DELIVERY_DAYS = 2;
+    /**
+     * @var \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig
+     */
+    protected $config;
 
     /**
-     * @return \DateTime
+     * @param \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig $config
      */
-    public function generate(): DateTime
+    public function __construct(ConditionalAvailabilityConfig $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function generate(): DateTimeInterface
     {
         $earliestDeliveryDate = new DateTime();
         $earliestDeliveryDate->setTime(0, 0);
@@ -32,13 +45,15 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
      */
     protected function getDeliveryDaysByWeekDay(int $weekDay): int
     {
+        $defaultDeliveryDays = $this->config->getDefaultDeliveryDays();
+
         switch ($weekDay) {
             case 5:
-                return static::DEFAULT_DELIVERY_DAYS + 2;
+                return $defaultDeliveryDays + 2;
             case 6:
-                return static::DEFAULT_DELIVERY_DAYS + 1;
+                return $defaultDeliveryDays + 1;
             default:
-                return static::DEFAULT_DELIVERY_DAYS;
+                return $defaultDeliveryDays;
         }
     }
 }
