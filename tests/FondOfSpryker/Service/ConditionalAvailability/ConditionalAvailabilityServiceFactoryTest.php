@@ -8,6 +8,11 @@ use FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator\
 class ConditionalAvailabilityServiceFactoryTest extends Unit
 {
     /**
+     * @var \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $configMock;
+
+    /**
      * @var \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityServiceFactory
      */
     protected $conditionalAvailabilityServiceFactory;
@@ -19,7 +24,12 @@ class ConditionalAvailabilityServiceFactoryTest extends Unit
     {
         parent::_before();
 
+        $this->configMock = $this->getMockBuilder(ConditionalAvailabilityConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->conditionalAvailabilityServiceFactory = new ConditionalAvailabilityServiceFactory();
+        $this->conditionalAvailabilityServiceFactory->setConfig($this->configMock);
     }
 
     /**
@@ -27,6 +37,9 @@ class ConditionalAvailabilityServiceFactoryTest extends Unit
      */
     public function testCreateEarliestDeliveryDateGenerator(): void
     {
-        $this->assertInstanceOf(EarliestDeliveryDateGenerator::class, $this->conditionalAvailabilityServiceFactory->createEarliestDeliveryDateGenerator());
+        static::assertInstanceOf(
+            EarliestDeliveryDateGenerator::class,
+            $this->conditionalAvailabilityServiceFactory->createEarliestDeliveryDateGenerator()
+        );
     }
 }
