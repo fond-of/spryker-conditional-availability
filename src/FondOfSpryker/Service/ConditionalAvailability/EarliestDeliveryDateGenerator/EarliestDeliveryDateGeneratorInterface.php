@@ -10,4 +10,11 @@ interface EarliestDeliveryDateGeneratorInterface
      * @return \DateTimeInterface
      */
     public function generate(): DateTimeInterface;
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return \DateTimeInterface
+     */
+    public function generateByDateTime(DateTimeInterface $dateTime): DateTimeInterface;
 }

@@ -38,15 +38,17 @@ class EarliestDeliveryDateGeneratorTest extends Unit
     /**
      * @return void
      */
-    public function testGenerate(): void
+    public function testGenerateByDateTime(): void
     {
         $this->configMock->expects(static::atLeastOnce())
             ->method('getDefaultDeliveryDays')
             ->willReturn(ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS);
 
-        static::assertInstanceOf(
-            DateTime::class,
-            $this->earliestDeliveryDateGenerator->generate()
+        $earliestDeliveryDate = $this->earliestDeliveryDateGenerator->generateByDateTime(new DateTime('2021-01-21'));
+
+        static::assertEquals(
+            '2021-01-25',
+            $earliestDeliveryDate->format('Y-m-d')
         );
     }
 }

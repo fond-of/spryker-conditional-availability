@@ -2,7 +2,6 @@
 
 namespace FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator;
 
-use DateInterval;
 use DateTime;
 use DateTimeInterface;
 use FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig;
@@ -27,33 +26,31 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
      */
     public function generate(): DateTimeInterface
     {
-        $earliestDeliveryDate = new DateTime();
-        $earliestDeliveryDate->setTime(0, 0);
-
-        $weekDay = (int)$earliestDeliveryDate->format('N');
-        $deliveryDaysByWeekDay = $this->getDeliveryDaysByWeekDay($weekDay);
-
-        $earliestDeliveryDate->add(new DateInterval(sprintf('P%dD', $deliveryDaysByWeekDay)));
-
-        return $earliestDeliveryDate;
+        return $this->generateByDateTime(new DateTime());
     }
 
     /**
-     * @param int $weekDay
+     * @param \DateTimeInterface $dateTime
      *
-     * @return int
+     * @return \DateTimeInterface
      */
-    protected function getDeliveryDaysByWeekDay(int $weekDay): int
+    public function generateByDateTime(DateTimeInterface $dateTime): DateTimeInterface
     {
         $defaultDeliveryDays = $this->config->getDefaultDeliveryDays();
 
-        switch ($weekDay) {
-            case 5:
-                return $defaultDeliveryDays + 2;
-            case 6:
-                return $defaultDeliveryDays + 1;
-            default:
-                return $defaultDeliveryDays;
+        $dateTime->setTime(0, 0);
+
+        while ($defaultDeliveryDays > 0) {
+            $dateTime->modify('+1day');
+            $weekDay = (int)$dateTime->format('N');
+
+            if ($weekDay === 6 || $weekDay === 7) {
+                continue;
+            }
+
+            $defaultDeliveryDays--;
         }
+
+        return $dateTime;
     }
 }
