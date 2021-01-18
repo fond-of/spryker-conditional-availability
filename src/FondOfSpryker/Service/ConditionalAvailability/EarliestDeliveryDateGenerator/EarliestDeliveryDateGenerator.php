@@ -26,14 +26,23 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
      */
     public function generate(): DateTimeInterface
     {
+        return $this->generateByDateTime(new DateTime());
+    }
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return \DateTimeInterface
+     */
+    public function generateByDateTime(DateTimeInterface $dateTime): DateTimeInterface
+    {
         $defaultDeliveryDays = $this->config->getDefaultDeliveryDays();
 
-        $earliestDeliveryDate = new DateTime();
-        $earliestDeliveryDate->setTime(0, 0);
+        $dateTime->setTime(0, 0);
 
         while ($defaultDeliveryDays > 0) {
-            $earliestDeliveryDate->modify('+1day');
-            $weekDay = (int)$earliestDeliveryDate->format('N');
+            $dateTime->modify('+1day');
+            $weekDay = (int)$dateTime->format('N');
 
             if ($weekDay === 6 || $weekDay === 7) {
                 continue;
@@ -42,6 +51,6 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
             $defaultDeliveryDays--;
         }
 
-        return $earliestDeliveryDate;
+        return $dateTime;
     }
 }
