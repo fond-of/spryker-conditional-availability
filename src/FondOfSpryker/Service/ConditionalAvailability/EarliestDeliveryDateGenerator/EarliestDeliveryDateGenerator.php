@@ -30,11 +30,11 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
     }
 
     /**
-     * @param \DateTimeInterface $dateTime
+     * @param \DateTime $dateTime
      *
      * @return \DateTimeInterface
      */
-    public function generateByDateTime(DateTimeInterface $dateTime): DateTimeInterface
+    public function generateByDateTime(DateTime $dateTime): DateTimeInterface
     {
         $defaultDeliveryDays = $this->config->getDefaultDeliveryDays();
 
