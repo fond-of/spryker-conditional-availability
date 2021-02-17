@@ -17,7 +17,7 @@
     "fond-of-spryker/conditional-availability-extension": "dev-master"
   },
   "require-dev": {
-    "spryker/code-sniffer": "^0.12",
+    "spryker/code-sniffer": "^0.15",
     "codeception/codeception": "^3.0 || ^4.0",
     "fond-of-codeception/spryker": "dev-master as 1.0.0",
     "mikey179/vfsstream": "^1.6",
