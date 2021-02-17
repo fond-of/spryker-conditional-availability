@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Service\ConditionalAvailability;
 
+use DateTime;
 use DateTimeInterface;
 use Spryker\Service\Kernel\AbstractService;
 
@@ -20,5 +21,19 @@ class ConditionalAvailabilityService extends AbstractService implements Conditio
     public function generateEarliestDeliveryDate(): DateTimeInterface
     {
         return $this->getFactory()->createEarliestDeliveryDateGenerator()->generate();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \DateTime $dateTime
+     *
+     * @return \DateTimeInterface
+     */
+    public function generateEarliestDeliveryDateByDateTime(DateTime $dateTime): DateTimeInterface
+    {
+        return $this->getFactory()->createEarliestDeliveryDateGenerator()->generateByDateTime($dateTime);
     }
 }
