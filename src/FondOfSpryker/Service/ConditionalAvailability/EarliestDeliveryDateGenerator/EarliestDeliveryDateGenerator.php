@@ -22,6 +22,8 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return \DateTimeInterface
      */
     public function generate(): DateTimeInterface

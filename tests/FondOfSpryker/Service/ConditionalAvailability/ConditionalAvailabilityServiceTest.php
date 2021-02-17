@@ -62,4 +62,26 @@ class ConditionalAvailabilityServiceTest extends Unit
             $this->conditionalAvailabilityService->generateEarliestDeliveryDate()
         );
     }
+
+    /**
+     * @return void
+     */
+    public function testGenerateEarliestDeliveryDateByDateTime(): void
+    {
+        $dateTime = new DateTime();
+
+        $this->conditionalAvailabilityServiceFactoryMock->expects(static::atLeastOnce())
+            ->method('createEarliestDeliveryDateGenerator')
+            ->willReturn($this->earliestDeliveryDateGeneratorMock);
+
+        $this->earliestDeliveryDateGeneratorMock->expects(static::atLeastOnce())
+            ->method('generateByDateTime')
+            ->with($dateTime)
+            ->willReturn($dateTime);
+
+        static::assertEquals(
+            $dateTime,
+            $this->conditionalAvailabilityService->generateEarliestDeliveryDateByDateTime($dateTime)
+        );
+    }
 }
