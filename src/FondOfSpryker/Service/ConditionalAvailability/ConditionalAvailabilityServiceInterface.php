@@ -28,4 +28,16 @@ interface ConditionalAvailabilityServiceInterface
      * @return \DateTimeInterface
      */
     public function generateEarliestDeliveryDateByDateTime(DateTime $dateTime): DateTimeInterface;
+
+    /**
+     * Specification:
+     * - Generate latest order date by delivery date as DateTime
+     *
+     * @api
+     *
+     * @param \DateTime $deliveryDate
+     *
+     * @return \DateTimeInterface
+     */
+    public function generateLatestOrderDateByDeliveryDate(DateTime $deliveryDate): DateTimeInterface;
 }

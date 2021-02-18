@@ -1,6 +1,6 @@
 <?php
 
-namespace FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator;
+namespace FondOfSpryker\Service\ConditionalAvailability\Generator;
 
 use Codeception\Test\Unit;
 use DateTime;
@@ -15,7 +15,7 @@ class EarliestDeliveryDateGeneratorTest extends Unit
     protected $configMock;
 
     /**
-     * @var \FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator\EarliestDeliveryDateGenerator
+     * @var \FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestDeliveryDateGenerator
      */
     protected $earliestDeliveryDateGenerator;
 
