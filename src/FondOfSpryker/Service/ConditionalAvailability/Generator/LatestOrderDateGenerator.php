@@ -1,12 +1,12 @@
 <?php
 
-namespace FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator;
+namespace FondOfSpryker\Service\ConditionalAvailability\Generator;
 
 use DateTime;
 use DateTimeInterface;
 use FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig;
 
-class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInterface
+class LatestOrderDateGenerator implements LatestOrderDateGeneratorInterface
 {
     /**
      * @var \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig
@@ -22,29 +22,20 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
     }
 
     /**
-     * @codeCoverageIgnore
+     * @param \DateTime $deliveryDate
      *
      * @return \DateTimeInterface
      */
-    public function generate(): DateTimeInterface
-    {
-        return $this->generateByDateTime(new DateTime());
-    }
-
-    /**
-     * @param \DateTime $dateTime
-     *
-     * @return \DateTimeInterface
-     */
-    public function generateByDateTime(DateTime $dateTime): DateTimeInterface
+    public function generateByDeliveryDate(DateTime $deliveryDate): DateTimeInterface
     {
         $defaultDeliveryDays = $this->config->getDefaultDeliveryDays();
 
-        $dateTime->setTime(0, 0);
+        $latestOrderDate = clone $deliveryDate;
+        $latestOrderDate->setTime(0, 0);
 
         while ($defaultDeliveryDays > 0) {
-            $dateTime->modify('+1day');
-            $weekDay = (int)$dateTime->format('N');
+            $latestOrderDate->modify('-1day');
+            $weekDay = (int)$latestOrderDate->format('N');
 
             if ($weekDay === 6 || $weekDay === 7) {
                 continue;
@@ -53,6 +44,6 @@ class EarliestDeliveryDateGenerator implements EarliestDeliveryDateGeneratorInte
             $defaultDeliveryDays--;
         }
 
-        return $dateTime;
+        return $latestOrderDate;
     }
 }

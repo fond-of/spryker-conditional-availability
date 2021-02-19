@@ -4,7 +4,8 @@ namespace FondOfSpryker\Service\ConditionalAvailability;
 
 use Codeception\Test\Unit;
 use DateTime;
-use FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator\EarliestDeliveryDateGeneratorInterface;
+use FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestDeliveryDateGeneratorInterface;
+use FondOfSpryker\Service\ConditionalAvailability\Generator\LatestOrderDateGeneratorInterface;
 
 class ConditionalAvailabilityServiceTest extends Unit
 {
@@ -14,9 +15,14 @@ class ConditionalAvailabilityServiceTest extends Unit
     protected $conditionalAvailabilityServiceFactoryMock;
 
     /**
-     * @var \FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator\EarliestDeliveryDateGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var \FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestDeliveryDateGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $earliestDeliveryDateGeneratorMock;
+
+    /**
+     * @var \FondOfSpryker\Service\ConditionalAvailability\Generator\LatestOrderDateGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $latestOrderDateGeneratorMock;
 
     /**
      * @var \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityService
@@ -35,6 +41,10 @@ class ConditionalAvailabilityServiceTest extends Unit
             ->getMock();
 
         $this->earliestDeliveryDateGeneratorMock = $this->getMockBuilder(EarliestDeliveryDateGeneratorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->latestOrderDateGeneratorMock = $this->getMockBuilder(LatestOrderDateGeneratorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -82,6 +92,28 @@ class ConditionalAvailabilityServiceTest extends Unit
         static::assertEquals(
             $dateTime,
             $this->conditionalAvailabilityService->generateEarliestDeliveryDateByDateTime($dateTime)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGenerateLatestOrderDateByDeliveryDate(): void
+    {
+        $dateTime = new DateTime();
+
+        $this->conditionalAvailabilityServiceFactoryMock->expects(static::atLeastOnce())
+            ->method('createLatestOrderDateGenerator')
+            ->willReturn($this->latestOrderDateGeneratorMock);
+
+        $this->latestOrderDateGeneratorMock->expects(static::atLeastOnce())
+            ->method('generateByDeliveryDate')
+            ->with($dateTime)
+            ->willReturn($dateTime);
+
+        static::assertEquals(
+            $dateTime,
+            $this->conditionalAvailabilityService->generateLatestOrderDateByDeliveryDate($dateTime)
         );
     }
 }

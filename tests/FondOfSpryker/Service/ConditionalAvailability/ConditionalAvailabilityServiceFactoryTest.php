@@ -3,7 +3,8 @@
 namespace FondOfSpryker\Service\ConditionalAvailability;
 
 use Codeception\Test\Unit;
-use FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator\EarliestDeliveryDateGenerator;
+use FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestDeliveryDateGenerator;
+use FondOfSpryker\Service\ConditionalAvailability\Generator\LatestOrderDateGenerator;
 
 class ConditionalAvailabilityServiceFactoryTest extends Unit
 {
@@ -40,6 +41,17 @@ class ConditionalAvailabilityServiceFactoryTest extends Unit
         static::assertInstanceOf(
             EarliestDeliveryDateGenerator::class,
             $this->conditionalAvailabilityServiceFactory->createEarliestDeliveryDateGenerator()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateLatestOrderDateGenerator(): void
+    {
+        static::assertInstanceOf(
+            LatestOrderDateGenerator::class,
+            $this->conditionalAvailabilityServiceFactory->createLatestOrderDateGenerator()
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace FondOfSpryker\Service\ConditionalAvailability\EarliestDeliveryDateGenerator;
+namespace FondOfSpryker\Service\ConditionalAvailability\Generator;
 
 use DateTime;
 use DateTimeInterface;

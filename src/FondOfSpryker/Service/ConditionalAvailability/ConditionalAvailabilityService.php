@@ -36,4 +36,18 @@ class ConditionalAvailabilityService extends AbstractService implements Conditio
     {
         return $this->getFactory()->createEarliestDeliveryDateGenerator()->generateByDateTime($dateTime);
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \DateTime $deliveryDate
+     *
+     * @return \DateTimeInterface
+     */
+    public function generateLatestOrderDateByDeliveryDate(DateTime $deliveryDate): DateTimeInterface
+    {
+        return $this->getFactory()->createLatestOrderDateGenerator()->generateByDeliveryDate($deliveryDate);
+    }
 }
