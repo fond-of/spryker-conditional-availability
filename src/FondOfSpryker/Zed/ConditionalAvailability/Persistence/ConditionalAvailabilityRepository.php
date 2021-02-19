@@ -21,6 +21,7 @@ use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 class ConditionalAvailabilityRepository extends AbstractRepository implements ConditionalAvailabilityRepositoryInterface
 {
     public const VIRTUAL_COLUMN_SKU = 'sku';
+    protected const RELATION_ALIAS_FOS_CONDITIONAL_AVAILABILITY_PERIOD = 'FosConditionalAvailabilityPeriod';
 
     /**
      * @param int $idConditionalAvailability
@@ -34,6 +35,7 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
             ->useFosConditionalAvailabilityPeriodQuery()
                 ->addAscendingOrderByColumn(FosConditionalAvailabilityPeriodTableMap::COL_START_AT)
             ->endUse()
+            ->with(static::RELATION_ALIAS_FOS_CONDITIONAL_AVAILABILITY_PERIOD)
             ->filterByIdConditionalAvailability($idConditionalAvailability)
             ->findOne();
 
@@ -54,7 +56,7 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
     public function findConditionalAvailabilityPeriodsByFkConditionalAvailability(
         int $fkConditionalAvailability
     ): ConditionalAvailabilityPeriodCollectionTransfer {
-        $fosConditionalAvailabilities = $this->getFactory()
+        $fosConditionalAvailabilityPeriods = $this->getFactory()
             ->createConditionalAvailabilityPeriodQuery()
             ->filterByFkConditionalAvailability($fkConditionalAvailability)
             ->addAscendingOrderByColumn(FosConditionalAvailabilityPeriodTableMap::COL_START_AT)
@@ -62,10 +64,10 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
 
         $conditionalAvailabilityPeriodCollectionTransfer = new ConditionalAvailabilityPeriodCollectionTransfer();
 
-        foreach ($fosConditionalAvailabilities as $fosConditionalAvailability) {
+        foreach ($fosConditionalAvailabilityPeriods as $fosConditionalAvailabilityPeriod) {
             $conditionalAvailabilityPeriodTransfer = $this->getFactory()
                 ->createConditionalAvailabilityPeriodMapper()
-                ->mapEntityToTransfer($fosConditionalAvailability, new ConditionalAvailabilityPeriodTransfer());
+                ->mapEntityToTransfer($fosConditionalAvailabilityPeriod, new ConditionalAvailabilityPeriodTransfer());
 
             $conditionalAvailabilityPeriodCollectionTransfer
                 ->addConditionalAvailabilityPeriod($conditionalAvailabilityPeriodTransfer);
@@ -130,6 +132,8 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
                 ->addAscendingOrderByColumn(FosConditionalAvailabilityPeriodTableMap::COL_START_AT)
                 ->endUse();
         }
+
+        $fosConditionalAvailabilityQuery->with(static::RELATION_ALIAS_FOS_CONDITIONAL_AVAILABILITY_PERIOD);
 
         if ($conditionalAvailabilityCriteriaFilterTransfer->getIsAccessible() !== null) {
             $fosConditionalAvailabilityQuery->filterByIsAccessible(
