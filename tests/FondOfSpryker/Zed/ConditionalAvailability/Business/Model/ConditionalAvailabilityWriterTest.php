@@ -98,7 +98,7 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->method('rollback');
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
-            ->method('persistConditionalAvailability')
+            ->method('saveConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
             ->willThrowException(new Exception());
 
@@ -122,7 +122,7 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->method('commit');
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
-            ->method('persistConditionalAvailability')
+            ->method('saveConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
             ->willReturn($this->conditionalAvailabilityTransferMock);
 
@@ -147,7 +147,41 @@ class ConditionalAvailabilityWriterTest extends Unit
     /**
      * @return void
      */
-    public function testUpdateWithError(): void
+    public function testPersist(): void
+    {
+        $this->connectionMock->expects($this->atLeastOnce())
+            ->method('beginTransaction');
+
+        $this->connectionMock->expects($this->atLeastOnce())
+            ->method('commit');
+
+        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+            ->method('persistConditionalAvailability')
+            ->with($this->conditionalAvailabilityTransferMock)
+            ->willReturn($this->conditionalAvailabilityTransferMock);
+
+        $this->conditionalAvailabilityPluginExecutorMock->expects($this->atLeastOnce())
+            ->method('executePostSavePlugins')
+            ->withAnyParameters()
+            ->willReturnCallback(static function (ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer) {
+                return $conditionalAvailabilityResponseTransfer;
+            });
+
+        $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->persist(
+            $this->conditionalAvailabilityTransferMock
+        );
+
+        $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        $this->assertEquals(
+            $this->conditionalAvailabilityTransferMock,
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testPersistWithError(): void
     {
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('beginTransaction');
@@ -157,6 +191,30 @@ class ConditionalAvailabilityWriterTest extends Unit
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
             ->method('persistConditionalAvailability')
+            ->with($this->conditionalAvailabilityTransferMock)
+            ->willThrowException(new Exception());
+
+        $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->persist(
+            $this->conditionalAvailabilityTransferMock
+        );
+
+        $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        $this->assertEquals(null, $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer());
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdateWithError(): void
+    {
+        $this->connectionMock->expects($this->atLeastOnce())
+            ->method('beginTransaction');
+
+        $this->connectionMock->expects($this->atLeastOnce())
+            ->method('rollback');
+
+        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+            ->method('saveConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
             ->willThrowException(new Exception());
 
@@ -180,7 +238,7 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->method('commit');
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
-            ->method('persistConditionalAvailability')
+            ->method('saveConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
             ->willReturn($this->conditionalAvailabilityTransferMock);
 

@@ -22,9 +22,16 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
     ): ConditionalAvailabilityTransfer {
         $fosConditionalAvailabilityQuery = $this->getFactory()->createConditionalAvailabilityQuery();
 
-        $fosConditionalAvailability = $fosConditionalAvailabilityQuery
-            ->filterByIdConditionalAvailability($conditionalAvailabilityTransfer->getIdConditionalAvailability())
-            ->findOneOrCreate();
+        if ($conditionalAvailabilityTransfer->getIdConditionalAvailability() !== null) {
+            $fosConditionalAvailability = $fosConditionalAvailabilityQuery
+                ->filterByIdConditionalAvailability($conditionalAvailabilityTransfer->getIdConditionalAvailability())
+                ->findOneOrCreate();
+        } else {
+            $fosConditionalAvailability = $fosConditionalAvailabilityQuery
+                ->filterByFkProduct($conditionalAvailabilityTransfer->getFkProduct())
+                ->filterByWarehouseGroup($conditionalAvailabilityTransfer->getWarehouseGroup())
+                ->findOneOrCreate();
+        }
 
         $fosConditionalAvailability = $this->getFactory()
             ->createConditionalAvailabilityMapper()
@@ -88,5 +95,31 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
         foreach ($fosConditionalAvailabilityPeriods as $fosConditionalAvailabilityPeriod) {
             $fosConditionalAvailabilityPeriod->delete();
         }
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityTransfer
+     */
+    public function saveConditionalAvailability(ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer): ConditionalAvailabilityTransfer
+    {
+        $fosConditionalAvailabilityQuery = $this->getFactory()->createConditionalAvailabilityQuery();
+
+        $fosConditionalAvailability = $fosConditionalAvailabilityQuery
+            ->filterByIdConditionalAvailability($conditionalAvailabilityTransfer->getIdConditionalAvailability())
+            ->findOneOrCreate();
+
+        $fosConditionalAvailability = $this->getFactory()
+            ->createConditionalAvailabilityMapper()
+            ->mapTransferToEntity($conditionalAvailabilityTransfer, $fosConditionalAvailability);
+
+        $fosConditionalAvailability->save();
+
+        $conditionalAvailabilityTransfer->setIdConditionalAvailability(
+            $fosConditionalAvailability->getIdConditionalAvailability()
+        );
+
+        return $conditionalAvailabilityTransfer;
     }
 }

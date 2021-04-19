@@ -17,6 +17,15 @@ interface ConditionalAvailabilityEntityManagerInterface
     ): ConditionalAvailabilityTransfer;
 
     /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityTransfer
+     */
+    public function saveConditionalAvailability(
+        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+    ): ConditionalAvailabilityTransfer;
+
+    /**
      * @param int $idConditionalAvailability
      *
      * @return void

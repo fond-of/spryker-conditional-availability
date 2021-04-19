@@ -203,6 +203,28 @@ class ConditionalAvailabilityFacadeTest extends Unit
     /**
      * @return void
      */
+    public function testPersistConditionalAvailability(): void
+    {
+        $this->conditionalAvailabilityBusinessFactoryMock->expects($this->atLeastOnce())
+            ->method('createConditionalAvailabilityWriter')
+            ->willReturn($this->conditionalAvailabilityWriterMock);
+
+        $this->conditionalAvailabilityWriterMock->expects($this->atLeastOnce())
+            ->method('persist')
+            ->with($this->conditionalAvailabilityTransferMock)
+            ->willReturn($this->conditionalAvailabilityResponseTransferMock);
+
+        $this->assertEquals(
+            $this->conditionalAvailabilityResponseTransferMock,
+            $this->conditionalAvailabilityFacade->persistConditionalAvailability(
+                $this->conditionalAvailabilityTransferMock
+            )
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testDeleteConditionalAvailability(): void
     {
         $this->conditionalAvailabilityBusinessFactoryMock->expects($this->atLeastOnce())

@@ -44,6 +44,21 @@ interface ConditionalAvailabilityFacadeInterface
 
     /**
      * Specifications:
+     * - Persists conditional availability
+     * - Persists conditional availability periods optionally.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
+     */
+    public function persistConditionalAvailability(
+        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+    ): ConditionalAvailabilityResponseTransfer;
+
+    /**
+     * Specifications:
      * - Requires ConditionalAvailabilityTransfer::idConditionalAvailability.
      * - Updates conditional availability.
      * - Updates conditional availability periods optionally.

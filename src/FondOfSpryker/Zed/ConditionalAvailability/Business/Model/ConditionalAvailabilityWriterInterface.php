@@ -30,6 +30,15 @@ interface ConditionalAvailabilityWriterInterface
      *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
      */
+    public function persist(
+        ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+    ): ConditionalAvailabilityResponseTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
+     */
     public function delete(
         ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
     ): ConditionalAvailabilityResponseTransfer;
