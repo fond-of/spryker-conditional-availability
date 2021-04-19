@@ -48,7 +48,7 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
         try {
             $conditionalAvailabilityResponseTransfer = $this->getTransactionHandler()->handleTransaction(
                 function () use ($conditionalAvailabilityResponseTransfer) {
-                    return $this->executePersistTransaction($conditionalAvailabilityResponseTransfer);
+                    return $this->executeSaveTransaction($conditionalAvailabilityResponseTransfer);
                 }
             );
         } catch (Exception $exception) {
@@ -75,7 +75,7 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
 
             $conditionalAvailabilityResponseTransfer = $this->getTransactionHandler()->handleTransaction(
                 function () use ($conditionalAvailabilityResponseTransfer) {
-                    return $this->executePersistTransaction($conditionalAvailabilityResponseTransfer);
+                    return $this->executeSaveTransaction($conditionalAvailabilityResponseTransfer);
                 }
             );
         } catch (Exception $exception) {
@@ -91,10 +91,10 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
      *
      * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
      */
-    protected function executePersistTransaction(
+    protected function executeSaveTransaction(
         ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
     ): ConditionalAvailabilityResponseTransfer {
-        $conditionalAvailabilityTransfer = $this->entityManager->persistConditionalAvailability(
+        $conditionalAvailabilityTransfer = $this->entityManager->saveConditionalAvailability(
             $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
         );
 
@@ -102,10 +102,8 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
             $conditionalAvailabilityTransfer
         );
 
-        $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityPluginExecutor
+        return $this->conditionalAvailabilityPluginExecutor
             ->executePostSavePlugins($conditionalAvailabilityResponseTransfer);
-
-        return $conditionalAvailabilityResponseTransfer;
     }
 
     /**
@@ -153,5 +151,50 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
         $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null);
 
         return $conditionalAvailabilityResponseTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
+     */
+    public function persist(ConditionalAvailabilityTransfer $conditionalAvailabilityTransfer): ConditionalAvailabilityResponseTransfer
+    {
+        $conditionalAvailabilityResponseTransfer = (new ConditionalAvailabilityResponseTransfer())
+            ->setConditionalAvailabilityTransfer($conditionalAvailabilityTransfer)
+            ->setIsSuccessful(true);
+
+        try {
+            $conditionalAvailabilityResponseTransfer = $this->getTransactionHandler()->handleTransaction(
+                function () use ($conditionalAvailabilityResponseTransfer) {
+                    return $this->executePersistTransaction($conditionalAvailabilityResponseTransfer);
+                }
+            );
+        } catch (Exception $exception) {
+            $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
+                ->setIsSuccessful(false);
+        }
+
+        return $conditionalAvailabilityResponseTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
+     *
+     * @return \Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer
+     */
+    protected function executePersistTransaction(
+        ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
+    ): ConditionalAvailabilityResponseTransfer {
+        $conditionalAvailabilityTransfer = $this->entityManager->persistConditionalAvailability(
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+        );
+
+        $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(
+            $conditionalAvailabilityTransfer
+        );
+
+        return $this->conditionalAvailabilityPluginExecutor
+            ->executePostSavePlugins($conditionalAvailabilityResponseTransfer);
     }
 }
