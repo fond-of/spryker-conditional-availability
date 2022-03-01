@@ -35,7 +35,7 @@ class ConditionalAvailabilityReader implements ConditionalAvailabilityReaderInte
         $conditionalAvailabilityTransfer->requireIdConditionalAvailability();
 
         $conditionalAvailabilityTransfer = $this->repository->findConditionalAvailabilityById(
-            $conditionalAvailabilityTransfer->getIdConditionalAvailability()
+            $conditionalAvailabilityTransfer->getIdConditionalAvailability(),
         );
 
         $conditionalAvailabilityResponseTransfer = (new ConditionalAvailabilityResponseTransfer())

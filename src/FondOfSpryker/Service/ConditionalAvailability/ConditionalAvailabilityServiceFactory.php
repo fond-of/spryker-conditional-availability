@@ -19,7 +19,7 @@ class ConditionalAvailabilityServiceFactory extends AbstractServiceFactory
     public function createEarliestDeliveryDateGenerator(): EarliestDeliveryDateGeneratorInterface
     {
         return new EarliestDeliveryDateGenerator(
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 
@@ -29,7 +29,7 @@ class ConditionalAvailabilityServiceFactory extends AbstractServiceFactory
     public function createLatestOrderDateGenerator(): LatestOrderDateGeneratorInterface
     {
         return new LatestOrderDateGenerator(
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 }

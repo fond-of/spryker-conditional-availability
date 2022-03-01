@@ -31,7 +31,7 @@ class ConditionalAvailabilityBusinessFactory extends AbstractBusinessFactory
     public function createConditionalAvailabilityReader(): ConditionalAvailabilityReaderInterface
     {
         return new ConditionalAvailabilityReader(
-            $this->getRepository()
+            $this->getRepository(),
         );
     }
 
@@ -41,7 +41,7 @@ class ConditionalAvailabilityBusinessFactory extends AbstractBusinessFactory
     public function createGroupedConditionalAvailabilityReader(): GroupedConditionalAvailabilityReaderInterface
     {
         return new GroupedConditionalAvailabilityReader(
-            $this->getRepository()
+            $this->getRepository(),
         );
     }
 
@@ -52,7 +52,7 @@ class ConditionalAvailabilityBusinessFactory extends AbstractBusinessFactory
     {
         return new ConditionalAvailabilityWriter(
             $this->getEntityManager(),
-            $this->createConditionalAvailabilityPluginExecutor()
+            $this->createConditionalAvailabilityPluginExecutor(),
         );
     }
 
@@ -70,17 +70,17 @@ class ConditionalAvailabilityBusinessFactory extends AbstractBusinessFactory
     protected function createConditionalAvailabilityPluginExecutor(): ConditionalAvailabilityPluginExecutorInterface
     {
         return new ConditionalAvailabilityPluginExecutor(
-            $this->getConditionalAvailabilityPostSavePlugins()
+            $this->getConditionalAvailabilityPostSavePlugins(),
         );
     }
 
     /**
-     * @return \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface[]
+     * @return array<\FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface>
      */
     protected function getConditionalAvailabilityPostSavePlugins(): array
     {
         return $this->getProvidedDependency(
-            ConditionalAvailabilityDependencyProvider::PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE
+            ConditionalAvailabilityDependencyProvider::PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE,
         );
     }
 }

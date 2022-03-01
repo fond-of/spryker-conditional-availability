@@ -49,7 +49,7 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
             $conditionalAvailabilityResponseTransfer = $this->getTransactionHandler()->handleTransaction(
                 function () use ($conditionalAvailabilityResponseTransfer) {
                     return $this->executeSaveTransaction($conditionalAvailabilityResponseTransfer);
-                }
+                },
             );
         } catch (Exception $exception) {
             $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
@@ -76,7 +76,7 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
             $conditionalAvailabilityResponseTransfer = $this->getTransactionHandler()->handleTransaction(
                 function () use ($conditionalAvailabilityResponseTransfer) {
                     return $this->executeSaveTransaction($conditionalAvailabilityResponseTransfer);
-                }
+                },
             );
         } catch (Exception $exception) {
             $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
@@ -95,11 +95,11 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
         ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
     ): ConditionalAvailabilityResponseTransfer {
         $conditionalAvailabilityTransfer = $this->entityManager->saveConditionalAvailability(
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
 
         $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(
-            $conditionalAvailabilityTransfer
+            $conditionalAvailabilityTransfer,
         );
 
         return $this->conditionalAvailabilityPluginExecutor
@@ -123,7 +123,7 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
             $conditionalAvailabilityResponseTransfer = $this->getTransactionHandler()->handleTransaction(
                 function () use ($conditionalAvailabilityResponseTransfer) {
                     return $this->executeDeleteTransaction($conditionalAvailabilityResponseTransfer);
-                }
+                },
             );
         } catch (Exception $exception) {
             $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
@@ -145,7 +145,7 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
             ->getConditionalAvailabilityTransfer();
 
         $this->entityManager->deleteConditionalAvailabilityById(
-            $conditionalAvailabilityTransfer->getIdConditionalAvailability()
+            $conditionalAvailabilityTransfer->getIdConditionalAvailability(),
         );
 
         $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null);
@@ -168,7 +168,7 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
             $conditionalAvailabilityResponseTransfer = $this->getTransactionHandler()->handleTransaction(
                 function () use ($conditionalAvailabilityResponseTransfer) {
                     return $this->executePersistTransaction($conditionalAvailabilityResponseTransfer);
-                }
+                },
             );
         } catch (Exception $exception) {
             $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
@@ -187,11 +187,11 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
         ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer
     ): ConditionalAvailabilityResponseTransfer {
         $conditionalAvailabilityTransfer = $this->entityManager->persistConditionalAvailability(
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
 
         $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(
-            $conditionalAvailabilityTransfer
+            $conditionalAvailabilityTransfer,
         );
 
         return $this->conditionalAvailabilityPluginExecutor

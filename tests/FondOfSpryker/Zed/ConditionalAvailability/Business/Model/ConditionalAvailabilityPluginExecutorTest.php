@@ -14,7 +14,7 @@ class ConditionalAvailabilityPluginExecutorTest extends Unit
     protected $conditionalAvailabilityPluginExecutor;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject[]|\FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface[]
+     * @var array<\FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface>|array<\PHPUnit\Framework\MockObject\MockObject>
      */
     protected $conditionalAvailabilityPostSavePluginMocks;
 
@@ -41,7 +41,7 @@ class ConditionalAvailabilityPluginExecutorTest extends Unit
         ];
 
         $this->conditionalAvailabilityPluginExecutor = new ConditionalAvailabilityPluginExecutor(
-            $this->conditionalAvailabilityPostSavePluginMocks
+            $this->conditionalAvailabilityPostSavePluginMocks,
         );
     }
 
@@ -50,7 +50,6 @@ class ConditionalAvailabilityPluginExecutorTest extends Unit
      */
     public function testExecutePostSavePlugins(): void
     {
-
         $this->conditionalAvailabilityPostSavePluginMocks[0]->expects($this->atLeastOnce())
             ->method('postSave')
             ->with($this->conditionalAvailabilityResponseTransferMock)
@@ -59,8 +58,8 @@ class ConditionalAvailabilityPluginExecutorTest extends Unit
         $this->assertEquals(
             $this->conditionalAvailabilityResponseTransferMock,
             $this->conditionalAvailabilityPluginExecutor->executePostSavePlugins(
-                $this->conditionalAvailabilityResponseTransferMock
-            )
+                $this->conditionalAvailabilityResponseTransferMock,
+            ),
         );
     }
 }

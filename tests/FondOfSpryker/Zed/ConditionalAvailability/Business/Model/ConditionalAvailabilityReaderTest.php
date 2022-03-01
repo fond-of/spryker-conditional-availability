@@ -59,7 +59,7 @@ class ConditionalAvailabilityReaderTest extends Unit
             ->getMock();
 
         $this->conditionalAvailabilityReader = new ConditionalAvailabilityReader(
-            $this->conditionalAvailabilityRepositoryMock
+            $this->conditionalAvailabilityRepositoryMock,
         );
     }
 
@@ -116,7 +116,7 @@ class ConditionalAvailabilityReaderTest extends Unit
         $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
         $this->assertEquals(
             $this->conditionalAvailabilityTransferMock,
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
     }
 
@@ -135,7 +135,7 @@ class ConditionalAvailabilityReaderTest extends Unit
 
         $this->assertEquals(
             $conditionalAvailabilityCollectionTransfer,
-            $this->conditionalAvailabilityCollectionTransferMock
+            $this->conditionalAvailabilityCollectionTransferMock,
         );
     }
 
@@ -154,7 +154,7 @@ class ConditionalAvailabilityReaderTest extends Unit
 
         $this->assertEquals(
             $conditionalAvailabilityCollectionTransfer,
-            $this->conditionalAvailabilityCollectionTransferMock
+            $this->conditionalAvailabilityCollectionTransferMock,
         );
     }
 }

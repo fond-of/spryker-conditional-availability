@@ -36,7 +36,7 @@ class ConditionalAvailabilityPeriodsPersister implements ConditionalAvailability
         }
 
         $this->entityManager->deleteConditionalAvailabilityPeriodsByConditionalAvailabilityId(
-            $conditionalAvailabilityTransfer->getIdConditionalAvailability()
+            $conditionalAvailabilityTransfer->getIdConditionalAvailability(),
         );
 
         $conditionalAvailabilityPeriodTransfers = $conditionalAvailabilityTransfer
@@ -45,7 +45,7 @@ class ConditionalAvailabilityPeriodsPersister implements ConditionalAvailability
 
         foreach ($conditionalAvailabilityPeriodTransfers as $conditionalAvailabilityPeriodTransfer) {
             $conditionalAvailabilityPeriodTransfer->setFkConditionalAvailability(
-                $conditionalAvailabilityTransfer->getIdConditionalAvailability()
+                $conditionalAvailabilityTransfer->getIdConditionalAvailability(),
             );
 
             $this->entityManager->createConditionalAvailabilityPeriod($conditionalAvailabilityPeriodTransfer);

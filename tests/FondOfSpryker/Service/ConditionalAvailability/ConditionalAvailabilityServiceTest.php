@@ -69,7 +69,7 @@ class ConditionalAvailabilityServiceTest extends Unit
 
         static::assertEquals(
             $dateTime,
-            $this->conditionalAvailabilityService->generateEarliestDeliveryDate()
+            $this->conditionalAvailabilityService->generateEarliestDeliveryDate(),
         );
     }
 
@@ -91,7 +91,7 @@ class ConditionalAvailabilityServiceTest extends Unit
 
         static::assertEquals(
             $dateTime,
-            $this->conditionalAvailabilityService->generateEarliestDeliveryDateByDateTime($dateTime)
+            $this->conditionalAvailabilityService->generateEarliestDeliveryDateByDateTime($dateTime),
         );
     }
 
@@ -113,7 +113,7 @@ class ConditionalAvailabilityServiceTest extends Unit
 
         static::assertEquals(
             $dateTime,
-            $this->conditionalAvailabilityService->generateLatestOrderDateByDeliveryDate($dateTime)
+            $this->conditionalAvailabilityService->generateLatestOrderDateByDeliveryDate($dateTime),
         );
     }
 }

@@ -31,12 +31,12 @@ class ConditionalAvailabilityConfigTest extends Unit
             ->method('get')
             ->with(
                 ConditionalAvailabilityConstants::DEFAULT_DELIVERY_DAYS,
-                ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS
+                ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS,
             )->willReturn(ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS);
 
         static::assertEquals(
             ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS,
-            $this->conditionalAvailabilityConfig->getDefaultDeliveryDays()
+            $this->conditionalAvailabilityConfig->getDefaultDeliveryDays(),
         );
     }
 
@@ -49,12 +49,12 @@ class ConditionalAvailabilityConfigTest extends Unit
             ->method('get')
             ->with(
                 ConditionalAvailabilityConstants::DEFAULT_DELIVERY_DAYS,
-                ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS
+                ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS,
             )->willReturn(2);
 
         static::assertEquals(
             2,
-            $this->conditionalAvailabilityConfig->getDefaultDeliveryDays()
+            $this->conditionalAvailabilityConfig->getDefaultDeliveryDays(),
         );
     }
 }

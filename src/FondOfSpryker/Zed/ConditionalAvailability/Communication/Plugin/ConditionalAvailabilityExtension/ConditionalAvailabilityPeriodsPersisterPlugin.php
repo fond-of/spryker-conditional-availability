@@ -32,11 +32,11 @@ class ConditionalAvailabilityPeriodsPersisterPlugin extends AbstractPlugin imple
         }
 
         $conditionalAvailabilityTransfer = $this->getFacade()->persistConditionalAvailabilityPeriods(
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
 
         return $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(
-            $conditionalAvailabilityTransfer
+            $conditionalAvailabilityTransfer,
         );
     }
 }

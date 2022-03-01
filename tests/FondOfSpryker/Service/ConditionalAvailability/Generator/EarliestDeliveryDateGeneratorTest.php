@@ -31,7 +31,7 @@ class EarliestDeliveryDateGeneratorTest extends Unit
             ->getMock();
 
         $this->earliestDeliveryDateGenerator = new EarliestDeliveryDateGenerator(
-            $this->configMock
+            $this->configMock,
         );
     }
 
@@ -48,7 +48,7 @@ class EarliestDeliveryDateGeneratorTest extends Unit
 
         static::assertEquals(
             '2021-01-25',
-            $earliestDeliveryDate->format('Y-m-d')
+            $earliestDeliveryDate->format('Y-m-d'),
         );
     }
 }

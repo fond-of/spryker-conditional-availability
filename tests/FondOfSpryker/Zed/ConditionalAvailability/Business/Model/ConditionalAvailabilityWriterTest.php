@@ -7,18 +7,22 @@ use Exception;
 use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManagerInterface;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
-use Propel\Runtime\Connection\ConnectionInterface;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface;
 
 class ConditionalAvailabilityWriterTest extends Unit
 {
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface
+     */
+    protected $transactionHandlerMock;
+
     /**
      * @var \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter
      */
     protected $conditionalAvailabilityWriter;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ConditionalAvailabilityPluginExecutorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface
      */
     protected $conditionalAvailabilityPluginExecutorMock;
 
@@ -33,18 +37,13 @@ class ConditionalAvailabilityWriterTest extends Unit
     protected $conditionalAvailabilityTransferMock;
 
     /**
-     * @var \Propel\Runtime\Connection\ConnectionInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $connectionMock;
-
-    /**
      * @return void
      */
     protected function _before(): void
     {
         parent::_before();
 
-        $this->connectionMock = $this->getMockBuilder(ConnectionInterface::class)
+        $this->transactionHandlerMock = $this->getMockBuilder(TransactionHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -62,7 +61,8 @@ class ConditionalAvailabilityWriterTest extends Unit
 
         $this->conditionalAvailabilityWriter = new class (
             $this->conditionalAvailabilityEntityManagerMock,
-            $this->conditionalAvailabilityPluginExecutorMock
+            $this->conditionalAvailabilityPluginExecutorMock,
+            $this->transactionHandlerMock
         ) extends ConditionalAvailabilityWriter {
             /**
              * @var \Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface
@@ -70,20 +70,28 @@ class ConditionalAvailabilityWriterTest extends Unit
             protected $transactionHandler;
 
             /**
+             * @param \FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManagerInterface $entityManager
+             * @param \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor
+             * @param \Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface $transactionHandler
+             */
+            public function __construct(
+                ConditionalAvailabilityEntityManagerInterface $entityManager,
+                ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor,
+                TransactionHandlerInterface $transactionHandler
+            ) {
+                parent::__construct($entityManager, $conditionalAvailabilityPluginExecutor);
+
+                $this->transactionHandler = $transactionHandler;
+            }
+
+            /**
              * @return \Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface
              */
             public function getTransactionHandler(): TransactionHandlerInterface
             {
-                if ($this->transactionHandler === null) {
-                    $this->transactionHandler = parent::getTransactionHandler();
-                }
-
                 return $this->transactionHandler;
             }
         };
-
-        $this->conditionalAvailabilityWriter->getTransactionHandler()
-            ->setConnection($this->connectionMock);
     }
 
     /**
@@ -91,11 +99,13 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testCreateWithError(): void
     {
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('beginTransaction');
-
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('rollback');
+        $this->transactionHandlerMock->expects(static::atLeastOnce())
+            ->method('handleTransaction')
+            ->willReturnCallback(
+                static function ($callable) {
+                    $callable();
+                },
+            );
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
             ->method('saveConditionalAvailability')
@@ -103,7 +113,7 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->willThrowException(new Exception());
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->create(
-            $this->conditionalAvailabilityTransferMock
+            $this->conditionalAvailabilityTransferMock,
         );
 
         $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
@@ -115,11 +125,13 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testCreate(): void
     {
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('beginTransaction');
-
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('commit');
+        $this->transactionHandlerMock->expects(static::atLeastOnce())
+            ->method('handleTransaction')
+            ->willReturnCallback(
+                static function ($callable) {
+                    return $callable();
+                },
+            );
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
             ->method('saveConditionalAvailability')
@@ -134,13 +146,13 @@ class ConditionalAvailabilityWriterTest extends Unit
             });
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->create(
-            $this->conditionalAvailabilityTransferMock
+            $this->conditionalAvailabilityTransferMock,
         );
 
         $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
         $this->assertEquals(
             $this->conditionalAvailabilityTransferMock,
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
     }
 
@@ -149,11 +161,13 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testPersist(): void
     {
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('beginTransaction');
-
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('commit');
+        $this->transactionHandlerMock->expects(static::atLeastOnce())
+            ->method('handleTransaction')
+            ->willReturnCallback(
+                static function ($callable) {
+                    return $callable();
+                },
+            );
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
             ->method('persistConditionalAvailability')
@@ -168,13 +182,13 @@ class ConditionalAvailabilityWriterTest extends Unit
             });
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->persist(
-            $this->conditionalAvailabilityTransferMock
+            $this->conditionalAvailabilityTransferMock,
         );
 
         $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
         $this->assertEquals(
             $this->conditionalAvailabilityTransferMock,
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
     }
 
@@ -183,11 +197,13 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testPersistWithError(): void
     {
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('beginTransaction');
-
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('rollback');
+        $this->transactionHandlerMock->expects(static::atLeastOnce())
+            ->method('handleTransaction')
+            ->willReturnCallback(
+                static function ($callable) {
+                    return $callable();
+                },
+            );
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
             ->method('persistConditionalAvailability')
@@ -195,7 +211,7 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->willThrowException(new Exception());
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->persist(
-            $this->conditionalAvailabilityTransferMock
+            $this->conditionalAvailabilityTransferMock,
         );
 
         $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
@@ -207,11 +223,13 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testUpdateWithError(): void
     {
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('beginTransaction');
-
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('rollback');
+        $this->transactionHandlerMock->expects(static::atLeastOnce())
+            ->method('handleTransaction')
+            ->willReturnCallback(
+                static function ($callable) {
+                    return $callable();
+                },
+            );
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
             ->method('saveConditionalAvailability')
@@ -219,7 +237,7 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->willThrowException(new Exception());
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->update(
-            $this->conditionalAvailabilityTransferMock
+            $this->conditionalAvailabilityTransferMock,
         );
 
         $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
@@ -231,11 +249,13 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testUpdate(): void
     {
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('beginTransaction');
-
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('commit');
+        $this->transactionHandlerMock->expects(static::atLeastOnce())
+            ->method('handleTransaction')
+            ->willReturnCallback(
+                static function ($callable) {
+                    return $callable();
+                },
+            );
 
         $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
             ->method('saveConditionalAvailability')
@@ -250,13 +270,13 @@ class ConditionalAvailabilityWriterTest extends Unit
             });
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->update(
-            $this->conditionalAvailabilityTransferMock
+            $this->conditionalAvailabilityTransferMock,
         );
 
         $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
         $this->assertEquals(
             $this->conditionalAvailabilityTransferMock,
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
     }
 
@@ -267,11 +287,13 @@ class ConditionalAvailabilityWriterTest extends Unit
     {
         $idConditionalAvailability = 1;
 
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('beginTransaction');
-
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('rollback');
+        $this->transactionHandlerMock->expects(static::atLeastOnce())
+            ->method('handleTransaction')
+            ->willReturnCallback(
+                static function ($callable) {
+                    return $callable();
+                },
+            );
 
         $this->conditionalAvailabilityTransferMock->expects($this->atLeastOnce())
             ->method('getIdConditionalAvailability')
@@ -287,13 +309,13 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->willThrowException(new Exception());
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->delete(
-            $this->conditionalAvailabilityTransferMock
+            $this->conditionalAvailabilityTransferMock,
         );
 
         $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
         $this->assertEquals(
             null,
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
     }
 
@@ -304,11 +326,13 @@ class ConditionalAvailabilityWriterTest extends Unit
     {
         $idConditionalAvailability = 1;
 
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('beginTransaction');
-
-        $this->connectionMock->expects($this->atLeastOnce())
-            ->method('commit');
+        $this->transactionHandlerMock->expects(static::atLeastOnce())
+            ->method('handleTransaction')
+            ->willReturnCallback(
+                static function ($callable) {
+                    return $callable();
+                },
+            );
 
         $this->conditionalAvailabilityTransferMock->expects($this->atLeastOnce())
             ->method('requireIdConditionalAvailability')
@@ -323,13 +347,13 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->with($idConditionalAvailability);
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->delete(
-            $this->conditionalAvailabilityTransferMock
+            $this->conditionalAvailabilityTransferMock,
         );
 
         $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
         $this->assertEquals(
             null,
-            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer()
+            $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
     }
 }

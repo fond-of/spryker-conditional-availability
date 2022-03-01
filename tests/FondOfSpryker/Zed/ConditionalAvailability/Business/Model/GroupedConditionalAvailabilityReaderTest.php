@@ -49,7 +49,7 @@ class GroupedConditionalAvailabilityReaderTest extends Unit
             ->getMock();
 
         $this->groupedConditionalAvailabilityReader = new GroupedConditionalAvailabilityReader(
-            $this->conditionalAvailabilityRepositoryMock
+            $this->conditionalAvailabilityRepositoryMock,
         );
     }
 
@@ -65,7 +65,7 @@ class GroupedConditionalAvailabilityReaderTest extends Unit
 
         $this->assertEquals(
             $this->arrayObjectMock,
-            $this->groupedConditionalAvailabilityReader->find($this->conditionalAvailabilityCriteriaFilterTransferMock)
+            $this->groupedConditionalAvailabilityReader->find($this->conditionalAvailabilityCriteriaFilterTransferMock),
         );
     }
 }

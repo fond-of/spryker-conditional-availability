@@ -40,7 +40,7 @@ class ConditionalAvailabilityServiceFactoryTest extends Unit
     {
         static::assertInstanceOf(
             EarliestDeliveryDateGenerator::class,
-            $this->conditionalAvailabilityServiceFactory->createEarliestDeliveryDateGenerator()
+            $this->conditionalAvailabilityServiceFactory->createEarliestDeliveryDateGenerator(),
         );
     }
 
@@ -51,7 +51,7 @@ class ConditionalAvailabilityServiceFactoryTest extends Unit
     {
         static::assertInstanceOf(
             LatestOrderDateGenerator::class,
-            $this->conditionalAvailabilityServiceFactory->createLatestOrderDateGenerator()
+            $this->conditionalAvailabilityServiceFactory->createLatestOrderDateGenerator(),
         );
     }
 }

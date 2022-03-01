@@ -40,7 +40,7 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
         $fosConditionalAvailability->save();
 
         $conditionalAvailabilityTransfer->setIdConditionalAvailability(
-            $fosConditionalAvailability->getIdConditionalAvailability()
+            $fosConditionalAvailability->getIdConditionalAvailability(),
         );
 
         return $conditionalAvailabilityTransfer;
@@ -71,7 +71,7 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
             ->createConditionalAvailabilityPeriodMapper()
             ->mapTransferToEntity(
                 $conditionalAvailabilityPeriodTransfer,
-                new FosConditionalAvailabilityPeriod()
+                new FosConditionalAvailabilityPeriod(),
             );
 
         $fosConditionalAvailabilityPeriod->save();
@@ -117,7 +117,7 @@ class ConditionalAvailabilityEntityManager extends AbstractEntityManager impleme
         $fosConditionalAvailability->save();
 
         $conditionalAvailabilityTransfer->setIdConditionalAvailability(
-            $fosConditionalAvailability->getIdConditionalAvailability()
+            $fosConditionalAvailability->getIdConditionalAvailability(),
         );
 
         return $conditionalAvailabilityTransfer;

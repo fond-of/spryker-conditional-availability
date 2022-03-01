@@ -26,7 +26,7 @@ class ConditionalAvailabilityPeriodsPersisterTest extends Unit
     protected $conditionalAvailabilityPeriodCollectionTransferMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject[]|\Generated\Shared\Transfer\ConditionalAvailabilityPeriodTransfer[]
+     * @var array<\Generated\Shared\Transfer\ConditionalAvailabilityPeriodTransfer>|array<\PHPUnit\Framework\MockObject\MockObject>
      */
     protected $conditionalAvailabilityPeriodTransferMocks;
 
@@ -61,7 +61,7 @@ class ConditionalAvailabilityPeriodsPersisterTest extends Unit
             ->getMock();
 
         $this->conditionalAvailabilityPeriodsPersister = new ConditionalAvailabilityPeriodsPersister(
-            $this->conditionalAvailabilityEntityManagerMock
+            $this->conditionalAvailabilityEntityManagerMock,
         );
     }
 
@@ -76,7 +76,7 @@ class ConditionalAvailabilityPeriodsPersisterTest extends Unit
 
         $this->assertEquals(
             $this->conditionalAvailabilityTransferMock,
-            $this->conditionalAvailabilityPeriodsPersister->persist($this->conditionalAvailabilityTransferMock)
+            $this->conditionalAvailabilityPeriodsPersister->persist($this->conditionalAvailabilityTransferMock),
         );
     }
 
@@ -95,7 +95,7 @@ class ConditionalAvailabilityPeriodsPersisterTest extends Unit
 
         $this->assertEquals(
             $this->conditionalAvailabilityTransferMock,
-            $this->conditionalAvailabilityPeriodsPersister->persist($this->conditionalAvailabilityTransferMock)
+            $this->conditionalAvailabilityPeriodsPersister->persist($this->conditionalAvailabilityTransferMock),
         );
     }
 
@@ -133,7 +133,7 @@ class ConditionalAvailabilityPeriodsPersisterTest extends Unit
 
         $this->assertEquals(
             $this->conditionalAvailabilityTransferMock,
-            $this->conditionalAvailabilityPeriodsPersister->persist($this->conditionalAvailabilityTransferMock)
+            $this->conditionalAvailabilityPeriodsPersister->persist($this->conditionalAvailabilityTransferMock),
         );
     }
 }

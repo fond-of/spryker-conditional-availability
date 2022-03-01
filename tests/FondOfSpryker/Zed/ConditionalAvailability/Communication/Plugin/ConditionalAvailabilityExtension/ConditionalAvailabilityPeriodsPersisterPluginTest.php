@@ -52,12 +52,12 @@ class ConditionalAvailabilityPeriodsPersisterPluginTest extends Unit
             ->willReturn(null);
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityPeriodsPersisterPlugin->postSave(
-            $this->conditionalAvailabilityResponseTransferMock
+            $this->conditionalAvailabilityResponseTransferMock,
         );
 
         $this->assertEquals(
             $this->conditionalAvailabilityResponseTransferMock,
-            $conditionalAvailabilityResponseTransfer
+            $conditionalAvailabilityResponseTransfer,
         );
     }
 
@@ -88,12 +88,12 @@ class ConditionalAvailabilityPeriodsPersisterPluginTest extends Unit
             ->willReturn($this->conditionalAvailabilityResponseTransferMock);
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityPeriodsPersisterPlugin->postSave(
-            $this->conditionalAvailabilityResponseTransferMock
+            $this->conditionalAvailabilityResponseTransferMock,
         );
 
         $this->assertEquals(
             $this->conditionalAvailabilityResponseTransferMock,
-            $conditionalAvailabilityResponseTransfer
+            $conditionalAvailabilityResponseTransfer,
         );
     }
 }

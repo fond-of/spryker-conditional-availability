@@ -78,7 +78,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     {
         $this->assertInstanceOf(
             ConditionalAvailabilityReader::class,
-            $this->businessFactory->createConditionalAvailabilityReader()
+            $this->businessFactory->createConditionalAvailabilityReader(),
         );
     }
 
@@ -89,7 +89,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     {
         $this->assertInstanceOf(
             GroupedConditionalAvailabilityReader::class,
-            $this->businessFactory->createGroupedConditionalAvailabilityReader()
+            $this->businessFactory->createGroupedConditionalAvailabilityReader(),
         );
     }
 
@@ -100,7 +100,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     {
         $this->assertInstanceOf(
             ConditionalAvailabilityPeriodsPersister::class,
-            $this->businessFactory->createConditionalAvailabilityPeriodsPersister()
+            $this->businessFactory->createConditionalAvailabilityPeriodsPersister(),
         );
     }
 
@@ -121,7 +121,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
 
         $this->assertInstanceOf(
             ConditionalAvailabilityWriter::class,
-            $this->businessFactory->createConditionalAvailabilityWriter()
+            $this->businessFactory->createConditionalAvailabilityWriter(),
         );
     }
 }

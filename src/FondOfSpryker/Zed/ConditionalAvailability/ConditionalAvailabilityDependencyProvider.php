@@ -9,6 +9,9 @@ use Spryker\Zed\Kernel\Container;
 
 class ConditionalAvailabilityDependencyProvider extends AbstractBundleDependencyProvider
 {
+    /**
+     * @var string
+     */
     public const PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE = 'PLUGIN_CONDITIONAL_AVAILABILITY_POST_SAVE';
 
     /**
@@ -40,7 +43,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractBundleDependency
     }
 
     /**
-     * @return \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface[]
+     * @return array<\FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface>
      */
     protected function getConditionalAvailabilityPostSavePlugins(): array
     {

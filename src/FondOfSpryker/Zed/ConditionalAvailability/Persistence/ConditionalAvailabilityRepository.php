@@ -20,7 +20,14 @@ use Spryker\Zed\Kernel\Persistence\AbstractRepository;
  */
 class ConditionalAvailabilityRepository extends AbstractRepository implements ConditionalAvailabilityRepositoryInterface
 {
+    /**
+     * @var string
+     */
     public const VIRTUAL_COLUMN_SKU = 'sku';
+
+    /**
+     * @var string
+     */
     protected const RELATION_ALIAS_FOS_CONDITIONAL_AVAILABILITY_PERIOD = 'FosConditionalAvailabilityPeriod';
 
     /**
@@ -89,14 +96,14 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
 
         $fosConditionalAvailabilityQuery = $this->applyFilters(
             $fosConditionalAvailabilityQuery,
-            $conditionalAvailabilityCriteriaFilterTransfer
+            $conditionalAvailabilityCriteriaFilterTransfer,
         );
 
         return $this->getFactory()
             ->createConditionalAvailabilityMapper()
             ->mapEntityCollectionToTransferCollection(
                 $fosConditionalAvailabilityQuery->find(),
-                new ConditionalAvailabilityCollectionTransfer()
+                new ConditionalAvailabilityCollectionTransfer(),
             );
     }
 
@@ -124,7 +131,7 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
             $fosConditionalAvailabilityQuery->useFosConditionalAvailabilityPeriodQuery()
                 ->filterByQuantity(
                     $conditionalAvailabilityCriteriaFilterTransfer->getMinimumQuantity(),
-                    Criteria::GREATER_EQUAL
+                    Criteria::GREATER_EQUAL,
                 )->addAscendingOrderByColumn(FosConditionalAvailabilityPeriodTableMap::COL_START_AT)
                 ->endUse();
         } else {
@@ -137,7 +144,7 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
 
         if ($conditionalAvailabilityCriteriaFilterTransfer->getIsAccessible() !== null) {
             $fosConditionalAvailabilityQuery->filterByIsAccessible(
-                $conditionalAvailabilityCriteriaFilterTransfer->getIsAccessible()
+                $conditionalAvailabilityCriteriaFilterTransfer->getIsAccessible(),
             );
         }
 
@@ -147,7 +154,7 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
     /**
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
      *
-     * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
+     * @return \ArrayObject<string, \ArrayObject<\Generated\Shared\Transfer\ConditionalAvailabilityTransfer>>
      */
     public function findGroupedConditionalAvailabilities(
         ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
@@ -157,12 +164,12 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
 
         $fosConditionalAvailabilityQuery = $this->applyFilters(
             $fosConditionalAvailabilityQuery,
-            $conditionalAvailabilityCriteriaFilterTransfer
+            $conditionalAvailabilityCriteriaFilterTransfer,
         );
 
         $fosConditionalAvailabilityQuery = $fosConditionalAvailabilityQuery->withColumn(
             SpyProductTableMap::COL_SKU,
-            static::VIRTUAL_COLUMN_SKU
+            static::VIRTUAL_COLUMN_SKU,
         );
 
         return $this->getFactory()
@@ -171,9 +178,9 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
     }
 
     /**
-     * @param int[] $productConcreteIds
+     * @param array<int> $productConcreteIds
      *
-     * @return int[]
+     * @return array<int>
      */
     public function getConditionalAvailabilityIdsByProductConcreteIds(array $productConcreteIds): array
     {

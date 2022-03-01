@@ -12,7 +12,7 @@ class ConditionalAvailabilityPluginExecutor implements ConditionalAvailabilityPl
     protected $conditionalAvailabilityPostSavePlugins;
 
     /**
-     * @param \FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface[] $conditionalAvailabilityPostSavePlugins
+     * @param array<\FondOfSpryker\Zed\ConditionalAvailabilityExtension\Dependency\Plugin\ConditionalAvailabilityPostSavePluginInterface> $conditionalAvailabilityPostSavePlugins
      */
     public function __construct(
         array $conditionalAvailabilityPostSavePlugins
