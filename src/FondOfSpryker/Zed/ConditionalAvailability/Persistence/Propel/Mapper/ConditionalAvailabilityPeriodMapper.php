@@ -17,7 +17,7 @@ class ConditionalAvailabilityPeriodMapper implements ConditionalAvailabilityPeri
         FosConditionalAvailabilityPeriod $fosConditionalAvailabilityPeriod
     ): FosConditionalAvailabilityPeriod {
         $fosConditionalAvailabilityPeriod->fromArray(
-            $conditionalAvailabilityPeriodTransfer->modifiedToArray(false)
+            $conditionalAvailabilityPeriodTransfer->modifiedToArray(false),
         );
 
         return $fosConditionalAvailabilityPeriod;
@@ -32,7 +32,7 @@ class ConditionalAvailabilityPeriodMapper implements ConditionalAvailabilityPeri
     ): ConditionalAvailabilityPeriodTransfer {
         return $conditionalAvailabilityPeriodTransfer->fromArray(
             $fosConditionalAvailabilityPeriod->toArray(),
-            true
+            true,
         );
     }
 
@@ -49,11 +49,11 @@ class ConditionalAvailabilityPeriodMapper implements ConditionalAvailabilityPeri
         foreach ($fosConditionalAvailabilityPeriods as $fosConditionalAvailabilityPeriod) {
             $conditionalAvailabilityPeriodTransfer = $this->mapEntityToTransfer(
                 $fosConditionalAvailabilityPeriod,
-                new ConditionalAvailabilityPeriodTransfer()
+                new ConditionalAvailabilityPeriodTransfer(),
             );
 
             $conditionalAvailabilityPeriodCollectionTransfer->addConditionalAvailabilityPeriod(
-                $conditionalAvailabilityPeriodTransfer
+                $conditionalAvailabilityPeriodTransfer,
             );
         }
 

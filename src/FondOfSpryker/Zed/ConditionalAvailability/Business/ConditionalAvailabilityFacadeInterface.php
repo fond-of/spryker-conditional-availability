@@ -112,7 +112,7 @@ interface ConditionalAvailabilityFacadeInterface
      *
      * @param \Generated\Shared\Transfer\ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
      *
-     * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
+     * @return \ArrayObject<string, \ArrayObject<\Generated\Shared\Transfer\ConditionalAvailabilityTransfer>>
      */
     public function findGroupedConditionalAvailabilities(
         ConditionalAvailabilityCriteriaFilterTransfer $conditionalAvailabilityCriteriaFilterTransfer
@@ -138,9 +138,9 @@ interface ConditionalAvailabilityFacadeInterface
      *
      * @api
      *
-     * @param int[] $productConcreteIds
+     * @param array<int> $productConcreteIds
      *
-     * @return int[]
+     * @return array<int>
      */
     public function getConditionalAvailabilityIdsByProductConcreteIds(array $productConcreteIds): array;
 }

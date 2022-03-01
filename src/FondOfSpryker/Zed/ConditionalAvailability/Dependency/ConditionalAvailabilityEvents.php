@@ -9,6 +9,8 @@ interface ConditionalAvailabilityEvents
      * - This event will be used for fos_conditional_availability entity creation
      *
      * @api
+     *
+     * @var string
      */
     public const ENTITY_FOS_CONDITIONAL_AVAILABILITY_CREATE = 'Entity.fos_conditional_availability.create';
 
@@ -17,6 +19,8 @@ interface ConditionalAvailabilityEvents
      * - This event will be used for fos_price_product_price_list entity update
      *
      * @api
+     *
+     * @var string
      */
     public const ENTITY_FOS_CONDITIONAL_AVAILABILITY_UPDATE = 'Entity.fos_conditional_availability.update';
 
@@ -25,6 +29,8 @@ interface ConditionalAvailabilityEvents
      * - This event will be used for fos_price_product_price_list entity delete
      *
      * @api
+     *
+     * @var string
      */
     public const ENTITY_FOS_CONDITIONAL_AVAILABILITY_DELETE = 'Entity.fos_conditional_availability.delete';
 
@@ -33,6 +39,8 @@ interface ConditionalAvailabilityEvents
      * - This events will be used for conditional_availability publishing
      *
      * @api
+     *
+     * @var string
      */
     public const CONDITIONAL_AVAILABILITY_PUBLISH = 'ConditionalAvailability.conditional_availability.publish';
 
@@ -41,6 +49,8 @@ interface ConditionalAvailabilityEvents
      * - This events will be used for conditional_availability un-publishing
      *
      * @api
+     *
+     * @var string
      */
     public const CONDITIONAL_AVAILABILITY_UNPUBLISH = 'ConditionalAvailability.conditional_availability.unpublish';
 
@@ -49,6 +59,8 @@ interface ConditionalAvailabilityEvents
      * - This event will be used for fos_conditional_availability entity creation
      *
      * @api
+     *
+     * @var string
      */
     public const ENTITY_FOS_CONDITIONAL_AVAILABILITY_PERIOD_CREATE = 'Entity.fos_conditional_availability_period.create';
 
@@ -57,6 +69,8 @@ interface ConditionalAvailabilityEvents
      * - This event will be used for fos_price_product_price_list entity update
      *
      * @api
+     *
+     * @var string
      */
     public const ENTITY_FOS_CONDITIONAL_AVAILABILITY_PERIOD_UPDATE = 'Entity.fos_conditional_availability_period.update';
 
@@ -65,6 +79,8 @@ interface ConditionalAvailabilityEvents
      * - This event will be used for fos_price_product_price_list entity delete
      *
      * @api
+     *
+     * @var string
      */
     public const ENTITY_FOS_CONDITIONAL_AVAILABILITY_PERIOD_DELETE = 'Entity.fos_conditional_availability_period.delete';
 
@@ -73,6 +89,8 @@ interface ConditionalAvailabilityEvents
      * - This events will be used for conditional_availability publishing
      *
      * @api
+     *
+     * @var string
      */
     public const CONDITIONAL_AVAILABILITY_PERIOD_PUBLISH = 'ConditionalAvailability.conditional_availability_period.publish';
 
@@ -81,6 +99,8 @@ interface ConditionalAvailabilityEvents
      * - This events will be used for conditional_availability un-publishing
      *
      * @api
+     *
+     * @var string
      */
     public const CONDITIONAL_AVAILABILITY_PERIOD_UNPUBLISH = 'ConditionalAvailability.conditional_availability_period.unpublish';
 }

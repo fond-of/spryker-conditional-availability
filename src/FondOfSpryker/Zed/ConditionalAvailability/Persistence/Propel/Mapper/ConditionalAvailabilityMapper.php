@@ -11,6 +11,9 @@ use Propel\Runtime\Collection\ObjectCollection;
 
 class ConditionalAvailabilityMapper implements ConditionalAvailabilityMapperInterface
 {
+    /**
+     * @var string
+     */
     public const VIRTUAL_COLUMN_SKU = 'sku';
 
     /**
@@ -37,7 +40,7 @@ class ConditionalAvailabilityMapper implements ConditionalAvailabilityMapperInte
         FosConditionalAvailability $fosConditionalAvailability
     ): FosConditionalAvailability {
         $fosConditionalAvailability->fromArray(
-            $conditionalAvailabilityTransfer->modifiedToArray(false)
+            $conditionalAvailabilityTransfer->modifiedToArray(false),
         );
 
         return $fosConditionalAvailability;
@@ -55,17 +58,17 @@ class ConditionalAvailabilityMapper implements ConditionalAvailabilityMapperInte
     ): ConditionalAvailabilityTransfer {
         $conditionalAvailabilityTransfer->fromArray(
             $fosConditionalAvailability->toArray(),
-            true
+            true,
         );
 
         $fosConditionalAvailabilityPeriods = $this->conditionalAvailabilityPeriodMapper
             ->mapEntityCollectionToTransferCollection(
                 $fosConditionalAvailability->getFosConditionalAvailabilityPeriods(),
-                new ConditionalAvailabilityPeriodCollectionTransfer()
+                new ConditionalAvailabilityPeriodCollectionTransfer(),
             );
 
         $conditionalAvailabilityTransfer->setConditionalAvailabilityPeriodCollection(
-            $fosConditionalAvailabilityPeriods
+            $fosConditionalAvailabilityPeriods,
         );
 
         return $conditionalAvailabilityTransfer;
@@ -90,7 +93,7 @@ class ConditionalAvailabilityMapper implements ConditionalAvailabilityMapperInte
 
             $conditionalAvailabilityTransfer = $this->mapEntityToTransfer(
                 $fosConditionalAvailability,
-                new ConditionalAvailabilityTransfer()
+                new ConditionalAvailabilityTransfer(),
             );
 
             $groupedConditionalAvailabilityTransfers->offsetGet($sku)
@@ -113,7 +116,7 @@ class ConditionalAvailabilityMapper implements ConditionalAvailabilityMapperInte
         foreach ($fosConditionalAvailabilities as $fosConditionalAvailability) {
             $conditionalAvailabilityTransfer = $this->mapEntityToTransfer(
                 $fosConditionalAvailability,
-                new ConditionalAvailabilityTransfer()
+                new ConditionalAvailabilityTransfer(),
             );
 
             $conditionalAvailabilityCollectionTransfer->addConditionalAvailability($conditionalAvailabilityTransfer);

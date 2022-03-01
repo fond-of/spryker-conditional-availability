@@ -45,9 +45,9 @@ interface ConditionalAvailabilityMapperInterface
 
     /**
      * @param \Propel\Runtime\Collection\ObjectCollection $fosConditionalAvailabilities
-     * @param \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]> $groupedConditionalAvailabilities
+     * @param \ArrayObject<string, \ArrayObject<\Generated\Shared\Transfer\ConditionalAvailabilityTransfer>> $groupedConditionalAvailabilities
      *
-     * @return \ArrayObject<string,\Generated\Shared\Transfer\ConditionalAvailabilityTransfer[]>
+     * @return \ArrayObject<string, \ArrayObject<\Generated\Shared\Transfer\ConditionalAvailabilityTransfer>>
      */
     public function mapEntityCollectionToGroupedTransfers(
         ObjectCollection $fosConditionalAvailabilities,

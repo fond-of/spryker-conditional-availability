@@ -31,7 +31,7 @@ class LatestOrderDateGeneratorTest extends Unit
             ->getMock();
 
         $this->latestOrderDateGenerator = new LatestOrderDateGenerator(
-            $this->configMock
+            $this->configMock,
         );
     }
 
@@ -46,7 +46,7 @@ class LatestOrderDateGeneratorTest extends Unit
 
         static::assertEquals(
             new DateTime('2021-02-12'),
-            $this->latestOrderDateGenerator->generateByDeliveryDate(new DateTime('2021-02-16'))
+            $this->latestOrderDateGenerator->generateByDeliveryDate(new DateTime('2021-02-16')),
         );
     }
 }

@@ -151,8 +151,8 @@ class ConditionalAvailabilityFacadeTest extends Unit
         $this->assertEquals(
             $this->conditionalAvailabilityResponseTransferMock,
             $this->conditionalAvailabilityFacade->findConditionalAvailabilityById(
-                $this->conditionalAvailabilityTransferMock
-            )
+                $this->conditionalAvailabilityTransferMock,
+            ),
         );
     }
 
@@ -173,8 +173,8 @@ class ConditionalAvailabilityFacadeTest extends Unit
         $this->assertEquals(
             $this->conditionalAvailabilityResponseTransferMock,
             $this->conditionalAvailabilityFacade->createConditionalAvailability(
-                $this->conditionalAvailabilityTransferMock
-            )
+                $this->conditionalAvailabilityTransferMock,
+            ),
         );
     }
 
@@ -195,8 +195,8 @@ class ConditionalAvailabilityFacadeTest extends Unit
         $this->assertEquals(
             $this->conditionalAvailabilityResponseTransferMock,
             $this->conditionalAvailabilityFacade->updateConditionalAvailability(
-                $this->conditionalAvailabilityTransferMock
-            )
+                $this->conditionalAvailabilityTransferMock,
+            ),
         );
     }
 
@@ -217,8 +217,8 @@ class ConditionalAvailabilityFacadeTest extends Unit
         $this->assertEquals(
             $this->conditionalAvailabilityResponseTransferMock,
             $this->conditionalAvailabilityFacade->persistConditionalAvailability(
-                $this->conditionalAvailabilityTransferMock
-            )
+                $this->conditionalAvailabilityTransferMock,
+            ),
         );
     }
 
@@ -239,8 +239,8 @@ class ConditionalAvailabilityFacadeTest extends Unit
         $this->assertEquals(
             $this->conditionalAvailabilityResponseTransferMock,
             $this->conditionalAvailabilityFacade->deleteConditionalAvailability(
-                $this->conditionalAvailabilityTransferMock
-            )
+                $this->conditionalAvailabilityTransferMock,
+            ),
         );
     }
 
@@ -261,8 +261,8 @@ class ConditionalAvailabilityFacadeTest extends Unit
         $this->assertEquals(
             $this->conditionalAvailabilityTransferMock,
             $this->conditionalAvailabilityFacade->persistConditionalAvailabilityPeriods(
-                $this->conditionalAvailabilityTransferMock
-            )
+                $this->conditionalAvailabilityTransferMock,
+            ),
         );
     }
 
@@ -283,8 +283,8 @@ class ConditionalAvailabilityFacadeTest extends Unit
         $this->assertEquals(
             $this->arrayObjectMock,
             $this->conditionalAvailabilityFacade->findGroupedConditionalAvailabilities(
-                $this->conditionalAvailabilityCriteriaFilterTransferMock
-            )
+                $this->conditionalAvailabilityCriteriaFilterTransferMock,
+            ),
         );
     }
 
@@ -305,8 +305,8 @@ class ConditionalAvailabilityFacadeTest extends Unit
         $this->assertEquals(
             $this->conditionalAvailabilityCollectionTransferMock,
             $this->conditionalAvailabilityFacade->findConditionalAvailabilities(
-                $this->conditionalAvailabilityCriteriaFilterTransferMock
-            )
+                $this->conditionalAvailabilityCriteriaFilterTransferMock,
+            ),
         );
     }
 
@@ -325,7 +325,7 @@ class ConditionalAvailabilityFacadeTest extends Unit
 
         $this->assertEquals(
             $conditionalAvailabilityIds,
-            $this->conditionalAvailabilityFacade->getConditionalAvailabilityIdsByProductConcreteIds($productConcreteIds)
+            $this->conditionalAvailabilityFacade->getConditionalAvailabilityIdsByProductConcreteIds($productConcreteIds),
         );
     }
 }
