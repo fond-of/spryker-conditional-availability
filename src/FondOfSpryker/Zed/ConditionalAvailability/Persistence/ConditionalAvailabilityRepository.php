@@ -127,6 +127,12 @@ class ConditionalAvailabilityRepository extends AbstractRepository implements Co
             $fosConditionalAvailabilityQuery->innerJoinWithSpyProduct();
         }
 
+        if ($conditionalAvailabilityCriteriaFilterTransfer->getWarehouseGroup() !== null) {
+            $fosConditionalAvailabilityQuery->filterByWarehouseGroup(
+                $conditionalAvailabilityCriteriaFilterTransfer->getWarehouseGroup(),
+            );
+        }
+
         if ($conditionalAvailabilityCriteriaFilterTransfer->getMinimumQuantity() !== null) {
             $fosConditionalAvailabilityQuery->useFosConditionalAvailabilityPeriodQuery()
                 ->filterByQuantity(
