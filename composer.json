@@ -14,14 +14,14 @@
   ],
   "require": {
     "php": ">=7.3",
-    "fond-of-spryker/conditional-availability-extension": "dev-master"
+    "fond-of-spryker/conditional-availability-extension": "dev-master",
+    "spryker/event-behavior": "^1.0.0",
+    "spryker/product": "^5.2.2 || ^6.0.0"
   },
   "require-dev": {
     "fond-of-codeception/spryker": "^1.0",
     "spryker/code-sniffer": "*",
-    "spryker-sdk/phpstan-spryker": "*",
-    "spryker/event-behavior": "*",
-    "spryker/product": "*"
+    "spryker-sdk/phpstan-spryker": "*"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
