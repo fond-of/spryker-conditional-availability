@@ -9,15 +9,24 @@ use FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig;
 class LatestOrderDateGenerator implements LatestOrderDateGeneratorInterface
 {
     /**
+     * @var \FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestOrderDateGeneratorInterface
+     */
+    protected $earliestOrderDateGenerator;
+
+    /**
      * @var \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig
      */
     protected $config;
 
     /**
+     * @param \FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestOrderDateGeneratorInterface $earliestOrderDateGenerator
      * @param \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig $config
      */
-    public function __construct(ConditionalAvailabilityConfig $config)
-    {
+    public function __construct(
+        EarliestOrderDateGeneratorInterface $earliestOrderDateGenerator,
+        ConditionalAvailabilityConfig $config
+    ) {
+        $this->earliestOrderDateGenerator = $earliestOrderDateGenerator;
         $this->config = $config;
     }
 
@@ -44,6 +53,6 @@ class LatestOrderDateGenerator implements LatestOrderDateGeneratorInterface
             $defaultDeliveryDays--;
         }
 
-        return $latestOrderDate;
+        return max($latestOrderDate, $this->earliestOrderDateGenerator->generate());
     }
 }

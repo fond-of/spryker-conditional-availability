@@ -10,6 +10,11 @@ use FondOfSpryker\Shared\ConditionalAvailability\ConditionalAvailabilityConstant
 class LatestOrderDateGeneratorTest extends Unit
 {
     /**
+     * @var \FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestOrderDateGeneratorInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $earliestOrderDateGeneratorMock;
+
+    /**
      * @var \FondOfSpryker\Service\ConditionalAvailability\ConditionalAvailabilityConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
@@ -26,11 +31,16 @@ class LatestOrderDateGeneratorTest extends Unit
     {
         parent::_before();
 
+        $this->earliestOrderDateGeneratorMock = $this->getMockBuilder(EarliestOrderDateGeneratorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->configMock = $this->getMockBuilder(ConditionalAvailabilityConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->latestOrderDateGenerator = new LatestOrderDateGenerator(
+            $this->earliestOrderDateGeneratorMock,
             $this->configMock,
         );
     }
@@ -40,6 +50,10 @@ class LatestOrderDateGeneratorTest extends Unit
      */
     public function testGenerateByDeliveryDate(): void
     {
+        $this->earliestOrderDateGeneratorMock->expects(static::atLeastOnce())
+            ->method('generate')
+            ->willReturn(new DateTime('2021-02-11'));
+
         $this->configMock->expects(static::atLeastOnce())
             ->method('getDefaultDeliveryDays')
             ->willReturn(ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS);
@@ -47,6 +61,25 @@ class LatestOrderDateGeneratorTest extends Unit
         static::assertEquals(
             new DateTime('2021-02-12'),
             $this->latestOrderDateGenerator->generateByDeliveryDate(new DateTime('2021-02-16')),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGenerateByDeliveryDateWithExceededLimit(): void
+    {
+        $this->earliestOrderDateGeneratorMock->expects(static::atLeastOnce())
+            ->method('generate')
+            ->willReturn(new DateTime('2021-02-13'));
+
+        $this->configMock->expects(static::atLeastOnce())
+            ->method('getDefaultDeliveryDays')
+            ->willReturn(ConditionalAvailabilityConstants::DEFAULT_VALUE_DEFAULT_DELIVERY_DAYS);
+
+        static::assertEquals(
+            new DateTime('2021-02-13'),
+            $this->latestOrderDateGenerator->generateByDeliveryDate(new DateTime('2021-02-15')),
         );
     }
 }
