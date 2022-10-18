@@ -4,6 +4,8 @@ namespace FondOfSpryker\Service\ConditionalAvailability;
 
 use FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestDeliveryDateGenerator;
 use FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestDeliveryDateGeneratorInterface;
+use FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestOrderDateGenerator;
+use FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestOrderDateGeneratorInterface;
 use FondOfSpryker\Service\ConditionalAvailability\Generator\LatestOrderDateGenerator;
 use FondOfSpryker\Service\ConditionalAvailability\Generator\LatestOrderDateGeneratorInterface;
 use Spryker\Service\Kernel\AbstractServiceFactory;
@@ -29,7 +31,16 @@ class ConditionalAvailabilityServiceFactory extends AbstractServiceFactory
     public function createLatestOrderDateGenerator(): LatestOrderDateGeneratorInterface
     {
         return new LatestOrderDateGenerator(
+            $this->createEarliestOrderDateGenerator(),
             $this->getConfig(),
         );
+    }
+
+    /**
+     * @return \FondOfSpryker\Service\ConditionalAvailability\Generator\EarliestOrderDateGeneratorInterface
+     */
+    protected function createEarliestOrderDateGenerator(): EarliestOrderDateGeneratorInterface
+    {
+        return new EarliestOrderDateGenerator();
     }
 }
