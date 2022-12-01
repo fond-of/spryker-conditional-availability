@@ -26,9 +26,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractBundleDependency
     {
         $container = parent::provideBusinessLayerDependencies($container);
 
-        $container = $this->addConditionalAvailabilityPostSavePlugins($container);
-
-        return $container;
+        return $this->addConditionalAvailabilityPostSavePlugins($container);
     }
 
     /**
