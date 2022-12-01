@@ -1,9 +1,8 @@
 <?php
 
-namespace FondOfSpryker\Client\Zed\ConditionalAvailability\Business;
+namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
 use Codeception\Test\Unit;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityBusinessFactory;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPeriodsPersister;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityReader;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter;
@@ -12,6 +11,8 @@ use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityConfig;
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityDependencyProvider;
 use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManager;
 use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityRepository;
+use Psr\Log\LoggerInterface;
+use Spryker\Shared\Log\Config\LoggerConfigInterface;
 use Spryker\Zed\Kernel\Container;
 
 class ConditionalAvailabilityBusinessFactoryTest extends Unit
@@ -42,6 +43,11 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     protected $entityManagerMock;
 
     /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
+     */
+    protected $loggerMock;
+
+    /**
      * @return void
      */
     protected function _before(): void
@@ -64,7 +70,34 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->businessFactory = new ConditionalAvailabilityBusinessFactory();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->businessFactory = new class ($this->loggerMock) extends ConditionalAvailabilityBusinessFactory {
+            /**
+             * @var \Psr\Log\LoggerInterface
+             */
+            protected $logger;
+
+            /**
+             * @param \Psr\Log\LoggerInterface $logger
+             */
+            public function __construct(LoggerInterface $logger)
+            {
+                $this->logger = $logger;
+            }
+
+            /**
+             * @param \Spryker\Shared\Log\Config\LoggerConfigInterface|null $loggerConfig
+             *
+             * @return \Psr\Log\LoggerInterface
+             */
+            protected function getLogger(?LoggerConfigInterface $loggerConfig = null): LoggerInterface
+            {
+                return $this->logger;
+            }
+        };
         $this->businessFactory->setContainer($this->containerMock);
         $this->businessFactory->setConfig($this->configMock);
         $this->businessFactory->setRepository($this->repositoryMock);
@@ -76,7 +109,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
      */
     public function testCreateConditionalAvailabilityReader(): void
     {
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             ConditionalAvailabilityReader::class,
             $this->businessFactory->createConditionalAvailabilityReader(),
         );
@@ -87,7 +120,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
      */
     public function testCreateGroupedConditionalAvailabilityReader(): void
     {
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             GroupedConditionalAvailabilityReader::class,
             $this->businessFactory->createGroupedConditionalAvailabilityReader(),
         );
@@ -98,7 +131,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
      */
     public function testCreateConditionalAvailabilityPeriodsPersister(): void
     {
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             ConditionalAvailabilityPeriodsPersister::class,
             $this->businessFactory->createConditionalAvailabilityPeriodsPersister(),
         );
@@ -119,7 +152,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
             ->with(ConditionalAvailabilityDependencyProvider::PLUGINS_CONDITIONAL_AVAILABILITY_POST_SAVE)
             ->willReturn([]);
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             ConditionalAvailabilityWriter::class,
             $this->businessFactory->createConditionalAvailabilityWriter(),
         );

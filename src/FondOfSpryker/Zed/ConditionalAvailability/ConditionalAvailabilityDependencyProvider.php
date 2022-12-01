@@ -7,6 +7,9 @@ namespace FondOfSpryker\Zed\ConditionalAvailability;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ConditionalAvailabilityDependencyProvider extends AbstractBundleDependencyProvider
 {
     /**
@@ -23,9 +26,7 @@ class ConditionalAvailabilityDependencyProvider extends AbstractBundleDependency
     {
         $container = parent::provideBusinessLayerDependencies($container);
 
-        $container = $this->addConditionalAvailabilityPostSavePlugins($container);
-
-        return $container;
+        return $this->addConditionalAvailabilityPostSavePlugins($container);
     }
 
     /**

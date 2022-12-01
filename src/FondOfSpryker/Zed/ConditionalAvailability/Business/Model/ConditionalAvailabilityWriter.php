@@ -6,6 +6,7 @@ use Exception;
 use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManagerInterface;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
+use Psr\Log\LoggerInterface;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
 
 class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInterface
@@ -23,15 +24,23 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
     protected $conditionalAvailabilityPluginExecutor;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param \FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManagerInterface $entityManager
      * @param \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         ConditionalAvailabilityEntityManagerInterface $entityManager,
-        ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor
+        ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->conditionalAvailabilityPluginExecutor = $conditionalAvailabilityPluginExecutor;
+        $this->logger = $logger;
     }
 
     /**
@@ -52,6 +61,12 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
                 },
             );
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage(), [
+                'exception' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'data' => $conditionalAvailabilityTransfer->serialize(),
+            ]);
+
             $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
                 ->setIsSuccessful(false);
         }
@@ -79,6 +94,12 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
                 },
             );
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage(), [
+                'exception' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'data' => $conditionalAvailabilityTransfer->serialize(),
+            ]);
+
             $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
                 ->setIsSuccessful(false);
         }
@@ -171,6 +192,12 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
                 },
             );
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage(), [
+                'exception' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'data' => $conditionalAvailabilityTransfer->serialize(),
+            ]);
+
             $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
                 ->setIsSuccessful(false);
         }

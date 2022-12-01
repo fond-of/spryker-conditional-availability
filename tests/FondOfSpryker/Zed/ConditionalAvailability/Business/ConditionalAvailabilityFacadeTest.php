@@ -1,11 +1,9 @@
 <?php
 
-namespace FondOfSpryker\Client\Zed\ConditionalAvailability\Business;
+namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
 use ArrayObject;
 use Codeception\Test\Unit;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityBusinessFactory;
-use FondOfSpryker\Zed\ConditionalAvailability\Business\ConditionalAvailabilityFacade;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPeriodsPersister;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityReader;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter;

@@ -15,6 +15,7 @@ use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabi
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReader;
 use FondOfSpryker\Zed\ConditionalAvailability\Business\Model\GroupedConditionalAvailabilityReaderInterface;
 use FondOfSpryker\Zed\ConditionalAvailability\ConditionalAvailabilityDependencyProvider;
+use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 
 /**
@@ -25,6 +26,8 @@ use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
  */
 class ConditionalAvailabilityBusinessFactory extends AbstractBusinessFactory
 {
+    use LoggerTrait;
+
     /**
      * @return \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityReaderInterface
      */
@@ -53,6 +56,7 @@ class ConditionalAvailabilityBusinessFactory extends AbstractBusinessFactory
         return new ConditionalAvailabilityWriter(
             $this->getEntityManager(),
             $this->createConditionalAvailabilityPluginExecutor(),
+            $this->getLogger(),
         );
     }
 
