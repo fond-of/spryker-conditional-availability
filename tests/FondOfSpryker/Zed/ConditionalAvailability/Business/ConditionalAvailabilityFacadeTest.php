@@ -1,6 +1,6 @@
 <?php
 
-namespace FondOfSpryker\Client\Zed\ConditionalAvailability\Business;
+namespace FondOfSpryker\Zed\ConditionalAvailability\Business;
 
 use ArrayObject;
 use Codeception\Test\Unit;

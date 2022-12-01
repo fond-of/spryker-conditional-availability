@@ -7,19 +7,20 @@ use Exception;
 use FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManagerInterface;
 use Generated\Shared\Transfer\ConditionalAvailabilityResponseTransfer;
 use Generated\Shared\Transfer\ConditionalAvailabilityTransfer;
+use Psr\Log\LoggerInterface;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface;
 
 class ConditionalAvailabilityWriterTest extends Unit
 {
     /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface&\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $loggerMock;
+
+    /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface
      */
     protected $transactionHandlerMock;
-
-    /**
-     * @var \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter
-     */
-    protected $conditionalAvailabilityWriter;
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface
@@ -37,11 +38,21 @@ class ConditionalAvailabilityWriterTest extends Unit
     protected $conditionalAvailabilityTransferMock;
 
     /**
+     * @var \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityWriter
+     */
+    protected $conditionalAvailabilityWriter;
+
+    /**
      * @return void
      */
     protected function _before(): void
     {
         parent::_before();
+
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
 
         $this->transactionHandlerMock = $this->getMockBuilder(TransactionHandlerInterface::class)
             ->disableOriginalConstructor()
@@ -62,6 +73,7 @@ class ConditionalAvailabilityWriterTest extends Unit
         $this->conditionalAvailabilityWriter = new class (
             $this->conditionalAvailabilityEntityManagerMock,
             $this->conditionalAvailabilityPluginExecutorMock,
+            $this->loggerMock,
             $this->transactionHandlerMock
         ) extends ConditionalAvailabilityWriter {
             /**
@@ -72,14 +84,16 @@ class ConditionalAvailabilityWriterTest extends Unit
             /**
              * @param \FondOfSpryker\Zed\ConditionalAvailability\Persistence\ConditionalAvailabilityEntityManagerInterface $entityManager
              * @param \FondOfSpryker\Zed\ConditionalAvailability\Business\Model\ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor
+             * @param \Psr\Log\LoggerInterface $logger
              * @param \Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface $transactionHandler
              */
             public function __construct(
                 ConditionalAvailabilityEntityManagerInterface $entityManager,
                 ConditionalAvailabilityPluginExecutorInterface $conditionalAvailabilityPluginExecutor,
+                LoggerInterface $logger,
                 TransactionHandlerInterface $transactionHandler
             ) {
-                parent::__construct($entityManager, $conditionalAvailabilityPluginExecutor);
+                parent::__construct($entityManager, $conditionalAvailabilityPluginExecutor, $logger);
 
                 $this->transactionHandler = $transactionHandler;
             }
@@ -99,6 +113,9 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testCreateWithError(): void
     {
+        $exception = new Exception('foo');
+        $serializedData = '{}';
+
         $this->transactionHandlerMock->expects(static::atLeastOnce())
             ->method('handleTransaction')
             ->willReturnCallback(
@@ -107,17 +124,29 @@ class ConditionalAvailabilityWriterTest extends Unit
                 },
             );
 
-        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityEntityManagerMock->expects(static::atLeastOnce())
             ->method('saveConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
-            ->willThrowException(new Exception());
+            ->willThrowException($exception);
+
+        $this->conditionalAvailabilityTransferMock->expects(static::atLeastOnce())
+            ->method('serialize')
+            ->willReturn($serializedData);
+
+        $this->loggerMock->expects(static::atLeastOnce())
+            ->method('error')
+            ->with($exception->getMessage(), [
+                'exception' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'data' => $serializedData,
+            ]);
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->create(
             $this->conditionalAvailabilityTransferMock,
         );
 
-        $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
-        $this->assertEquals(null, $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer());
+        static::assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        static::assertEquals(null, $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer());
     }
 
     /**
@@ -133,24 +162,30 @@ class ConditionalAvailabilityWriterTest extends Unit
                 },
             );
 
-        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityEntityManagerMock->expects(static::atLeastOnce())
             ->method('saveConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
             ->willReturn($this->conditionalAvailabilityTransferMock);
 
-        $this->conditionalAvailabilityPluginExecutorMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityPluginExecutorMock->expects(static::atLeastOnce())
             ->method('executePostSavePlugins')
             ->withAnyParameters()
             ->willReturnCallback(static function (ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer) {
                 return $conditionalAvailabilityResponseTransfer;
             });
 
+        $this->conditionalAvailabilityTransferMock->expects(static::never())
+            ->method('serialize');
+
+        $this->loggerMock->expects(static::never())
+            ->method('error');
+
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->create(
             $this->conditionalAvailabilityTransferMock,
         );
 
-        $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
-        $this->assertEquals(
+        static::assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        static::assertEquals(
             $this->conditionalAvailabilityTransferMock,
             $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
@@ -169,24 +204,30 @@ class ConditionalAvailabilityWriterTest extends Unit
                 },
             );
 
-        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityEntityManagerMock->expects(static::atLeastOnce())
             ->method('persistConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
             ->willReturn($this->conditionalAvailabilityTransferMock);
 
-        $this->conditionalAvailabilityPluginExecutorMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityPluginExecutorMock->expects(static::atLeastOnce())
             ->method('executePostSavePlugins')
             ->withAnyParameters()
             ->willReturnCallback(static function (ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer) {
                 return $conditionalAvailabilityResponseTransfer;
             });
 
+        $this->conditionalAvailabilityTransferMock->expects(static::never())
+            ->method('serialize');
+
+        $this->loggerMock->expects(static::never())
+            ->method('error');
+
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->persist(
             $this->conditionalAvailabilityTransferMock,
         );
 
-        $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
-        $this->assertEquals(
+        static::assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        static::assertEquals(
             $this->conditionalAvailabilityTransferMock,
             $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
@@ -197,6 +238,9 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testPersistWithError(): void
     {
+        $exception = new Exception('foo');
+        $serializedData = '{}';
+
         $this->transactionHandlerMock->expects(static::atLeastOnce())
             ->method('handleTransaction')
             ->willReturnCallback(
@@ -205,17 +249,29 @@ class ConditionalAvailabilityWriterTest extends Unit
                 },
             );
 
-        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityEntityManagerMock->expects(static::atLeastOnce())
             ->method('persistConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
-            ->willThrowException(new Exception());
+            ->willThrowException($exception);
+
+        $this->conditionalAvailabilityTransferMock->expects(static::atLeastOnce())
+            ->method('serialize')
+            ->willReturn($serializedData);
+
+        $this->loggerMock->expects(static::atLeastOnce())
+            ->method('error')
+            ->with($exception->getMessage(), [
+                'exception' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'data' => $serializedData,
+            ]);
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->persist(
             $this->conditionalAvailabilityTransferMock,
         );
 
-        $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
-        $this->assertEquals(null, $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer());
+        static::assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        static::assertEquals(null, $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer());
     }
 
     /**
@@ -223,6 +279,9 @@ class ConditionalAvailabilityWriterTest extends Unit
      */
     public function testUpdateWithError(): void
     {
+        $exception = new Exception('foo');
+        $serializedData = '{}';
+
         $this->transactionHandlerMock->expects(static::atLeastOnce())
             ->method('handleTransaction')
             ->willReturnCallback(
@@ -231,17 +290,29 @@ class ConditionalAvailabilityWriterTest extends Unit
                 },
             );
 
-        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityEntityManagerMock->expects(static::atLeastOnce())
             ->method('saveConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
-            ->willThrowException(new Exception());
+            ->willThrowException($exception);
+
+        $this->conditionalAvailabilityTransferMock->expects(static::atLeastOnce())
+            ->method('serialize')
+            ->willReturn($serializedData);
+
+        $this->loggerMock->expects(static::atLeastOnce())
+            ->method('error')
+            ->with($exception->getMessage(), [
+                'exception' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'data' => $serializedData,
+            ]);
 
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->update(
             $this->conditionalAvailabilityTransferMock,
         );
 
-        $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
-        $this->assertEquals(null, $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer());
+        static::assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        static::assertEquals(null, $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer());
     }
 
     /**
@@ -257,24 +328,30 @@ class ConditionalAvailabilityWriterTest extends Unit
                 },
             );
 
-        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityEntityManagerMock->expects(static::atLeastOnce())
             ->method('saveConditionalAvailability')
             ->with($this->conditionalAvailabilityTransferMock)
             ->willReturn($this->conditionalAvailabilityTransferMock);
 
-        $this->conditionalAvailabilityPluginExecutorMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityPluginExecutorMock->expects(static::atLeastOnce())
             ->method('executePostSavePlugins')
             ->withAnyParameters()
             ->willReturnCallback(static function (ConditionalAvailabilityResponseTransfer $conditionalAvailabilityResponseTransfer) {
                 return $conditionalAvailabilityResponseTransfer;
             });
 
+        $this->conditionalAvailabilityTransferMock->expects(static::never())
+            ->method('serialize');
+
+        $this->loggerMock->expects(static::never())
+            ->method('error');
+
         $conditionalAvailabilityResponseTransfer = $this->conditionalAvailabilityWriter->update(
             $this->conditionalAvailabilityTransferMock,
         );
 
-        $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
-        $this->assertEquals(
+        static::assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        static::assertEquals(
             $this->conditionalAvailabilityTransferMock,
             $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
@@ -295,15 +372,15 @@ class ConditionalAvailabilityWriterTest extends Unit
                 },
             );
 
-        $this->conditionalAvailabilityTransferMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityTransferMock->expects(static::atLeastOnce())
             ->method('getIdConditionalAvailability')
             ->willReturn($idConditionalAvailability);
 
-        $this->conditionalAvailabilityTransferMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityTransferMock->expects(static::atLeastOnce())
             ->method('requireIdConditionalAvailability')
             ->willReturn($this->conditionalAvailabilityTransferMock);
 
-        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityEntityManagerMock->expects(static::atLeastOnce())
             ->method('deleteConditionalAvailabilityById')
             ->with($idConditionalAvailability)
             ->willThrowException(new Exception());
@@ -312,8 +389,8 @@ class ConditionalAvailabilityWriterTest extends Unit
             $this->conditionalAvailabilityTransferMock,
         );
 
-        $this->assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
-        $this->assertEquals(
+        static::assertFalse($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        static::assertEquals(
             null,
             $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
@@ -334,15 +411,15 @@ class ConditionalAvailabilityWriterTest extends Unit
                 },
             );
 
-        $this->conditionalAvailabilityTransferMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityTransferMock->expects(static::atLeastOnce())
             ->method('requireIdConditionalAvailability')
             ->willReturn($this->conditionalAvailabilityTransferMock);
 
-        $this->conditionalAvailabilityTransferMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityTransferMock->expects(static::atLeastOnce())
             ->method('getIdConditionalAvailability')
             ->willReturn($idConditionalAvailability);
 
-        $this->conditionalAvailabilityEntityManagerMock->expects($this->atLeastOnce())
+        $this->conditionalAvailabilityEntityManagerMock->expects(static::atLeastOnce())
             ->method('deleteConditionalAvailabilityById')
             ->with($idConditionalAvailability);
 
@@ -350,8 +427,8 @@ class ConditionalAvailabilityWriterTest extends Unit
             $this->conditionalAvailabilityTransferMock,
         );
 
-        $this->assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
-        $this->assertEquals(
+        static::assertTrue($conditionalAvailabilityResponseTransfer->getIsSuccessful());
+        static::assertEquals(
             null,
             $conditionalAvailabilityResponseTransfer->getConditionalAvailabilityTransfer(),
         );
