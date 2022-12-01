@@ -198,7 +198,6 @@ class ConditionalAvailabilityWriter implements ConditionalAvailabilityWriterInte
                 'data' => $conditionalAvailabilityTransfer->serialize(),
             ]);
 
-
             $conditionalAvailabilityResponseTransfer->setConditionalAvailabilityTransfer(null)
                 ->setIsSuccessful(false);
         }

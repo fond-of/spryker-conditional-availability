@@ -53,7 +53,6 @@ class ConditionalAvailabilityWriterTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $this->transactionHandlerMock = $this->getMockBuilder(TransactionHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
