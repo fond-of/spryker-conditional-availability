@@ -13,7 +13,7 @@ use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionHandlerInterface;
 class ConditionalAvailabilityWriterTest extends Unit
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface&\PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 

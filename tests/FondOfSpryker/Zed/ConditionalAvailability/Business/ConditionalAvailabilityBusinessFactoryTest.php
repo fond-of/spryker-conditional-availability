@@ -43,7 +43,7 @@ class ConditionalAvailabilityBusinessFactoryTest extends Unit
     protected $entityManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface&\PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 
