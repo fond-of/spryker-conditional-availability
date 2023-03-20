@@ -37,6 +37,7 @@
         <property name="conditionalAvailability" type="ConditionalAvailability" />
         <property name="quantity" type="int" />
         <property name="createdAt" type="string" />
+        <property name="originalStartAt" type="string" />
         <property name="startAt" type="string" />
         <property name="endAt" type="string" />
     </transfer>

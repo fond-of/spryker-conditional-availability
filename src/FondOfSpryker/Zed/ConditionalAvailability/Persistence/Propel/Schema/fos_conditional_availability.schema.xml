@@ -38,6 +38,7 @@
         <column name="fk_conditional_availability" type="INTEGER" required="true" primaryKey="true"/>
         <column name="start_at" required="true" type="TIMESTAMP" primaryKey="true"/>
         <column name="end_at" required="true" type="TIMESTAMP" primaryKey="true"/>
+        <column name="original_start_at" type="TIMESTAMP"/>
         <column name="quantity" type="INTEGER" required="true"/>
         <column name="created_at" required="true" type="TIMESTAMP"/>
 
